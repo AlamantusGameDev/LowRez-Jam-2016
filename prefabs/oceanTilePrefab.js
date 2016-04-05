@@ -9,7 +9,7 @@ var pr_ocean = OS.P.Add("Ocean Particle", {
 
 	positionCheckStep: 30,
 	positionCheckProgress: 30,
-	doCheckPosition: false;
+	doCheckPosition: false
 });
 
 pr_ocean.BeforeDo = function () {
