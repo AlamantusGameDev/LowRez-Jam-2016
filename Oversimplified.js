@@ -559,7 +559,7 @@ Oversimplified.Room.prototype.Draw = function () {
 }
 
 // Add a GameObject or PremadeObject to the room.
-Oversimplified.Room.prototype.AddObject = function (newObjectName, x, y, imageSrc, maskImageSrc, animationsArray) {
+Oversimplified.Room.prototype.AddObject = function (newObjectName, newObjectOptions) {
     var self = this;
     
     if (newObjectName.type == "GameObject") {    //Create from prefabricated object
@@ -574,7 +574,7 @@ Oversimplified.Room.prototype.AddObject = function (newObjectName, x, y, imageSr
             if (Oversimplified.DEBUG.showMessages) console.log("Object with name \"" + newObjectName + "\" already exists in current room!");
             return false;
         }
-        self.objects[newObjectName] = new Oversimplified.GameObject(newObjectName, x, y, imageSrc, maskImageSrc, animationsArray);
+        self.objects[newObjectName] = new Oversimplified.GameObject(newObjectName, newObjectOptions);
         
         return self.objects[newObjectName];
     }
@@ -684,6 +684,13 @@ Oversimplified.GameObject = function (name, options) {// x, y, imageSrc, maskIma
     } else {
         self.xBound = this.mask.width / 2;
         self.yBound = this.mask.height / 2;
+    }
+
+    // Set any extra properties from Options.
+    for (var property in options) {
+        if (typeof this[property] === 'undefined') {
+            this[property] = options[property];
+        }
     }
     
     this.DoFirst = function () {};
@@ -1024,18 +1031,11 @@ Oversimplified.Animation = function (name, width, height, options) {
     this.height = height;
 
     //Optional Options
-    options.columns = typeof options.columns !== 'undefined' ? options.columns : 1;
-    options.rows = typeof options.rows !== 'undefined' ? options.rows : 1;
-    options.speed = typeof options.speed !== 'undefined' ? Math.clamp01(options.speed) : 1;
-    options.xOffset = typeof options.xOffset !== 'undefined' ? options.xOffset : 0;
-    options.yOffset = typeof options.yOffset !== 'undefined' ? options.yOffset : 0;
-    
-    
-    this.columns = options.columns;
-    this.rows = options.rows;
-    this.speed = options.speed;
-    this.xOffset = options.xOffset;
-    this.yOffset = options.yOffset;
+    this.columns = typeof options.columns !== 'undefined' ? options.columns : 1;;
+    this.rows = typeof options.rows !== 'undefined' ? options.rows : 1;
+    this.speed = typeof options.speed !== 'undefined' ? Math.clamp01(options.speed) : 1;
+    this.xOffset = typeof options.xOffset !== 'undefined' ? options.xOffset : 0;
+    this.yOffset = typeof options.yOffset !== 'undefined' ? options.yOffset : 0;
 }
 Oversimplified.Animation.prototype.type = "Animation";
 
