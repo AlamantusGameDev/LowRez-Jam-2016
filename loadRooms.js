@@ -1,5 +1,9 @@
-var rm_TitleScreen = OS.R.Add("Default", OS.camera.width, OS.camera.height, "");
-var rm_Ocean = OS.R.Add("Ocean", 64 * 1000 * OS.S.pixelScale, 64 * 1000 * OS.S.pixelScale, "");
+var rm_TitleScreen = OS.R.Add("Default");
+var rm_Ocean = OS.R.Add("Ocean", {
+	width: 64 * 1000 * OS.S.pixelScale,
+	height: 64 * 1000 * OS.S.pixelScale,
+	backgroundColor: "#1b2632"
+});
 
 function loadRooms() {
     OS.AddScript("rooms/titleScreen.js");
