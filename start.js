@@ -1,5 +1,6 @@
 OS.S.defaultStep = 1 / 120;
-OS.S.SetCamera((window.innerWidth < 500) ? window.innerWidth - 10 : 500, (window.innerHeight < 800) ? window.innerHeight - 10 : 800);
+OS.S.pixelScale = 4;
+OS.S.SetCamera(64 * OS.S.pixelScale, 64 * OS.S.pixelScale);
 
 function start()
 {
