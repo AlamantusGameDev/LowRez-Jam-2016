@@ -491,7 +491,7 @@ Oversimplified.Room.prototype.Update = function () {
     }
     
     this.drawOrder = [];        //Determine draw order every frame
-    for (object in this.objects) {
+    for (var object in this.objects) {
         if (this.objects[object].type == 'GameObject') {
             if (this.drawOrder.length <= 0) {    //If this is the first object checked,
                 this.drawOrder = [object];        //Add it to the array
@@ -626,7 +626,7 @@ Oversimplified.GameObject = function (name, options) {// x, y, imageSrc, maskIma
     this.name = name;
 
     //Optional Options
-    this.depth = typeof options.depth !== 'undefined' ? options.depth : 0;
+    this.depth = typeof options.depth !== 'undefined' ? options.depth : 0; // Objects with higher depth are drawn *later* than (above) objects with lower depths. Objects with the same depth are drawn in the order they are created.
     this.solid = typeof options.solid !== 'undefined' ? options.solid : false;
     this.persistent = typeof options.persistent !== 'undefined' ? options.persistent : false;
     this.x = typeof options.x !== 'undefined' ? options.x : -1;
