@@ -8,25 +8,25 @@ rm_Ocean.DoFirst = function () {
     //OS.canvas.style.cursor = "none";
     
     // Create objects on room start. This is best practice unless you need persistent objects.
-    Game.player = this.AddObject(OS.P["UFO"]);
-    Game.ball = this.AddObject(OS.P["Ball"]);
-    Game.cowboys = Math.floor(RandomRange(5, 50));
-    for (var i = 0; i < Game.cowboys; i++) {
-        this.AddObject(OS.P["Cowboy"]);
-    }
+    G.player = this.AddObject(OS.P["Ship"]);
+    G.player.x = ((rm_Ocean.width / OS.S.pixelScale) / 2) * OS.S.pixelScale;
+    G.player.y = ((rm_Ocean.height / OS.S.pixelScale) / 2) * OS.S.pixelScale;
+
+    G.oceanParticle = this.AddObject(OS.P["Ocean Particle"]);
+    G.oceanParticle.x = G.player.x + randomSmidge();
+    G.oceanParticle.y = G.player.y + randomSmidge();
+
+    OS.camera.Follow(G.player);
 }
 rm_Ocean.Do = function () {
-    if (Game.cowboys <= 0) {
-        OS.SetRoom(rm_Ocean);
-    }
+    // Move G.oceanParticle around based on player's movement.
+    G.oceanParticle.CheckPosition(G.player.x, G.player.y);
 }
+
 rm_Ocean.DrawAbove = function () {
-    // Draw the number of cowboys remaining
-    if (Game.ball !== null) {
-        OS.context.font = "18px Impact";
-        OS.context.fillText(Game.cowboys, 15, 30);
-    }
+    // Draw the speed indicator in Bottom Left corner.
 }
+
 rm_Ocean.DoLast = function () {
     // Clear Objects on room exit. This is best practice unless you need persistent objects.
     rm_Ocean.objects = {};

@@ -9,3 +9,8 @@ function start()
     OS.AddScript("loadPrefabs.js");
     OS.AddScript("loadRooms.js");
 }
+
+function randomSmidge() {
+// Return a random amount between -10 and 10 on the pixel scale.
+	return (Math.round(Math.randomRange(-10, 10)) * OS.S.pixelScale);
+}

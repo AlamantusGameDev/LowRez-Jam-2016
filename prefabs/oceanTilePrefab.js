@@ -5,47 +5,69 @@ function oceanTilePrefab() {}
 var pr_ocean = OS.P.Add("Ocean Particle", {
 	imageSrc: "images/ocean_sheet.png",
 	animations: [ani_ocean],
+	depth: -100,	// Draw below everything.
 
 	positionCheckStep: 30,
 	positionCheckProgress: 30,
 	doCheckPosition: false;
 });
 
+pr_ocean.BeforeDo = function () {
+	this.positionCheckProgress++;
+	if (this.positionCheckProgress >= this.positionCheckStep) {
+		this.positionCheckProgress = 0;
+		doCheckPosition = true;
+	}
+}
 pr_ocean.Do = function () {
+	// Move around randomly.
+}
+
+pr_ocean.CheckPosition = function (checkX, checkY) {
 	if (this.doCheckPosition) {
 		// If it's completely off the screen, then update position.
-		if ((Math.abs(this.x - pr_ship.x) > (OS.camera.width + this.image.width)) ||
-			(Math.abs(this.y - pr_ship.y) > (OS.camera.height + this.image.height)))
+		if ((Math.abs(this.x - checkX) > (OS.camera.width + this.xBound)) ||
+			(Math.abs(this.y - checkY) > (OS.camera.height + this.yBound)))
 		{
 			switch (pr_ship.direction) {
 				case 0:
-					// if (pr_ship.doTakeStep) pr_ship.x += OS.S.pixelScale;
+					this.x = G.player.x + (OS.camera.width + this.xBound) + randomSmidge();
+					this.y = G.player.y + randomSmidge();
 					break;
 				case 45:
-					// if (pr_ship.doTakeStep) { pr_ship.x += OS.S.pixelScale; pr_ship.y -= OS.S.pixelScale; }
+					this.x = G.player.x + (OS.camera.width + this.xBound) + randomSmidge();
+					this.y = G.player.y - (OS.camera.height + this.yBound) + randomSmidge();
 					break;
 				case 90:
-					// if (pr_ship.doTakeStep) pr_ship.y -= OS.S.pixelScale;
+					this.x = G.player.x + randomSmidge();
+					this.y = G.player.y - (OS.camera.height + this.yBound) + randomSmidge();
 					break;
 				case 135:
-					// if (pr_ship.doTakeStep) { pr_ship.x -= OS.S.pixelScale; pr_ship.y -= OS.S.pixelScale; }
+					this.x = G.player.x - (OS.camera.width + this.xBound) + randomSmidge();
+					this.y = G.player.y - (OS.camera.height + this.yBound) + randomSmidge();
 					break;
 				case 180:
-					// if (pr_ship.doTakeStep) pr_ship.x -= OS.S.pixelScale;
+					this.x = G.player.x - (OS.camera.width + this.xBound) + randomSmidge();
+					this.y = G.player.y + randomSmidge();
 					break;
 				case 225:
-					// if (pr_ship.doTakeStep) { pr_ship.x -= OS.S.pixelScale; pr_ship.y += OS.S.pixelScale; }
+					this.x = G.player.x - (OS.camera.width + this.xBound) + randomSmidge();
+					this.y = G.player.y + (OS.camera.height + this.yBound) + randomSmidge();
 					break;
 				case 270:
-					// if (pr_ship.doTakeStep) pr_ship.y -= OS.S.pixelScale;
+					this.x = G.player.x + randomSmidge();
+					this.y = G.player.y + (OS.camera.height + this.yBound) + randomSmidge();
 					break;
 				case 315:
-					// if (pr_ship.doTakeStep) { pr_ship.x += OS.S.pixelScale; pr_ship.y += OS.S.pixelScale; }
+					this.x = G.player.x + (OS.camera.width + this.xBound) + randomSmidge();
+					this.y = G.player.y + (OS.camera.height + this.yBound) + randomSmidge();
 					break;
 				default:
 					console.log("No valid direction");
 					break;
 			}
 		}
+
+		this.doCheckPosition = false;
 	}
 }
