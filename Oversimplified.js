@@ -379,9 +379,9 @@ Oversimplified.Rooms = {
 }
 
 // Add a Room to the collection of Rooms
-Oversimplified.Rooms.Add = function (name, width, height, backgroundSrc, stepSpeed, extraParameters) {
+Oversimplified.Rooms.Add = function (name, options) {
     if (typeof Oversimplified.Rooms[name] === 'undefined') {
-        Oversimplified.Rooms[name] = new Oversimplified.Room(name, width, height, backgroundSrc, stepSpeed, extraParameters);
+        Oversimplified.Rooms[name] = new Oversimplified.Room(name, options);
         
         return Oversimplified.Rooms[name];
     } else {
@@ -402,36 +402,35 @@ Oversimplified.O = null;
 /* Room Class
 
 name (required) : The unique identifier of the room. Used to locate the room within the Rooms namespace.
-width (optional) : The width of the room. The camera will not travel beyond this to the right. If it is larger than the camera's width and there is an object being followed by the camera, the camera can scroll to the farther portions of the room. If it is smaller than the camera's width, it will be set to the camera's width. -- default = Oversimplified.camera.width
-height (optional) : The height of the room. The camera will not travel beyond this to the bottom. If it is larger than the camera's height and there is an object being followed by the camera, the camera can scroll to the farther portions of the room. If it is smaller than the camera's height, it will be set to the camera's height. -- default = Oversimplified.camera.height
-backgroundSrc (optional) : The image that will be displayed as the room's background. If excluded or set to empty string (""), no background will show.
-stepSpeed (optional) : The step speed for the Room. If excluded or set to 0, the default is used. -- default = Oversimplified.Settings.defaultStep
-extraParameters (optional) : An array of extra parameters for the Room. Options include:
-
-"background size" = sets the room size to whatever the backgroundSrc image size is, regardless of what is entered as width and height!
-
-"#FF0000" (any hex color value) = sets the far background color (behind the background image, visible only if transparent or excluded). A JavaScript alternative to setting the HTML5 canvas's background color CSS.
-
-"foreground.png" (path to any .png or .gif file) = sets the foreground image that displays over the background and all objects in the room. Appears below the Room's DrawAbove() function but above any GameObject's DrawAbove() function.
+options (optional) : An object with extra parameters for the Room. Options include:
+    width : The width of the room. The camera will not travel beyond this to the right. If it is larger than the camera's width and there is an object being followed by the camera, the camera can scroll to the farther portions of the room. If it is smaller than the camera's width, it will be set to the camera's width. -- default = Oversimplified.camera.width
+    height : The height of the room. The camera will not travel beyond this to the bottom. If it is larger than the camera's height and there is an object being followed by the camera, the camera can scroll to the farther portions of the room. If it is smaller than the camera's height, it will be set to the camera's height. -- default = Oversimplified.camera.height
+    backgroundSrc : The image that will be displayed as the room's background. If excluded or set to empty string (""), no background will show.
+    stepSpeed : The step speed for the Room. If excluded or set to 0, the default is used. -- default = Oversimplified.Settings.defaultStep
+    backgroundSize : Sets the room size to whatever the backgroundSrc image size is, regardless of what is entered as width and height!
+    backgroundColor : Any hex color value. Sets the far background color (behind the background image, visible only if transparent or excluded). A JavaScript alternative to setting the HTML5 canvas's background color CSS.
+    foreground : Path to any image file, though .png or .gif file with transparency is ideal. Sets the foreground image that displays over the background and all objects in the room. Appears below the Room's DrawAbove() function but above any GameObject's DrawAbove() function.
 */
-Oversimplified.Room = function (name, width, height, backgroundSrc, stepSpeed, extraParameters) {
+Oversimplified.Room = function (name, options) {
     this.id = Oversimplified.nextID++;
     var self = this;
     
-    stepSpeed = (typeof stepSpeed !== 'undefined' && stepSpeed > 0) ? stepSpeed : Oversimplified.Settings.defaultStep;
-    extraParameters = typeof extraParameters !== 'undefined' ? extraParameters : [];
-    width = (typeof width !== 'undefined' && width >= Oversimplified.camera.width) ? width : Oversimplified.camera.width;
-    height = (typeof height !== 'undefined' && height >= Oversimplified.camera.height) ? height : Oversimplified.camera.height;
-    
     this.name = name;
-    this.width = width;
-    this.height = height;
+
+    options = typeof options !== 'undefined' ? options : {};
     
-    if (typeof backgroundSrc !== 'undefined' && backgroundSrc != "") {
+    options.width = (typeof options.width !== 'undefined' && options.width >= Oversimplified.camera.width) ? options.width : Oversimplified.camera.width;
+    options.height = (typeof options.height !== 'undefined' && options.height >= Oversimplified.camera.height) ? options.height : Oversimplified.camera.height;
+    options.stepSpeed = (typeof options.stepSpeed !== 'undefined' && options.stepSpeed > 0) ? options.stepSpeed : Oversimplified.Settings.defaultStep;
+    
+    this.width = options.width;
+    this.height = options.height;
+    
+    if (typeof options.backgroundSrc !== 'undefined' && options.backgroundSrc != "") {
         this.background = new Image();
-        this.background.src = backgroundSrc;
+        this.background.src = options.backgroundSrc;
     } else {
-        // If backgroundSrc is excluded or an empty string, instead use Oversimplified.emptyImage instead.
+        // If options.backgroundSrc is excluded or an empty string, instead use Oversimplified.emptyImage instead.
         this.background = Oversimplified.emptyImage;
     }
     this.background.loaded = false;
@@ -439,8 +438,8 @@ Oversimplified.Room = function (name, width, height, backgroundSrc, stepSpeed, e
     if (this.background != Oversimplified.emptyImage) {
         this.background.onload = function () {
             this.loaded = true;
-            // If extraParameters contains "background size", then make room the size of the background image.
-            if (extraParameters.indexOf("background size") != -1) {
+            // If options "backgroundSize" is set to true, then make room the size of the background image.
+            if (options.backgroundSize == true) {
                 self.width = this.width;
                 self.height = this.height;
             }
@@ -448,33 +447,19 @@ Oversimplified.Room = function (name, width, height, backgroundSrc, stepSpeed, e
     }
     
     
-    this.stepSpeed = stepSpeed;
+    this.stepSpeed = options.stepSpeed;
     
     this.objects = {};
     this.O = this.objects;
-    
-    if (extraParameters.length > 0) {
-        for (var p = 0; p < extraParameters.length; p++) {
-            switch (typeof extraParameters[p]) {
-                case "string":
-                    // If the parameter starts with #, then it is a background color hex.
-                    if (extraParameters[p].substring(0,1) == "#") {
-                        self.background.color = extraParameters[p];
-                    } else {
-                        var ext = extraParameters[p].substr(extraParameters[p].length - 4);
-                        if (ext == ".png" || ext == ".gif") {   // If the string is a PNG or GIF, set it as foreground.
-                            self.foreground = new Image();
-                            self.foreground.loaded = false;
-                            self.foreground.src = extraParameters[p];
-                            self.foreground.onload = function () {this.loaded = true;}
-                        }
-                    }
-                    break;
-                // Can be expanded later.
-                default:
-                    break;
-            }
-        }
+
+    if (typeof options.backgroundColor !== 'undefined') {
+        self.background.color = options.backgroundColor;
+    }
+    if (typeof options.foreground !== 'undefined') {
+        self.foreground = new Image();
+        self.foreground.loaded = false;
+        self.foreground.src = options.foreground;
+        self.foreground.onload = function () {this.loaded = true;}
     }
     
     this.drawOrder = [];
@@ -543,7 +528,7 @@ Oversimplified.Room.prototype.End = function () {
 Oversimplified.Room.prototype.Draw = function () {
     var self = this;
     //Always draw background first if there is one
-    if (typeof this.background.color !== "undefined") {
+    if (typeof this.background.color !== 'undefined') {
         var tmp = Oversimplified.context.fillStyle;
         Oversimplified.context.fillStyle = this.background.color;
         Oversimplified.context.fillRect(0, 0, Oversimplified.camera.width, Oversimplified.camera.height);
@@ -564,7 +549,7 @@ Oversimplified.Room.prototype.Draw = function () {
     }
     
     // If there is a foreground, draw it.
-    if (typeof this.foreground !== "undefined") {
+    if (typeof this.foreground !== 'undefined') {
         if (this.foreground.loaded) {
             Oversimplified.context.drawImage(self.foreground, Oversimplified.camera.x, Oversimplified.camera.y, Oversimplified.camera.width, Oversimplified.camera.height, 0, 0, self.foreground.width, self.foreground.height);
         }
@@ -613,9 +598,9 @@ Oversimplified.SetRoom = function (room) {
 Oversimplified.PremadeObjects = {};
 
 // Add a GameObject to the list of PremadeObjects.
-Oversimplified.PremadeObjects.Add = function (name, x, y, imageSrc, maskImageSrc, animationsArray) {
+Oversimplified.PremadeObjects.Add = function (name, objectOptions) {// x, y, imageSrc, maskImageSrc, animationsArray) {
     if (typeof Oversimplified.PremadeObjects[name] === 'undefined') {
-        Oversimplified.PremadeObjects[name] = new Oversimplified.GameObject(name, x, y, imageSrc, maskImageSrc, animationsArray);
+        Oversimplified.PremadeObjects[name] = new Oversimplified.GameObject(name, objectOptions);// x, y, imageSrc, maskImageSrc, animationsArray);
         return Oversimplified.PremadeObjects[name];
     } else {
         if (Oversimplified.DEBUG.showMessages) console.log("A Premade Object with the name \"" + name + "\" already exists!");
@@ -631,59 +616,61 @@ Oversimplified.Prefabs = Oversimplified.PremadeObjects;    // In case someone li
 Oversimplified.P = Oversimplified.PremadeObjects;
 
 // GameObject class
-Oversimplified.GameObject = function (name, x, y, imageSrc, maskImageSrc, animationsArray) {
+Oversimplified.GameObject = function (name, options) {// x, y, imageSrc, maskImageSrc, animationsArray) {
     this.id = Oversimplified.nextID++;
     
     var self = this;
     this.self = self;
     
+    //Required Options
     this.name = name;
-    this.depth = 0;
-    this.solid = false;
-    this.persistent = false;
-    
-    this.x = typeof x !== 'undefined' ? x : -1;
-    this.y = typeof y !== 'undefined' ? y : -1;
+
+    //Optional Options
+    this.depth = typeof options.depth !== 'undefined' ? options.depth : 0;
+    this.solid = typeof options.solid !== 'undefined' ? options.solid : false;
+    this.persistent = typeof options.persistent !== 'undefined' ? options.persistent : false;
+    this.x = typeof options.x !== 'undefined' ? options.x : -1;
+    this.y = typeof options.y !== 'undefined' ? options.y : -1;
 	this.xPrevious = this.x;
 	this.yPrevious = this.y;
     this.screenX = this.x - Oversimplified.camera.x;
     this.screenY = this.y - Oversimplified.camera.y;
     
-    if (typeof imageSrc !== 'undefined' && imageSrc != "") {
+    if (typeof options.imageSrc !== 'undefined' && options.imageSrc != "") {
         this.image = new Image();
-        this.image.src = imageSrc;
+        this.image.src = options.imageSrc;
     } else {
         this.image = Oversimplified.emptyImage;
     }
-    this.image.xScale = 1;
-    this.image.yScale = 1;
-    this.image.rotation = 0;
+    this.image.xScale = typeof options.xScale !== 'undefined' ? options.xScale : 1;
+    this.image.yScale = typeof options.yScale !== 'undefined' ? options.yScale : 1;
+    this.image.rotation = typeof options.rotation !== 'undefined' ? options.rotation : 0;
     
     this.image.animations = {};
     
     this.image.frameColumn = 0;
     this.image.frameRow = 0;
     
-    if (typeof animationsArray !== 'undefined') {
-        for (var i = 0; i < animationsArray.length; i++) {
-            if (i == 0 && animationsArray[i].name != "Default") {
-                this.image.animations["Default"] = animationsArray[i];    // Creates a duplicate animation of the first animation called "Default" in addition to the named animation below (unless the animation's name is "Default")
+    if (typeof options.animations !== 'undefined') {
+        for (var i = 0; i < options.animations.length; i++) {
+            if (i == 0 && options.animations[i].name != "Default") {
+                this.image.animations["Default"] = options.animations[i];    // Creates a duplicate animation of the first animation called "Default" in addition to the named animation below (unless the animation's name is "Default")
             }
-            this.image.animations[animationsArray[i].name] = animationsArray[i];
+            this.image.animations[options.animations[i].name] = options.animations[i];
         }
     } else {
         if (this.image != Oversimplified.emptyImage) {
             //If no animations array is included, then just show the whole image
-            this.image.onload = function(){this.animations["Default"] = new Oversimplified.Animation("newAnimation", this.width, this.height)};    // Creates the default animation as the whole image once the image is loaded.
+            this.image.onload = function(){this.animations["Default"] = new Oversimplified.Animation("newAnimation", {width: this.width, height: this.height});}    // Creates the default animation as the whole image once the image is loaded.
         } else {
-            this.image.animations["Default"] = new Oversimplified.Animation("newAnimation", this.image.width, this.image.height)
+            this.image.animations["Default"] = new Oversimplified.Animation("newAnimation", {width: this.image.width, height: this.image.height});
         }
     }
     
     this.image.currentAnimation = "Default";
     
-    this.mask = (maskImageSrc) ? new Image() : {};
-    this.mask.src = (maskImageSrc) ? maskImageSrc : "";
+    this.mask = (options.maskImageSrc) ? new Image() : {};
+    this.mask.src = (options.maskImageSrc) ? options.maskImageSrc : "";
     if (this.mask.src == "") {
         this.mask.width = this.image.animations["Default"].width;
         this.mask.height = this.image.animations["Default"].height;
@@ -711,13 +698,13 @@ Oversimplified.GameObject = function (name, x, y, imageSrc, maskImageSrc, animat
     this.DrawAbove = function () {};
 }
 Oversimplified.GameObject.prototype.type = "GameObject";
-Oversimplified.GameObject.prototype.AddAnimation = function (animation, width, height, columns, rows, speed, xOffset, yOffset) {
+Oversimplified.GameObject.prototype.AddAnimation = function (animation, animationWidth, animationHeight, animationOptions) {//columns, rows, speed, xOffset, yOffset) {
     //Takes either an animation or the name of an animation in the Animations namespace and adds it to the object.
-    if (animation.name) {
-        this.image.animations[animation.name] = animation;
+    if (typeof animation.name !== 'undefined') {
+        this.image.animations[animationOptions.name] = animation;
     } else {
         if (typeof Oversimplified.Animations[animation] === 'undefined') {
-            Oversimplified.Animations.Add(animation, width, height, columns, rows, speed, xOffset, yOffset);
+            Oversimplified.Animations.Add(animation, animationWidth, animationHeight, animationOptions);
         }
         this.image.animations[Oversimplified.Animations[animation].name] = Oversimplified.Animations[animation];
     }
@@ -1013,12 +1000,12 @@ Oversimplified.CollisionAtPoint = function (x, y) {
 
 // Animations Namespace
 Oversimplified.Animations = {};
-Oversimplified.Animations.Add = function (name, width, height, columns, rows, speed, xOffset, yOffset) {
-    if (typeof Oversimplified.Animations[name] === 'undefined') {
-        Oversimplified.Animations[name] = new Oversimplified.Animation(name, width, height, columns, rows, speed, xOffset, yOffset);
-        return Oversimplified.Animations[name];
+Oversimplified.Animations.Add = function (animationName, animationWidth, animationHeight, animationOptions) {
+    if (typeof Oversimplified.Animations[animationName] === 'undefined') {
+        Oversimplified.Animations[animationName] = new Oversimplified.Animation(animationName, animationWidth, animationHeight, animationOptions);
+        return Oversimplified.Animations[animationName];
     } else {
-        if (Oversimplified.DEBUG.showMessages) console.log("An animation with the name \"" + name + "\" already exists!");
+        if (Oversimplified.DEBUG.showMessages) console.log("An animation with the name \"" + animationName + "\" already exists!");
         return false;
     }
 };
@@ -1028,25 +1015,27 @@ Oversimplified.A = Oversimplified.Animations;
 // Animation class (for use with sprite sheets)
 //
 // Prevents animation mess-ups by preventing speeds higher than one with Math.clamp01.
-Oversimplified.Animation = function (name, width, height, columns, rows, speed, xOffset, yOffset) {
+Oversimplified.Animation = function (name, width, height, options) {
     this.id = Oversimplified.nextID++;
-    
-    columns = typeof columns !== 'undefined' ? columns : 1;
-    rows = typeof rows !== 'undefined' ? rows : 1;
-    speed = typeof speed !== 'undefined' ? speed : 1;
-    xOffset = typeof xOffset !== 'undefined' ? xOffset : 0;
-    yOffset = typeof yOffset !== 'undefined' ? yOffset : 0;
-    
-    speed = Math.clamp01(speed);
-    
+
+    //Required Options
     this.name = name;
     this.width = width;
     this.height = height;
-    this.columns = columns;
-    this.rows = rows;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
-    this.speed = speed;
+
+    //Optional Options
+    options.columns = typeof options.columns !== 'undefined' ? options.columns : 1;
+    options.rows = typeof options.rows !== 'undefined' ? options.rows : 1;
+    options.speed = typeof options.speed !== 'undefined' ? Math.clamp01(options.speed) : 1;
+    options.xOffset = typeof options.xOffset !== 'undefined' ? options.xOffset : 0;
+    options.yOffset = typeof options.yOffset !== 'undefined' ? options.yOffset : 0;
+    
+    
+    this.columns = options.columns;
+    this.rows = options.rows;
+    this.speed = options.speed;
+    this.xOffset = options.xOffset;
+    this.yOffset = options.yOffset;
 }
 Oversimplified.Animation.prototype.type = "Animation";
 
