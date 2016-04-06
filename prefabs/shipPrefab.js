@@ -51,38 +51,43 @@ pr_ship.Do = function () {
 }
 
 pr_ship.AfterDo = function () {
+	this.CheckMovement();
+}
+
+pr_ship.CheckMovement = function () {
+	var moveAmount = (G.stats.speed + this.currentSpeed) * OS.S.pixelScale;
 	switch (this.direction) {
 		case 0:
 			if (this.image.currentAnimation != "Ship Right") this.SetAnimation("Ship Right");
-			if (this.doTakeStep) this.x += (this.speedStat + this.currentSpeed) * OS.S.pixelScale;
+			if (this.doTakeStep) this.SimpleMove(moveAmount, 0, true);
 			break;
 		case 45:
 			if (this.image.currentAnimation != "Ship Up-Right") this.SetAnimation("Ship Up-Right");
-			if (this.doTakeStep) { this.x += (this.speedStat + this.currentSpeed) * OS.S.pixelScale; this.y -= (this.speedStat + this.currentSpeed) * OS.S.pixelScale; }
+			if (this.doTakeStep) this.SimpleMove(moveAmount, -moveAmount, true);
 			break;
 		case 90:
 			if (this.image.currentAnimation != "Ship Up") this.SetAnimation("Ship Up");
-			if (this.doTakeStep) this.y -= (this.speedStat + this.currentSpeed) * OS.S.pixelScale;
+			if (this.doTakeStep) this.SimpleMove(0, -moveAmount, true);
 			break;
 		case 135:
 			if (this.image.currentAnimation != "Ship Up-Left") this.SetAnimation("Ship Up-Left");
-			if (this.doTakeStep) { this.x -= (this.speedStat + this.currentSpeed) * OS.S.pixelScale; this.y -= (this.speedStat + this.currentSpeed) * OS.S.pixelScale; }
+			if (this.doTakeStep) this.SimpleMove(-moveAmount, -moveAmount, true);
 			break;
 		case 180:
 			if (this.image.currentAnimation != "Ship Left") this.SetAnimation("Ship Left");
-			if (this.doTakeStep) this.x -= (this.speedStat + this.currentSpeed) * OS.S.pixelScale;
+			if (this.doTakeStep) this.SimpleMove(-moveAmount, 0, true);
 			break;
 		case 225:
 			if (this.image.currentAnimation != "Ship Down-Left") this.SetAnimation("Ship Down-Left");
-			if (this.doTakeStep) { this.x -= (this.speedStat + this.currentSpeed) * OS.S.pixelScale; this.y += (this.speedStat + this.currentSpeed) * OS.S.pixelScale; }
+			if (this.doTakeStep) this.SimpleMove(-moveAmount, moveAmount, true);
 			break;
 		case 270:
 			if (this.image.currentAnimation != "Ship Down") this.SetAnimation("Ship Down");
-			if (this.doTakeStep) this.y += (this.speedStat + this.currentSpeed) * OS.S.pixelScale;
+			if (this.doTakeStep) this.SimpleMove(0, moveAmount, true);
 			break;
 		case 315:
 			if (this.image.currentAnimation != "Ship Down-Right") this.SetAnimation("Ship Down-Right");
-			if (this.doTakeStep) { this.x += (this.speedStat + this.currentSpeed) * OS.S.pixelScale; this.y += (this.speedStat + this.currentSpeed) * OS.S.pixelScale; }
+			if (this.doTakeStep) this.SimpleMove(moveAmount, moveAmount, true);
 			break;
 		default:
 			console.log("No valid direction");
