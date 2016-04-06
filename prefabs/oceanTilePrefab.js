@@ -1,4 +1,4 @@
-var ani_ocean = OS.A.Add("Ocean", 256, 256, {columns: 10, speed: 1/120});
+var ani_ocean = OS.A.Add("Ocean", 256, 256, {columns: 10, speed: 1/60});
 
 function oceanTilePrefab() {}
 
@@ -11,7 +11,7 @@ var pr_ocean = OS.P.Add("Ocean Particle", {
 	positionCheckProgress: 30,
 	doCheckPosition: false,
 
-	moveTimer: 1 / OS.S.defaultStep,
+	moveTimer: 0,
 });
 
 pr_ocean.BeforeDo = function () {
@@ -23,11 +23,11 @@ pr_ocean.BeforeDo = function () {
 }
 pr_ocean.Do = function () {
 	// Move around randomly.
-	this.moveTimer--;
-	if (this.moveTimer <= 0) {
-		this.x += Math.round(Math.randomRange(-1, 1)) * OS.S.pixelScale;
-		this.y += Math.round(Math.randomRange(-1, 1)) * OS.S.pixelScale;
-		this.moveTimer = 1 / OS.S.defaultStep;
+	this.moveTimer++;
+	if (this.moveTimer >= 120) {
+		this.x += 1 * Math.round(Math.randomRange(-1, 1)) * OS.S.pixelScale;
+		this.y += 1 * Math.round(Math.randomRange(-1, 1)) * OS.S.pixelScale;
+		this.moveTimer = 0;
 	}
 }
 
