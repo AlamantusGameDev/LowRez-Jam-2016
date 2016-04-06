@@ -27,35 +27,25 @@ It is important that this is done first at the time the game is loaded because t
 Be sure that the objectToFollow has already been created in the current room. Can be referenced with a variable.
 objectToFollow, hBorder, and vBorder are optional arguments, but if you want to set hBorder and vBorder, there must be an objectToFollow.
 */
-Oversimplified.Settings.SetCamera = function (width, height, objectToFollow, hBorder, vBorder) {
-    hBorder = typeof hBorder !== 'undefined' ? hBorder : Oversimplified.camera.hBorder;
-    vBorder = typeof vBorder !== 'undefined' ? vBorder : Oversimplified.camera.vBorder;
+Oversimplified.Settings.SetCamera = function (options) {
+    Oversimplified.camera.width = typeof options.width !== 'undefined' ? options.width : Oversimplified.camera.width;
+    Oversimplified.camera.height = typeof options.height !== 'undefined' ? options.height : Oversimplified.camera.height;
+    Oversimplified.SetCanvasToCameraSize();
+
+    Oversimplified.camera.x = typeof options.x !== 'undefined' ? options.x : Oversimplified.camera.x;
+    Oversimplified.camera.y = typeof options.y !== 'undefined' ? options.y : Oversimplified.camera.y;
     
-    if (typeof width !== 'undefined') {
-        Oversimplified.camera.width = width;
-    } else {
-        if (Oversimplified.DEBUG.showMessages) console.log("You must specify a width in function Oversimplified.Settings.SetCamera()");
-        return false;
-    }
-    if (typeof height !== 'undefined') {
-        Oversimplified.camera.height = height;
-    } else {
-        if (Oversimplified.DEBUG.showMessages) console.log("You must specify a height in function Oversimplified.Settings.SetCamera()");
-        return false;
-    }
-    
-    if (typeof objectToFollow !== 'undefined') {
-        if (objectToFollow.name) {
-            Oversimplified.camera.Follow(objectToFollow);
+    if (typeof options.objectToFollow !== 'undefined') {
+        if (options.objectToFollow.name) {
+            Oversimplified.camera.Follow(options.objectToFollow);
         } else {
             if (Oversimplified.DEBUG.showMessages) console.log("Oversimplified.Settings.SetCamera()'s objectToFollow argument must be a Oversimplified.GameObject.");
         }
     }
     
-    Oversimplified.camera.hBorder = hBorder;
-    Oversimplified.camera.vBorder = vBorder;
+    Oversimplified.camera.hBorder = (typeof options.hBorder !== 'undefined') ? options.hBorder : Oversimplified.camera.hBorder;
+    Oversimplified.camera.vBorder = (typeof options.vBorder !== 'undefined') ? options.vBorder : Oversimplified.camera.vBorder;
     
-    Oversimplified.SetCanvasToCameraSize();
 }
 // Convenient alias for Settings.
 Oversimplified.S = Oversimplified.Settings;
