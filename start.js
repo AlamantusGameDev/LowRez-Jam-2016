@@ -23,8 +23,8 @@ function randomSmidge() {
 function drawPixelText(text, x, y, wrapWidth, color, size) {
 // Draw the text at the given x and y on the canvas using the alphabet images.
 // Remember to set the pixel scale for x and y when you call the function!
-// 4x4 font from http://pixeljoint.com/forum/forum_posts.asp?TID=18755&PID=185995#185995
-// 5x6 font from http://atariage.com/forums/topic/165697-fonts/page-4#entry2081600
+// 4x4 font modified from http://pixeljoint.com/forum/forum_posts.asp?TID=18755&PID=185995#185995
+// 5x6 font modified from http://atariage.com/forums/topic/165697-fonts/page-4#entry2081600
 	text = text.toString().toUpperCase();
 	
 	var letterSizeX = ((size == 6) ? size - 1 : size) * OS.S.pixelScale;
