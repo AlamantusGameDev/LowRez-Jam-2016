@@ -21,9 +21,6 @@ var pr_ship = OS.P.Add("Ship", {
 	moveStepAmount: 5 * Oversimplified.R[Oversimplified.R.currentRoom].stepSpeed,
 	moveStepProgress: 0,
 	doTakeStep: false,
-
-	// Ship stats.
-	speedStat: 1
 });
 
 pr_ship.Do = function () {
