@@ -1,6 +1,11 @@
 OS.S.defaultStep = 1 / 120;
 OS.S.pixelScale = 4;
-OS.S.SetCamera(64 * OS.S.pixelScale, 64 * OS.S.pixelScale);
+OS.SetCamera({
+	width: 64 * OS.S.pixelScale,
+	height: 64 * OS.S.pixelScale,
+	hBorder: 24 * OS.S.pixelScale,
+	vBorder: 24 * OS.S.pixelScale
+});
 
 function start()
 {
