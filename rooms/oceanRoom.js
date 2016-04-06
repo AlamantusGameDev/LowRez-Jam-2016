@@ -45,9 +45,12 @@ rm_Ocean.Do = function () {
 rm_Ocean.DrawAbove = function () {
     // Draw the speed indicator in Bottom Left corner.
     OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
+
+    drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
+    drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
 }
 
 rm_Ocean.DoLast = function () {
     // Clear Objects on room exit. This is best practice unless you need persistent objects.
-    rm_Ocean.objects = {};
+    //rm_Ocean.objects = {};
 }
