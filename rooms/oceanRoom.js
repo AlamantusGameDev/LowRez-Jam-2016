@@ -16,7 +16,7 @@ rm_Ocean.DoFirst = function () {
     G.oceanParticle.x = G.player.x + randomSmidge();
     G.oceanParticle.y = G.player.y + randomSmidge();
 
-    OS.camera.Follow(G.player);
+    OS.S.SetCamera(64 * OS.S.pixelScale, 64 * OS.S.pixelScale, G.player, 24 * OS.S.pixelScale, 24 * OS.S.pixelScale);
 }
 rm_Ocean.Do = function () {
     // Move G.oceanParticle around based on player's movement.
