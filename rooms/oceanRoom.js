@@ -18,15 +18,21 @@ rm_Ocean.speedGaugeImg = new Image();
 rm_Ocean.speedGaugeImg.src = "images/speed_gauge_sheet.png";
 
 rm_Ocean.DoFirst = function () {
-    //Hide cursor when playing (only use if masking the cursor with another object)
-    //OS.canvas.style.cursor = "none";
-    
     // Reset camera whenever room starts
     OS.SetCamera({
         x: G.player.x - (OS.camera.width / 2),
         y: G.player.y - (OS.camera.height / 2),
         objectToFollow: G.player
     });
+
+    this.mapLeftTrigger = OS.camera.hBorder;
+    this.mapLeftTriggerTarget = this.width - (OS.camera.width - OS.camera.hBorder);
+    this.mapRightTrigger = this.width - OS.camera.hBorder;
+    this.mapRightTriggerTarget = OS.camera.width - OS.camera.hBorder;
+    this.mapUpTrigger = OS.camera.vBorder;
+    this.mapUpTriggerTarget = this.height - (OS.camera.height - OS.camera.vBorder);
+    this.mapDownTrigger = this.height - OS.camera.vBorder;
+    this.mapDownTriggerTarget = OS.camera.height - OS.camera.vBorder;
 }
 rm_Ocean.Do = function () {
     // Move G.oceanParticle around based on player's movement.

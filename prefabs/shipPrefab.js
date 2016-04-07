@@ -45,6 +45,9 @@ pr_ship.Do = function () {
 	} else {
 		this.doTakeStep = false;
 	}
+
+	this.SeamlessScroll();
+	console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
 }
 
 pr_ship.AfterDo = function () {
@@ -89,5 +92,24 @@ pr_ship.CheckMovement = function () {
 		default:
 			console.log("No valid direction");
 			break;
+	}
+}
+
+pr_ship.SeamlessScroll = function () {
+	if (this.x <= rm_Ocean.mapLeftTrigger) {
+		this.x = rm_Ocean.mapLeftTriggerTarget;
+		OS.SetCamera({x: rm_Ocean.width});
+	}
+	else if (this.x >= rm_Ocean.mapRightTrigger) {
+		this.x = rm_Ocean.mapRightTriggerTarget;
+		OS.SetCamera({x: 0});
+	}
+	else if (this.y <= rm_Ocean.mapUpTrigger) {
+		this.y = rm_Ocean.mapUpTriggerTarget;
+		OS.SetCamera({y: rm_Ocean.height});
+	}
+	else if (this.y >= rm_Ocean.mapDownTrigger) {
+		this.y = rm_Ocean.mapDownTriggerTarget;
+		OS.SetCamera({y: 0});
 	}
 }
