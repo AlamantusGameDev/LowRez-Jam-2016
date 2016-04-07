@@ -7,7 +7,8 @@ G.map = [];	// List of island objects, generated/loaded and saved at game start,
 G.inventory = [];
 G.stats = {
     money: 100,
-    inventory: 5,   // Maximum number of different things the inventory can hold.
+    inventory: 3,   // Maximum number of different things the inventory can hold.
+    hold: 20,		// Maximum number of each individual kind of thing in the inventory.
     speed: 1,
     hull: 1,
     popularity: 0,
@@ -15,5 +16,7 @@ G.stats = {
     crew: 1,
     energy: 10
 }
+G.itemSheet = new Image();
+G.itemSheet.src = "images/items_sheet.png";
 
 function loadGameManager () {}
