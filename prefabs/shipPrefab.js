@@ -20,7 +20,7 @@ var pr_ship = OS.P.Add("Ship", {
 	moveStepSize: 3,
 	moveStepAmount: 5 * Oversimplified.R[Oversimplified.R.currentRoom].stepSpeed,
 	moveStepProgress: 0,
-	doTakeStep: false,
+	doTakeStep: false
 });
 
 pr_ship.Do = function () {

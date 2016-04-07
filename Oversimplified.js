@@ -453,6 +453,13 @@ Oversimplified.Room = function (name, options) {
         self.foreground.src = options.foreground;
         self.foreground.onload = function () {this.loaded = true;}
     }
+
+    // Set any extra properties from Options.
+    for (var property in options) {
+        if (typeof this[property] === 'undefined') {
+            this[property] = options[property];
+        }
+    }
     
     this.drawOrder = [];
     
@@ -634,9 +641,11 @@ Oversimplified.GameObject = function (name, options) {// x, y, imageSrc, maskIma
     } else {
         this.image = Oversimplified.emptyImage;
     }
+    
     this.image.xScale = typeof options.xScale !== 'undefined' ? options.xScale : 1;
-    this.image.yScale = typeof options.yScale !== 'undefined' ? options.yScale : 1;
-    this.image.rotation = typeof options.rotation !== 'undefined' ? options.rotation : 0;
+    this.image.yScale = typeof options.yScale !== 'undefined' ? options.yScale : this.image.xScale;
+
+    this.image.rotation = typeof options.rotation !== 'undefined' ? Math.clampAngle(options.rotation) : 0;
     
     this.image.animations = {};
     
@@ -670,12 +679,12 @@ Oversimplified.GameObject = function (name, options) {// x, y, imageSrc, maskIma
     
     if (this.mask.src != "") {
         this.mask.onload = function(){
-            self.xBound = this.width / 2;
-            self.yBound = this.height / 2;
+            self.xBound = this.width / 2 * self.image.xScale;
+            self.yBound = this.height / 2 * self.image.yScale;
         };
     } else {
-        self.xBound = this.mask.width / 2;
-        self.yBound = this.mask.height / 2;
+        self.xBound = this.mask.width / 2 * self.image.xScale;
+        self.yBound = this.mask.height / 2 * self.image.yScale;
     }
 
     // Set any extra properties from Options.

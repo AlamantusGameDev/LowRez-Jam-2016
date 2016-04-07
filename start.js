@@ -30,7 +30,7 @@ function drawPixelText(text, x, y, wrapWidth, color, size) {
 	var letterSizeX = ((size == 6) ? size - 1 : size) * OS.S.pixelScale;
 	var letterSizeY = size * OS.S.pixelScale;
 	var maxWrapWidth = Math.floor(OS.camera.width / (letterSizeX + OS.S.pixelScale));
-	console.log(maxWrapWidth);
+	
 	wrapWidth = (wrapWidth <= 0 || wrapWidth > maxWrapWidth) ? maxWrapWidth : wrapWidth;
 	
 	var alphabet = new Image();
