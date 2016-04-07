@@ -17,6 +17,10 @@ rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
 rm_Ocean.speedGaugeImg = new Image();
 rm_Ocean.speedGaugeImg.src = "images/speed_gauge_sheet.png";
 
+var island1 = rm_Ocean.AddObject(OS.P["Island"]);
+island1.x = (((rm_Ocean.width / OS.S.pixelScale) / 2) + 64) * OS.S.pixelScale;
+island1.y = ((rm_Ocean.height / OS.S.pixelScale) / 2) * OS.S.pixelScale;
+
 rm_Ocean.DoFirst = function () {
     // Reset camera whenever room starts
     OS.SetCamera({
@@ -52,8 +56,8 @@ rm_Ocean.DrawAbove = function () {
     // Draw the speed indicator in Bottom Left corner.
     OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
 
-    drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
-    drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
+    // drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
+    // drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
 }
 
 rm_Ocean.DoLast = function () {
