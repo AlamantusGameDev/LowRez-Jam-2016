@@ -1,0 +1,6 @@
+{
+  "name": "Lowrez-jam-2016",
+  "tagline": "An OversimplifiedJS game for the 2016 LowRez Jam (https://itch.io/jam/lowrezjam2016)",
+  "body": "## About\r\nThis is a work in progress for the [2016 LowRez Jam](https://itch.io/jam/lowrezjam2016). Its official name will probably be *Trade Winds*, and the final version will be [on Itch.io](https://alamantus-gamedev.itch.io/trade-winds).\r\n\r\n## Controls\r\n* Turn Left: `←` or `A`\r\n* Turn Right: `→` or `D`\r\n* Increase Speed: `↑` or `W`\r\n* Decrease Speed: `↓` or `S`\r\n\r\n## How to Play\r\nThe speed gauge in the bottom left corner shows your current speed level. The energy bar next to it shows how long you can go as fast as you are going and refills over time.\r\n\r\nThere's nothing to really play yet, but you can sail around as long as you want!",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
