@@ -17,6 +17,7 @@ var pr_ship = OS.P.Add("Ship", {
 	
 	direction: 0,
 	currentSpeed: 0,
+	pointInFront : {x: 0, y: 0 },
 	moveStepSize: 3,
 	moveStepAmount: 5 * Oversimplified.R[Oversimplified.R.currentRoom].stepSpeed,
 	moveStepProgress: 0,
@@ -60,6 +61,10 @@ pr_ship.AfterDo = function () {
 	this.UpdateEnergy();
 }
 
+pr_ship.CheckInteraction = function () {
+
+}
+
 pr_ship.CheckMovement = function () {
 	var moveAmount = (G.stats.speed + this.currentSpeed) * OS.S.pixelScale;
 	var movedSuccessfully = false;
@@ -67,34 +72,50 @@ pr_ship.CheckMovement = function () {
 		case 0:
 			if (this.image.currentAnimation != "Ship Right") this.SetAnimation("Ship Right");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, 0, true, 8);
+			this.pointInFront.x = this.x + this.xBound + (OS.S.pixelScale * 2) + moveAmount;
+			this.pointInFront.y = this.y;
 			break;
 		case 45:
 			if (this.image.currentAnimation != "Ship Up-Right") this.SetAnimation("Ship Up-Right");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, -moveAmount, true, 8);
+			this.pointInFront.x = this.x + this.xBound + (OS.S.pixelScale * 2) + moveAmount;
+			this.pointInFront.y = this.y - this.yBound - (OS.S.pixelScale * 2) - moveAmount;
 			break;
 		case 90:
 			if (this.image.currentAnimation != "Ship Up") this.SetAnimation("Ship Up");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(0, -moveAmount, true, 8);
+			this.pointInFront.x = this.x;
+			this.pointInFront.y = this.y - this.yBound - (OS.S.pixelScale * 2) - moveAmount;
 			break;
 		case 135:
 			if (this.image.currentAnimation != "Ship Up-Left") this.SetAnimation("Ship Up-Left");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, -moveAmount, true, 8);
+			this.pointInFront.x = this.x - this.xBound - (OS.S.pixelScale * 2) - moveAmount;
+			this.pointInFront.y = this.y - this.yBound - (OS.S.pixelScale * 2) - moveAmount;
 			break;
 		case 180:
 			if (this.image.currentAnimation != "Ship Left") this.SetAnimation("Ship Left");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, 0, true, 8);
+			this.pointInFront.x = this.x - this.xBound - (OS.S.pixelScale * 2) - moveAmount;
+			this.pointInFront.y = this.y;
 			break;
 		case 225:
 			if (this.image.currentAnimation != "Ship Down-Left") this.SetAnimation("Ship Down-Left");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, moveAmount, true, 8);
+			this.pointInFront.x = this.x - this.xBound - (OS.S.pixelScale * 2) - moveAmount;
+			this.pointInFront.y = this.y + this.yBound + (OS.S.pixelScale * 2) + moveAmount;
 			break;
 		case 270:
 			if (this.image.currentAnimation != "Ship Down") this.SetAnimation("Ship Down");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(0, moveAmount, true, 8);
+			this.pointInFront.x = this.x;
+			this.pointInFront.y = this.y + this.yBound + (OS.S.pixelScale * 2) + moveAmount;
 			break;
 		case 315:
 			if (this.image.currentAnimation != "Ship Down-Right") this.SetAnimation("Ship Down-Right");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, moveAmount, true, 8);
+			this.pointInFront.x = this.x + this.xBound + (OS.S.pixelScale * 2) + moveAmount;
+			this.pointInFront.y = this.y + this.yBound + (OS.S.pixelScale * 2) + moveAmount;
 			break;
 		default:
 			console.log("No valid direction");
