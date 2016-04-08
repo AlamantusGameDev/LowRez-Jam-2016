@@ -7,8 +7,7 @@ G.map = [];	// List of island objects, generated/loaded and saved at game start,
 G.currentScreen = "";	// For pause screen, stats screen, inventory screen
 G.inventory = {
     money: 100,
-	food: 10,
-	water: 10,
+	supplies: 20,	// How much stuff you have to maintain your crew's illness with.
 	cargo: []
 };
 G.stats = {
@@ -22,8 +21,7 @@ G.stats = {
     crew: 2,		// How many crew members you have. Influences how fast your energy recovers.
     energy: 25,		// Drains rate determined by current speed. When drained, currentSpeed reduces until you have enough energy to continue.
     maxEnergy: 50,	// How much to refill your energy to. Can increase with upgrades.
-    hunger: 0,
-    thirst: 0
+    illness: 1		// Your crew's overall health. When this is low, your ship slows down.
 }
 
 G.itemSheet = new Image();

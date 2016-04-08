@@ -39,11 +39,9 @@ pr_ship.Do = function () {
 	} else if (ct_down().down) {
 		this.currentSpeed--;
 	}
-	if (this.currentSpeed > 1 && G.stats.maxEnergy / G.stats.energy > this.currentSpeed + G.stats.crew) {
-		this.currentSpeed--;
-	}
+	this.AdjustSpeedBasedOnEnergy();
 	this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
-
+	
 	this.moveStepProgress += this.currentSpeed * this.moveStepAmount;
 	if (this.moveStepProgress >= this.moveStepSize) {
 		this.moveStepProgress -= this.moveStepSize;
@@ -129,18 +127,17 @@ pr_ship.CheckMovement = function () {
 
 pr_ship.UpdateEnergy = function () {
 	this.energyRefillTimer++;
+	if (this.energyRefillTimer >= (100 / G.stats.crew) + ((G.stats.illness) * (100 / G.stats.crew))) {
+		G.stats.energy += G.stats.crew;
+		this.energyRefillTimer = 0;
+	}
 
 	if (this.doTakeStep) {
-		G.stats.energy -= ((this.currentSpeed / G.stats.speed) + ((G.stats.hunger + G.stats.thirst) * 0.1)) * 0.25;
-
-		if (this.energyRefillTimer >= (100 / G.stats.crew) + ((G.stats.hunger + G.stats.thirst) * 10)) {
-			G.stats.energy += G.stats.crew;
-			this.energyRefillTimer = 0;
-		}
-
-		if (G.stats.energy < 0) G.stats.energy = 0;
-		if (G.stats.energy > G.stats.maxEnergy) G.stats.energy = G.stats.maxEnergy;
+		G.stats.energy -= ((this.currentSpeed / G.stats.speed) + ((G.stats.illness) * 0.1)) * 0.25;
 	}
+
+	if (G.stats.energy < 0) G.stats.energy = 0;
+	if (G.stats.energy > G.stats.maxEnergy) G.stats.energy = G.stats.maxEnergy;
 }
 
 pr_ship.SeamlessScroll = function () {
@@ -159,5 +156,14 @@ pr_ship.SeamlessScroll = function () {
 	else if (this.y >= rm_Ocean.mapDownTrigger) {
 		this.y = rm_Ocean.mapDownTriggerTarget;
 		OS.SetCamera({y: 0});
+	}
+}
+
+pr_ship.AdjustSpeedBasedOnEnergy = function () {
+	if (this.currentSpeed > 3 && G.stats.energy < (G.stats.maxEnergy * 0.3) ||
+		this.currentSpeed > 2 && G.stats.energy < (G.stats.maxEnergy * 0.15) ||
+		this.currentSpeed > 1 && G.stats.energy < (G.stats.maxEnergy * 0.05))
+	{
+		this.currentSpeed--;
 	}
 }
