@@ -941,14 +941,17 @@ Oversimplified.GameObject.prototype.Clicked = function (mouseClick) {
 
 // Move the object based upon xSpeed and ySpeed, stopping if colliding with solid objects
 //
-// xSpeed and ySpeed are numbers, and checkCollisions is true or false.
-Oversimplified.GameObject.prototype.SimpleMove = function (xSpeed, ySpeed, checkCollisions) {
+// xSpeed and ySpeed are numbers, checkCollisions is true or false, and checkEveryXPixels is a number.
+//
+// Returns true if successfully moved and false if not.
+Oversimplified.GameObject.prototype.SimpleMove = function (xSpeed, ySpeed, checkCollisions, checkEveryXPixels) {
+    checkEveryXPixels = (typeof checkEveryXPixels !== 'undefined') ? checkEveryXPixels : 2;
     var collisionLeft = false,
         collisionRight = false,
         collisionUp = false,
         collisionDown = false;
     if (checkCollisions) {
-        for (var vert = 0; vert < this.yBound * 2; vert++) {
+        for (var vert = 0; vert < this.yBound * 2; vert += checkEveryXPixels) {
             var yToCheck = (this.y - this.yBound + vert);
             if (!collisionLeft) {
                 collisionLeft = xSpeed < 0 && Oversimplified.CollisionAtPoint((this.x - this.xBound) + xSpeed, yToCheck);
@@ -957,7 +960,7 @@ Oversimplified.GameObject.prototype.SimpleMove = function (xSpeed, ySpeed, check
                 collisionRight = xSpeed > 0 && Oversimplified.CollisionAtPoint((this.x + this.xBound) + xSpeed, yToCheck);
             }
         }
-        for (var hor = 0; hor < this.xBound * 2; hor++) {
+        for (var hor = 0; hor < this.xBound * 2; hor += checkEveryXPixels) {
             var xToCheck = (this.x - this.xBound + hor);
             if (!collisionUp) {
                 collisionUp = ySpeed < 0 && Oversimplified.CollisionAtPoint(xToCheck, (this.y - this.yBound) + ySpeed);
@@ -970,6 +973,9 @@ Oversimplified.GameObject.prototype.SimpleMove = function (xSpeed, ySpeed, check
     if (!checkCollisions || (!collisionLeft && !collisionRight && !collisionUp && !collisionDown)) {
         this.x += xSpeed;
         this.y += ySpeed;
+        return true;
+    } else {
+        return false;
     }
 }
 
