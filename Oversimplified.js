@@ -889,17 +889,20 @@ Oversimplified.GameObject.prototype.IsOverlapping = function (doSimple) {
 Oversimplified.GameObject.prototype.IfOverlappingThenMove = function (doSimple) {
 	var overlappingObject = this.IsOverlapping(doSimple);
 	
-	if (overlappingObject != false)
-	{
+	if (overlappingObject != false) {
 		if (this.x < overlappingObject.x)
-		this.x--;
+            this.x--;
 		if (this.x >= overlappingObject.x)
-			this.x++;
+            this.x++;
 		if (this.y < overlappingObject.y)
-			this.y--;
+            this.y--;
 		if (this.y >= overlappingObject.y)
-			this.y++;
-	}
+            this.y++;
+
+        return true;
+	} else {
+        return false;
+    }
 }
 
 // Prevents the object from moving outside of the room's boundaries.
@@ -987,28 +990,40 @@ Oversimplified.GameObject.prototype.Destroy = function () {
 
 // Check if the point (x, y) lies inside the bounds of ANY object in the room.
 // If yes and if that object is flagged as solid, then there is a collision.
-Oversimplified.CollisionAtPoint = function (x, y) {
-    var currentRoom = Oversimplified.R[Oversimplified.R.currentRoom];
-    
+Oversimplified.GameObjectsAtPoint = function (x, y) {
+    var objectsAtPoint = [];
     for (var obj in Oversimplified.O) {
         var object = Oversimplified.O[obj];
-        if (object != this) {
-            for (var i = 0; i < 2 * object.xBound; i++) {
-                for (var j = 0; j < 2 * object.yBound; j++) {
-                    var xToCheck = (object.x - object.xBound) + i;
-                    var yToCheck = (object.y - object.yBound) + j;
-                    
-                    if (xToCheck == x && yToCheck == y)
-                    {
-                        if (object.solid) {
-                            return true;
-                        }
-                    }
+        for (var i = 0; i < 2 * object.xBound; i++) {
+            for (var j = 0; j < 2 * object.yBound; j++) {
+                var xToCheck = (object.x - object.xBound) + i;
+                var yToCheck = (object.y - object.yBound) + j;
+                
+                if (xToCheck == x && yToCheck == y)
+                {
+                    objectsAtPoint.push(object);
                 }
             }
         }
     }
     
+    if (objectsAtPoint.length > 0) {
+        return objectsAtPoint;
+    } else {
+        return false;
+    }
+}
+
+// Check if the point (x, y) lies inside the bounds of ANY object in the room.
+// If yes and if that object is flagged as solid, then there is a collision.
+Oversimplified.CollisionAtPoint = function (x, y) {
+    var objectsAtPoint = Oversimplified.GameObjectsAtPoint(x, y);
+
+    for (var i = 0; i < objectsAtPoint.length; i++) {
+        if (objectsAtPoint[i].solid == true) {
+            return true;
+        }
+    }
     return false;
 }
 
