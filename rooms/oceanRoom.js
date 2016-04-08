@@ -56,6 +56,9 @@ rm_Ocean.DrawAbove = function () {
     // Draw the speed indicator in Bottom Left corner.
     OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
 
+    // Draw Energy Bar
+    this.DrawEnergyBar();
+
     // drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
     // drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
 }
@@ -63,4 +66,16 @@ rm_Ocean.DrawAbove = function () {
 rm_Ocean.DoLast = function () {
     // Clear Objects on room exit. This is best practice unless you need persistent objects.
     //rm_Ocean.objects = {};
+}
+
+rm_Ocean.DrawEnergyBar = function () {
+    var percentage = G.stats.energy / G.stats.maxEnergy;
+    var barHeight = 2 * OS.S.pixelScale;
+    var maxBarWidth = 32;
+    var barWidth = Math.round(maxBarWidth * percentage) * OS.S.pixelScale;
+
+    var saveFillStyle = OS.context.fillStyle;
+    OS.context.fillStyle = "#0055FF";
+    OS.context.fillRect(64, OS.camera.height - barHeight - 16, barWidth, barHeight);
+    OS.context.fillStyle = saveFillStyle;
 }

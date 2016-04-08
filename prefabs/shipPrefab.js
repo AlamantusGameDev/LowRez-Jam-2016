@@ -20,7 +20,9 @@ var pr_ship = OS.P.Add("Ship", {
 	moveStepSize: 3,
 	moveStepAmount: 5 * Oversimplified.R[Oversimplified.R.currentRoom].stepSpeed,
 	moveStepProgress: 0,
-	doTakeStep: false
+	doTakeStep: false,
+
+	energyRefillTimer: 0
 });
 
 pr_ship.Do = function () {
@@ -36,6 +38,9 @@ pr_ship.Do = function () {
 	} else if (ct_down().down) {
 		this.currentSpeed--;
 	}
+	if (this.currentSpeed > 1 && G.stats.maxEnergy / G.stats.energy > this.currentSpeed + G.stats.crew) {
+		this.currentSpeed--;
+	}
 	this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
 
 	this.moveStepProgress += this.currentSpeed * this.moveStepAmount;
@@ -47,51 +52,73 @@ pr_ship.Do = function () {
 	}
 
 	this.SeamlessScroll();
-	console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
+	// console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
 }
 
 pr_ship.AfterDo = function () {
 	this.CheckMovement();
+	this.UpdateEnergy();
 }
 
 pr_ship.CheckMovement = function () {
 	var moveAmount = (G.stats.speed + this.currentSpeed) * OS.S.pixelScale;
+	var movedSuccessfully = false;
 	switch (this.direction) {
 		case 0:
 			if (this.image.currentAnimation != "Ship Right") this.SetAnimation("Ship Right");
-			if (this.doTakeStep) this.SimpleMove(moveAmount, 0, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, 0, true, 8);
 			break;
 		case 45:
 			if (this.image.currentAnimation != "Ship Up-Right") this.SetAnimation("Ship Up-Right");
-			if (this.doTakeStep) this.SimpleMove(moveAmount, -moveAmount, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, -moveAmount, true, 8);
 			break;
 		case 90:
 			if (this.image.currentAnimation != "Ship Up") this.SetAnimation("Ship Up");
-			if (this.doTakeStep) this.SimpleMove(0, -moveAmount, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(0, -moveAmount, true, 8);
 			break;
 		case 135:
 			if (this.image.currentAnimation != "Ship Up-Left") this.SetAnimation("Ship Up-Left");
-			if (this.doTakeStep) this.SimpleMove(-moveAmount, -moveAmount, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, -moveAmount, true, 8);
 			break;
 		case 180:
 			if (this.image.currentAnimation != "Ship Left") this.SetAnimation("Ship Left");
-			if (this.doTakeStep) this.SimpleMove(-moveAmount, 0, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, 0, true, 8);
 			break;
 		case 225:
 			if (this.image.currentAnimation != "Ship Down-Left") this.SetAnimation("Ship Down-Left");
-			if (this.doTakeStep) this.SimpleMove(-moveAmount, moveAmount, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, moveAmount, true, 8);
 			break;
 		case 270:
 			if (this.image.currentAnimation != "Ship Down") this.SetAnimation("Ship Down");
-			if (this.doTakeStep) this.SimpleMove(0, moveAmount, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(0, moveAmount, true, 8);
 			break;
 		case 315:
 			if (this.image.currentAnimation != "Ship Down-Right") this.SetAnimation("Ship Down-Right");
-			if (this.doTakeStep) this.SimpleMove(moveAmount, moveAmount, true);
+			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, moveAmount, true, 8);
 			break;
 		default:
 			console.log("No valid direction");
 			break;
+	}
+
+	if (this.doTakeStep && !movedSuccessfully) {
+		this.currentSpeed = 0;
+	}
+}
+
+pr_ship.UpdateEnergy = function () {
+	this.energyRefillTimer++;
+
+	if (this.doTakeStep) {
+		G.stats.energy -= ((this.currentSpeed / G.stats.speed) + ((G.stats.hunger + G.stats.thirst) * 0.1)) * 0.25;
+
+		if (this.energyRefillTimer >= (100 / G.stats.crew) + ((G.stats.hunger + G.stats.thirst) * 10)) {
+			G.stats.energy += G.stats.crew;
+			this.energyRefillTimer = 0;
+		}
+
+		if (G.stats.energy < 0) G.stats.energy = 0;
+		if (G.stats.energy > G.stats.maxEnergy) G.stats.energy = G.stats.maxEnergy;
 	}
 }
 
