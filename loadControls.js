@@ -9,6 +9,8 @@ var ct_arrow_right = OS.C.Add("Arrow Right", OS.Keycode.right);
 
 var ct_shift = OS.C.Add("Shift", OS.Keycode.shift);
 var ct_space = OS.C.Add("Confirm", OS.Keycode.space);
+var ct_z = OS.C.Add("Shift", OS.Keycode.z);
+var ct_x = OS.C.Add("Confirm", OS.Keycode.x);
 var ct_esc = OS.C.Add("Cancel", OS.Keycode.escape);
 
 function loadControls () {}
@@ -42,5 +44,21 @@ function ct_right () {
 		held : ct_wasd_right.held || ct_arrow_right.held,
 		down : ct_wasd_right.down || ct_arrow_right.down,
 		up : ct_wasd_right.up || ct_arrow_right.up
+	}
+}
+
+function ct_confirm () {
+	return {
+		held : ct_space.held || ct_z.held,
+		down : ct_space.down || ct_z.down,
+		up : ct_space.up || ct_z.up
+	}
+}
+
+function ct_cancel () {
+	return {
+		held : ct_shift.held || ct_x.held,
+		down : ct_shift.down || ct_x.down,
+		up : ct_shift.up || ct_x.up
 	}
 }
