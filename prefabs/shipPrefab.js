@@ -60,7 +60,16 @@ pr_ship.AfterDo = function () {
 }
 
 pr_ship.CheckInteraction = function () {
-
+	if (ct_confirm().down) {
+		var objectsFound = OS.GameObjectsAtPoint(this.pointInFront.x, this.pointInFront.y);
+		if (objectsFound.length > 0) {
+			for (var i = 0; i < objectsFound.length; i++) {
+				if (objectsFound[i].canTrade) {
+					// open the trading screen for the island.
+				}
+			}
+		}
+	}
 }
 
 pr_ship.CheckMovement = function () {
