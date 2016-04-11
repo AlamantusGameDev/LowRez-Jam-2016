@@ -1,8 +1,8 @@
 // var rm_TitleScreen = OS.R.Add("Default");
 // var rm_Ocean = OS.R.Add("Ocean", {
 var rm_Ocean = OS.R.Add("Default", {
-	width: (64 * OS.S.pixelScale) * 64,	//32 64x64 squares for the map.
-	height: (64 * OS.S.pixelScale) * 64,
+	width: (64 * OS.S.pixelScale) * 50,	//50x50 map of 64x64 squares. This will allow a single pixel on the map to represent a 64x square and fit comfortably on screen.
+	height: (64 * OS.S.pixelScale) * 50,
 	backgroundColor: "#1b2632"
 });
 

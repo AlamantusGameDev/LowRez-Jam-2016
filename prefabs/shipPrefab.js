@@ -27,19 +27,22 @@ var pr_ship = OS.P.Add("Ship", {
 });
 
 pr_ship.Do = function () {
-	if (ct_left().down) {
-		this.direction += 45;
-	} else if (ct_right().down) {
-		this.direction -= 45;
+	if (!guiControl.inventory.show) {
+		if (ct_left().down) {
+			this.direction += 45;
+		} else if (ct_right().down) {
+			this.direction -= 45;
+		}
+		this.direction = Math.clampAngle(this.direction);
+	
+		if (ct_up().down) {
+			this.currentSpeed++;
+		} else if (ct_down().down) {
+			this.currentSpeed--;
+		}
+		this.AdjustSpeedBasedOnEnergy();
 	}
-	this.direction = Math.clampAngle(this.direction);
 
-	if (ct_up().down) {
-		this.currentSpeed++;
-	} else if (ct_down().down) {
-		this.currentSpeed--;
-	}
-	this.AdjustSpeedBasedOnEnergy();
 	this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
 	
 	this.moveStepProgress += this.currentSpeed * this.moveStepAmount;
