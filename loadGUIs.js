@@ -6,8 +6,29 @@ var guiControl = {
 	topOfBackground: (2 + 2) * OS.S.pixelScale,
 	upperBorder: (13 + 2) * OS.S.pixelScale,
 	lowerBorder: (3 + 2) * OS.S.pixelScale,
-	leftBorder: (5 + 2) * OS.S.pixelScale,
-	rightBorder: (5 + 2) * OS.S.pixelScale
+	leftBorder: (10 + 2) * OS.S.pixelScale,
+	rightBorder: (5 + 2) * OS.S.pixelScale,
+	iconSize: 8,
+	iconScaled: 8 * OS.S.pixelScale,
+
+	iconPosition: function (cellPosition) {
+		return (guiControl.iconScaled * cellPosition);
+	},
+	rowTop: function (rowNumber) {
+		return guiControl.upperBorder + ((guiControl.iconSize + 2) * rowNumber * OS.S.pixelScale);
+	},
+
+	drawIcon: function (cellX, cellY, xPosition, yPosition) {
+		OS.context.drawImage(guiControl.icons, guiControl.iconPosition(cellX), guiControl.iconPosition(cellY), guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
+	},
+	drawItem: function (itemId, xPosition, yPosition) {
+		var cellX = itemId % 4;
+		var cellY = Math.floor(itemId / 4);
+		OS.context.drawImage(guiControl.itemSheet, guiControl.iconPosition(cellX), guiControl.iconPosition(cellY), guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
+	},
+	drawCursor: function (xPosition, yPosition) {
+		OS.context.drawImage(guiControl.cursor, xPosition, yPosition);
+	}
 }
 guiControl.background = new Image();
 guiControl.background.src = "images/guiBackground.png";
@@ -19,7 +40,7 @@ guiControl.itemSheet.src = "images/items_sheet.png";
 guiControl.icons = new Image();
 guiControl.icons.src = "images/icons_sheet.png";
 
-function drawPixelText(text, x, y, wrapWidth, color, size) {
+guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 // Draw the text at the given x and y on the canvas using the alphabet images.
 // Remember to set the pixel scale for x and y when you call the function!
 // 4x4 font modified from http://pixeljoint.com/forum/forum_posts.asp?TID=18755&PID=185995#185995

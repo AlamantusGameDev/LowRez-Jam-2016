@@ -12,6 +12,7 @@ function start()
     OS.AddScript("loadControls.js");
     OS.AddScript("loadGameManager.js");
     OS.AddScript("loadPrefabs.js");
+    OS.AddScript("loadGUIs.js");
     OS.AddScript("loadRooms.js");
 }
 

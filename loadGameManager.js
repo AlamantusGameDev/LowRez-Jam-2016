@@ -8,10 +8,30 @@ G.currentScreen = "";	// For pause screen, stats screen, inventory screen
 G.inventory = {
     money: 100,
 	supplies: 20,	// How much stuff you have to maintain your crew's illness with.
-	cargo: []
+	cargo:	[0, 0, 0, 0,		// Keeps track of how much of each item you have.
+			 0, 0, 0, 0,		// Requires a check to make sure you can't buy more different kinds than you can hold.
+			 0, 0, 0, 0,
+			 0, 0, 0, 0],
+	CheckCargo: function () {	// Returns an array of indices that have cargo
+		var indicesWithCargo = [];
+		for (var i = 0; i < G.inventory.cargo.length; i++) {
+			if (G.inventory.cargo[i] > 0) {
+				indicesWithCargo.push(i);
+			}
+		}
+		return indicesWithCargo;
+	},
+	CargoTotal: function () {
+		var cargo = G.inventory.CheckCargo();
+		var cargoTotal = 0;
+		for (var i = 0; i < cargo.length; i++) {
+			cargoTotal += G.inventory.cargo[cargo[i]];
+		}
+		return cargoTotal;
+	}
 };
 G.stats = {
-    inventory: 3,   // Maximum number of different things the inventory can hold.
+    inventory: 3,   // Maximum number of different things the cargo can hold.
     hold: 20,		// Maximum number of each individual kind of thing in the inventory.
     speed: 1,		// How many pixels you move.
     hull: 3,		// Your HP, pretty much. How many times you can crash without exploding.
@@ -22,7 +42,7 @@ G.stats = {
     energy: 25,		// Drains rate determined by current speed. When drained, currentSpeed reduces until you have enough energy to continue.
     maxEnergy: 50,	// How much to refill your energy to. Can increase with upgrades.
     illness: 1		// Your crew's overall health. When this is low, your ship slows down.
-}
+};
 
 G.economy = {	// Aww yea, supply and demand.
 // Items are determined by their index, and their position on the sheet determines their index.
@@ -52,6 +72,6 @@ G.economy = {	// Aww yea, supply and demand.
 			}
 		}
 	}
-}
+};
 
 function loadGameManager () {}

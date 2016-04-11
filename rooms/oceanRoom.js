@@ -50,6 +50,10 @@ rm_Ocean.Do = function () {
 
         this.waveTimer = Math.round(Math.randomRange(30, 150));
     }
+
+    if (!guiControl.inventory.show && ct_cancel().down) {
+        guiControl.inventory.show = true;
+    }
 }
 
 rm_Ocean.DrawAbove = function () {
@@ -61,6 +65,7 @@ rm_Ocean.DrawAbove = function () {
 
     // drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
     // drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
+    drawInventoryGUI();
 }
 
 rm_Ocean.DoLast = function () {
