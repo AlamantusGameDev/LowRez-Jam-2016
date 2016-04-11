@@ -41,7 +41,7 @@ G.stats = {
     crew: 2,		// How many crew members you have. Influences how fast your energy recovers.
     energy: 25,		// Drains rate determined by current speed. When drained, currentSpeed reduces until you have enough energy to continue.
     maxEnergy: 50,	// How much to refill your energy to. Can increase with upgrades.
-    illness: 1		// Your crew's overall health. When this is low, your ship slows down.
+    illness: 0		// Your crew's overall health. When this is low, your ship slows down.
 };
 
 G.economy = {	// Aww yea, supply and demand.

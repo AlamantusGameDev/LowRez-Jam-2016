@@ -2,7 +2,7 @@ function inventoryGUI() {
 	guiControl.inventory = {
 		screen: "main",
 		cursorPosition: 0,
-		show: true,
+		show: false,
 
 		moneyDisplay: function () {
 			var moneyString = "";
