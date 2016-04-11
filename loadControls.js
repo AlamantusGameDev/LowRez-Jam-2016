@@ -8,9 +8,9 @@ var ct_arrow_down = OS.C.Add("Arrow Down", OS.Keycode.down);
 var ct_arrow_right = OS.C.Add("Arrow Right", OS.Keycode.right);
 
 var ct_shift = OS.C.Add("Shift", OS.Keycode.shift);
-var ct_space = OS.C.Add("Confirm", OS.Keycode.space);
-var ct_z = OS.C.Add("Shift", OS.Keycode.z);
-var ct_x = OS.C.Add("Confirm", OS.Keycode.x);
+var ct_space = OS.C.Add("Space", OS.Keycode.space);
+var ct_z = OS.C.Add("Z", OS.Keycode.z);
+var ct_x = OS.C.Add("X", OS.Keycode.x);
 var ct_esc = OS.C.Add("Cancel", OS.Keycode.escape);
 
 function loadControls () {}
