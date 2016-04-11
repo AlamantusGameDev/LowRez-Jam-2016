@@ -24,9 +24,6 @@ G.stats = {
     illness: 1		// Your crew's overall health. When this is low, your ship slows down.
 }
 
-G.itemSheet = new Image();
-G.itemSheet.src = "images/items_sheet.png";
-
 G.economy = {	// Aww yea, supply and demand.
 // Items are determined by their index, and their position on the sheet determines their index.
 // So the second item on the top row is index 1, and to get its value, you get `G.economy.cargoItemWorth[1]`
