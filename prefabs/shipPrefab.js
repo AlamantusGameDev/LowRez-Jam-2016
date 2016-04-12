@@ -27,7 +27,7 @@ var pr_ship = OS.P.Add("Ship", {
 });
 
 pr_ship.Do = function () {
-	if (!guiControl.inventory.show) {
+	if (!guiControl.inventory.show && !guiControl.trade.show) {
 		if (ct_left().down) {
 			this.direction += 45;
 		} else if (ct_right().down) {

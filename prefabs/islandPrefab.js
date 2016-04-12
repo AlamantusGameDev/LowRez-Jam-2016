@@ -13,6 +13,7 @@ var pr_island = OS.P.Add("Island", {
 	mapHeight: 1,
 	mapColor: "#00AB00",
 
+	inventory:		[],
 	priceDifferences: [],
 	itemsSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
 					 0, 0, 0, 0,
@@ -21,7 +22,7 @@ var pr_island = OS.P.Add("Island", {
 	itemsBought:	[0, 0, 0, 0,		// The more you buy, the higher the price gets
 					 0, 0, 0, 0,
 					 0, 0, 0, 0,
-					 0, 0, 0, 0],
+					 0, 0, 0, 0]
 });
 
 pr_island.DoFirst = function () {
@@ -34,9 +35,10 @@ pr_island.GetMapPosition = function () {
 	this.mapY = (this.y / OS.S.pixelScale) / (OS.camera.height / OS.S.pixelScale);
 }
 
-pr_island.SetUpPrices = function () {
+pr_island.SetUp = function () {
 	for (var i = 0; i < 15; i++) {
-		this.priceDifferences[i] = Math.randomRange(-100, 100);
+		this.inventory[i] = Math.round(Math.randomRange(0, 20));
+		this.priceDifferences[i] = Math.round(Math.randomRange(-100, 100));
 	}
 }
 

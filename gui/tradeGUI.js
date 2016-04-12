@@ -2,7 +2,9 @@ function tradeGUI() {
 	guiControl.trade = {
 		screen: "main",	// "main", "buy", "sell", "gossip"
 		cursorPosition: 0,
-		show: true,	// Leaving this in just in case I change my mind about stopping time while trading.
+		show: false,
+
+		island: null,
 
 		padding: 2 * OS.S.pixelScale,
 		leftBorder: 12 * OS.S.pixelScale,
@@ -15,6 +17,11 @@ function tradeGUI() {
 
 function drawTradeGUI() {
 	if (guiControl.trade.show) {
+		var tmp = Oversimplified.context.fillStyle;
+	    Oversimplified.context.fillStyle = "#D9BEA5";
+	    Oversimplified.context.fillRect(0, 0, Oversimplified.camera.width, Oversimplified.camera.height);
+	    Oversimplified.context.fillStyle = tmp;
+
 		if (ct_down().down) {
 			guiControl.trade.cursorPosition++;
 		}
@@ -62,8 +69,7 @@ function drawTradeGUI() {
 						guiControl.trade.screen = "gossip";
 						break;
 					default:
-						OS.SetRoom(rm_Ocean);
-						// guiControl.trade.show = false;
+						guiControl.trade.show = false;
 						break;
 				}
 

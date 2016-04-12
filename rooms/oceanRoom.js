@@ -54,12 +54,14 @@ rm_Ocean.Do = function () {
         this.waveTimer = Math.round(Math.randomRange(30, 150));
     }
 
-    if (!guiControl.inventory.show && ct_cancel().down) {
-        guiControl.inventory.show = true;
-    }
-
-    if (!guiControl.inventory.show && ct_esc.down) {
-        OS.SetRoom(rm_Trade);
+    if (!guiControl.inventory.show && !guiControl.trade.show) {
+        if (ct_cancel().down) {
+            guiControl.inventory.show = true;
+        }
+        if (ct_esc.down) {
+            guiControl.trade.show = true;
+            G.player.speed = 0;
+        }
     }
 }
 
@@ -73,6 +75,7 @@ rm_Ocean.DrawAbove = function () {
     // drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
     // drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
     drawInventoryGUI();
+    drawTradeGUI();
 }
 
 rm_Ocean.DoLast = function () {
