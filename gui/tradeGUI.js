@@ -2,7 +2,9 @@ function tradeGUI() {
 	guiControl.trade = {
 		screen: "main",	// "main", "buy", "sell", "gossip"
 		cursorPosition: 0,
+		scroll: 0,		// horizontal scroll on item lists.
 		show: false,
+		activateDelay: 0,
 
 		island: null,
 
@@ -17,6 +19,7 @@ function tradeGUI() {
 
 function drawTradeGUI() {
 	if (guiControl.trade.show) {
+		guiControl.trade.activateDelay--;
 		var tmp = Oversimplified.context.fillStyle;
 	    Oversimplified.context.fillStyle = "#D9BEA5";
 	    Oversimplified.context.fillRect(0, 0, Oversimplified.camera.width, Oversimplified.camera.height);
@@ -32,10 +35,10 @@ function drawTradeGUI() {
 		if (guiControl.trade.screen == "main") {
 			// Limit Cursor
 			if (guiControl.trade.cursorPosition < 0) {
-				guiControl.trade.cursorPosition = 0;
+				guiControl.trade.cursorPosition = 3;
 			}
 			if (guiControl.trade.cursorPosition > 3) {
-				guiControl.trade.cursorPosition = 3;
+				guiControl.trade.cursorPosition = 0;
 			}
 
 			// Title
@@ -57,7 +60,7 @@ function drawTradeGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition));
 
 			// Button Action
-			if (ct_confirm().down) {
+			if (guiControl.trade.activateDelay <= 0 && ct_confirm().down) {
 				switch (guiControl.trade.cursorPosition) {
 					case 0:
 						guiControl.trade.screen = "buy";
@@ -88,11 +91,20 @@ function drawTradeGUI() {
 			// Title
 			guiControl.drawPixelText("Buy", guiControl.trade.leftBorder - (2 * OS.S.pixelScale), guiControl.topOfBackground, 10, "black", 6);
 
-			guiControl.drawPixelText("Actual Amt", guiControl.trade.leftBorder - (5 * OS.S.pixelScale), guiControl.trade.rowTop(0) + OS.S.pixelScale, 10, "black", 4);
 			// Money icon
-			guiControl.drawIcon(7, 2, guiControl.trade.leftBorder - (5 * OS.S.pixelScale), guiControl.trade.rowTop(1) - (3 * OS.S.pixelScale));
-			guiControl.drawPixelText(G.inventory.money.toString(), guiControl.trade.leftBorder - (5 * OS.S.pixelScale) + ((guiControl.iconSize + 2) * OS.S.pixelScale), guiControl.trade.rowTop(1) + (2 * OS.S.pixelScale) - (3 * OS.S.pixelScale), 10, "black", 4);
+			guiControl.drawIcon(7, 2, guiControl.trade.leftBorder - (5 * OS.S.pixelScale), guiControl.trade.rowTop(0) - (3 * OS.S.pixelScale));
+			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.trade.leftBorder - (5 * OS.S.pixelScale) + ((guiControl.iconSize + 2) * OS.S.pixelScale), guiControl.trade.rowTop(0) + (2 * OS.S.pixelScale) - (3 * OS.S.pixelScale), 10, "black", 4);
 			
+			// Cargo icons
+			var cargo = guiControl.trade.island.CheckInventory();	// Contains the item ids that have more than 1 item
+			for (var i = 0; i < cargo.length; i++) {
+				guiControl.drawItem(cargo[i], guiControl.trade.leftBorder, guiControl.trade.rowTop(i + 1));
+				var itemPrice = G.economy.cargoItemWorth[cargo[i]] + guiControl.trade.island.priceDifferences[cargo[i]];
+				var itemPriceDisplay = itemPrice.toString() + " c";
+				guiControl.drawPixelText(itemPriceDisplay, guiControl.trade.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.trade.rowTop(i + 1) + OS.S.pixelScale, 8, "black", 6);
+				// guiControl.drawPixelText(guiControl.trade.island.inventory[cargo[i]], guiControl.trade.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.trade.rowTop(i + 1) + OS.S.pixelScale, 8, "black", 6);
+			}
+
 			// Back Text
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - (3 * OS.S.pixelScale), 8, "black", 6);
 			
@@ -108,10 +120,10 @@ function drawTradeGUI() {
 		else if (guiControl.trade.screen == "sell") {
 			// Limit Cursor
 			if (guiControl.trade.cursorPosition < 0) {
-				guiControl.trade.cursorPosition = 0;
+				guiControl.trade.cursorPosition = 2;
 			}
 			if (guiControl.trade.cursorPosition > 2) {
-				guiControl.trade.cursorPosition = 2;
+				guiControl.trade.cursorPosition = 0;
 			}
 
 			// Title

@@ -1,6 +1,8 @@
 function tradeRoom () {}
 
-rm_Trade.DoFirst = function () {}
+rm_Trade.DoFirst = function () {
+	OS.canvas.style.background = this.background.color;
+}
 
 rm_Trade.Do = function () {}
 

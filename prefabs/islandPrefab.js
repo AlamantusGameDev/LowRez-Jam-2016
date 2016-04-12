@@ -13,6 +13,8 @@ var pr_island = OS.P.Add("Island", {
 	mapHeight: 1,
 	mapColor: "#00AB00",
 
+	canTrade: true,
+
 	inventory:		[],
 	priceDifferences: [],
 	itemsSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
@@ -27,7 +29,7 @@ var pr_island = OS.P.Add("Island", {
 
 pr_island.DoFirst = function () {
 	this.GetMapPosition();
-	this.SetUpPrices();
+	this.SetUp();
 }
 
 pr_island.GetMapPosition = function () {
@@ -38,7 +40,10 @@ pr_island.GetMapPosition = function () {
 pr_island.SetUp = function () {
 	for (var i = 0; i < 15; i++) {
 		this.inventory[i] = Math.round(Math.randomRange(0, 20));
-		this.priceDifferences[i] = Math.round(Math.randomRange(-100, 100));
+		this.priceDifferences[i] = Math.round(Math.randomRange(-50, 50));
+		if (G.economy.cargoItemWorth[i] + this.priceDifferences[i]) {
+			this.priceDifferences[i] = -G.economy.cargoItemWorth[i] + 1;
+		}
 	}
 }
 
@@ -53,10 +58,28 @@ pr_island.AdjustPrices = function () {
 	}
 }
 
+pr_island.CheckInventory = function () {	// Returns an array of indices that have cargo
+	var indicesWithCargo = [];
+	for (var i = 0; i < G.inventory.cargo.length; i++) {
+		if (this.inventory[i] > 0) {
+			indicesWithCargo.push(i);
+		}
+	}
+	return indicesWithCargo;
+}
+
+pr_island.TradeWith = function () {
+	guiControl.trade.island = this.self;
+	guiControl.trade.activateDelay = 5;
+	guiControl.trade.show = true;
+}
+
 pr_island.SellTo = function (itemIndex, amount) {
+	this.inventory[itemIndex] += amount;
 	this.itemsBought[itemIndex] += amount;
 }
 
 pr_island.BuyFrom = function (itemIndex, amount) {
+	this.inventory[itemIndex] += amount;
 	this.itemsSold[itemIndex] += amount;
 }

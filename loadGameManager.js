@@ -12,6 +12,26 @@ G.inventory = {
 			 0, 0, 0, 0,		// Requires a check to make sure you can't buy more different kinds than you can hold.
 			 0, 0, 0, 0,
 			 0, 0, 0, 0],
+	moneyDisplay: function () {
+		var moneyString = "";
+		if (G.inventory.money >= 1000000) {
+			moneyString = G.inventory.money.toString().substr(0, 1);
+			if (parseInt(G.inventory.money.toString().substr(1, 1)) > 0) {
+				moneyString += "." + G.inventory.money.toString().substr(1, 1);
+			}
+		}
+		if (G.inventory.money >= 1000000000000) {
+			moneyString += "T";
+		} else if (G.inventory.money >= 1000000000) {
+			moneyString += "B";
+		} else if (G.inventory.money >= 1000000) {
+			moneyString += "M";
+		} else {
+			moneyString = G.inventory.money.toString();
+		}
+
+		return moneyString;
+	},
 	CheckCargo: function () {	// Returns an array of indices that have cargo
 		var indicesWithCargo = [];
 		for (var i = 0; i < G.inventory.cargo.length; i++) {

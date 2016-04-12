@@ -41,6 +41,8 @@ pr_ship.Do = function () {
 			this.currentSpeed--;
 		}
 		this.AdjustSpeedBasedOnEnergy();
+
+		this.CheckInteraction();
 	}
 
 	this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
@@ -52,6 +54,7 @@ pr_ship.Do = function () {
 	} else {
 		this.doTakeStep = false;
 	}
+
 
 	this.SeamlessScroll();
 	// console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
@@ -68,7 +71,7 @@ pr_ship.CheckInteraction = function () {
 		if (objectsFound.length > 0) {
 			for (var i = 0; i < objectsFound.length; i++) {
 				if (objectsFound[i].canTrade) {
-					// open the trading screen for the island.
+					objectsFound[i].TradeWith();
 				}
 			}
 		}

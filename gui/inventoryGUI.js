@@ -2,28 +2,7 @@ function inventoryGUI() {
 	guiControl.inventory = {
 		screen: "main",
 		cursorPosition: 0,
-		show: false,
-
-		moneyDisplay: function () {
-			var moneyString = "";
-			if (G.inventory.money >= 1000000) {
-				moneyString = G.inventory.money.toString().substr(0, 1);
-				if (parseInt(G.inventory.money.toString().substr(1, 1)) > 0) {
-					moneyString += "." + G.inventory.money.toString().substr(1, 1);
-				}
-			}
-			if (G.inventory.money >= 1000000000000) {
-				moneyString += "T";
-			} else if (G.inventory.money >= 1000000000) {
-				moneyString += "B";
-			} else if (G.inventory.money >= 1000000) {
-				moneyString += "M";
-			} else {
-				moneyString = G.inventory.money.toString();
-			}
-
-			return moneyString;
-		}
+		show: false
 	}
 }
 
@@ -41,17 +20,17 @@ function drawInventoryGUI() {
 		if (guiControl.inventory.screen == "main") {
 			// Limit Cursor
 			if (guiControl.inventory.cursorPosition < 0) {
-				guiControl.inventory.cursorPosition = 0;
+				guiControl.inventory.cursorPosition = 3;
 			}
 			if (guiControl.inventory.cursorPosition > 3) {
-				guiControl.inventory.cursorPosition = 3;
+				guiControl.inventory.cursorPosition = 0;
 			}
 
 			// Title
 			guiControl.drawPixelText("Storage", guiControl.leftBorder - (2 * OS.S.pixelScale), guiControl.topOfBackground, 8, "black", 6);
 			// Money icon
 			guiControl.drawIcon(7, 2, guiControl.leftBorder, guiControl.rowTop(0));
-			guiControl.drawPixelText(guiControl.inventory.moneyDisplay(), guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(0) + OS.S.pixelScale, 8, "black", 6);
+			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(0) + OS.S.pixelScale, 8, "black", 6);
 			// Supplies icon
 			guiControl.drawIcon(9, 2, guiControl.leftBorder, guiControl.rowTop(1));
 			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(1) + OS.S.pixelScale, 8, "black", 6);
@@ -117,10 +96,10 @@ function drawInventoryGUI() {
 		else if (guiControl.inventory.screen == "supplies") {
 			// Limit Cursor
 			if (guiControl.inventory.cursorPosition < 0) {
-				guiControl.inventory.cursorPosition = 0;
+				guiControl.inventory.cursorPosition = 2;
 			}
 			if (guiControl.inventory.cursorPosition > 2) {
-				guiControl.inventory.cursorPosition = 2;
+				guiControl.inventory.cursorPosition = 0;
 			}
 
 			// Title
