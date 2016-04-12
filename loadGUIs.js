@@ -1,5 +1,6 @@
 function loadGUIs() {
 	OS.AddScript("gui/inventoryGUI.js");
+	OS.AddScript("gui/tradeGUI.js");
 }
 
 var guiControl = {

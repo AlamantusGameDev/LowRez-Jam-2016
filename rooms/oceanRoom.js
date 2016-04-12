@@ -37,6 +37,9 @@ rm_Ocean.DoFirst = function () {
     this.mapUpTriggerTarget = this.height - (OS.camera.height - OS.camera.vBorder);
     this.mapDownTrigger = this.height - OS.camera.vBorder;
     this.mapDownTriggerTarget = OS.camera.height - OS.camera.vBorder;
+
+    // THIS IS JUST FOR MAKING TRADE ROOM TESTING EASIER. DO NOT SHIP LIKE THIS!!!!
+    // OS.SetRoom(rm_Trade);
 }
 rm_Ocean.Do = function () {
     // Move G.oceanParticle around based on player's movement.
@@ -53,6 +56,10 @@ rm_Ocean.Do = function () {
 
     if (!guiControl.inventory.show && ct_cancel().down) {
         guiControl.inventory.show = true;
+    }
+
+    if (!guiControl.inventory.show && ct_esc.down) {
+        OS.SetRoom(rm_Trade);
     }
 }
 
