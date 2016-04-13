@@ -57,6 +57,58 @@ guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 	var alphabet = new Image();
 	alphabet.src = "images/alphabet_" + color + "_" + size.toString() + "px.png";
 
+	// Make words wrap nicely, but let punctuation wrap.
+	var wordsInText = text.split(" ");
+	if (wordsInText.length > 1) {
+		var indexToBreak = 0;
+		var replacementText = "";
+		var punctuation = [".", ",", "-", "?", "!"];
+		for (var w = 0; w < wordsInText.length; w++) {
+			// console.log("\"" + wordsInText[w].charAt(wordsInText[w].length - 1) + "\"");
+			
+			if (punctuation.indexOf(wordsInText[w]) == -1 && punctuation.indexOf(wordsInText[w].charAt(wordsInText[w].length - 1)) != -1) {
+				// If the last character of a word is punctuation, separate it out
+				wordsInText.splice(w + 1, 0, wordsInText[w].charAt(wordsInText[w].length - 1));
+				// console.log("punctuation:" + wordsInText[w].charAt(wordsInText[w].length - 1));
+				wordsInText[w] = wordsInText[w].substr(0, wordsInText[w].length - 1);
+				// console.log("Turns to:" + wordsInText[w]);
+				w--;
+			} else if (replacementText.substr(indexToBreak).length + wordsInText[w].length + 1 <= wrapWidth) {
+				// console.log("Adding: \"" + wordsInText[w] + " \" to \"" + replacementText.substr(indexToBreak) + "\"");
+				// console.log(replacementText.substr(indexToBreak).length + wordsInText[w].length + " < " + wrapWidth);
+				// console.log("\"" + replacementText.substr(indexToBreak) + "\"");
+				replacementText += wordsInText[w];
+
+				if (punctuation.indexOf(wordsInText[w + 1]) == -1) {	// If the next word in the array is not punctuation,
+					replacementText += " ";								// Then add a space after.
+				}
+				// console.log("Turns to: \"" + replacementText.substr(indexToBreak) + "\"");
+			} else if (replacementText.substr(indexToBreak).length + wordsInText[w].length <= wrapWidth) {
+				// console.log("Adding: \"" + wordsInText[w] + "\" to \"" + replacementText.substr(indexToBreak) + "\"");
+				// console.log(replacementText.substr(indexToBreak).length + wordsInText[w].length + " < " + wrapWidth);
+				// console.log("\"" + replacementText.substr(indexToBreak) + "\"");
+				replacementText += wordsInText[w];
+				// console.log("Turns to: \"" + replacementText.substr(indexToBreak) + "\"");
+				indexToBreak = replacementText.length;
+			} else {
+				// console.log("Checking: \"" + replacementText.substr(indexToBreak) + wordsInText[w] + "\"");
+				// console.log(replacementText.substr(indexToBreak).length + wordsInText[w].length + " > " + wrapWidth);
+				// console.log("\"" + replacementText.substr(indexToBreak) + "\"");
+				// indexToBreak = replacementText.length - 1;
+				var numberOfSpaces = wrapWidth - replacementText.substr(indexToBreak).length;
+				for (var s = 0; s < numberOfSpaces; s++) {
+					replacementText += " ";
+				}
+				// console.log("Turns to: \"" + replacementText.substr(indexToBreak) + "\"");
+				indexToBreak = replacementText.length;
+				w--;
+				// replacementText += wordsInText[w];
+			}
+			// console.log("----");
+		}
+		text = replacementText;
+	}
+
 	for (var i = 0; i < text.length; i++) {
 		var letterCellX, letterCellY;
 		switch (text.charAt(i)) {
