@@ -15,11 +15,7 @@ var pr_island = OS.P.Add("Island", {
 
 	canTrade: true,
 
-	// inventory:		[],
-	inventory: 		[0, 5, 0, 0,
-	                 0, 0, 3, 0,
-	                 0, 4, 0, 0,
-	                 0, 0, 0, 6],
+	inventory:		[],
 	priceDifferences: [],
 	itemsSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
 					 0, 0, 0, 0,
@@ -43,23 +39,50 @@ pr_island.GetMapPosition = function () {
 
 pr_island.SetUp = function () {
 	for (var i = 0; i < 16; i++) {
-		// this.inventory[i] = Math.round(Math.randomRange(0, 20));
-		this.priceDifferences[i] = Math.round(Math.randomRange(-50, 50));
+		if (Math.randomRange(0, 100) < 25) {
+			this.inventory[i] = Math.round(Math.randomRange(0, 20));
+		}
+	}
+
+	this.AdjustPrices();
+
+	if (this.CheckInventory().length < 4) {
+		this.SetUp();
+	}
+}
+
+pr_island.AdjustPrices = function () {
+	for (var i = 0; i < 16; i++) {
+		if (this.inventory[i] > 10) {
+			this.priceDifferences[i] = -Math.round(this.inventory[i] * Math.randomRange(1, 3));
+		} else if (this.inventory[i] < 5) {
+			this.priceDifferences[i] = Math.round(this.inventory[i] * Math.randomRange(1, 3));
+		} else {
+			this.priceDifferences[i] = 0;
+		}
+
 		if (G.economy.cargoItemWorth[i] + this.priceDifferences[i] < 0) {
 			this.priceDifferences[i] = -G.economy.cargoItemWorth[i] + 1;
 		}
 	}
 }
 
-pr_island.AdjustPrices = function () {
-	for (var i = 0; i < 15; i++) {
-		var saleDifference = this.itemsSold[i] - this.itemsBought[i];
-		if (saleDifference = 0) {
-			this.priceDifferences[i] += Math.round(Math.randomRange(-1, 1)) * 5;
+pr_island.SimulateTrade = function () {
+// This will be run on a timer that runs when not trading.
+	for (var i = 0; i < 16; i++) {
+		if (this.inventory[i] > 0) {
+			this.inventory[i] += Math.round(Math.randomRange(-5, 5));
+			if (this.inventory[i] < 0) {
+				this.inventory[i] = 0;
+			}
 		} else {
-			this.priceDifferences[i] += saleDifference * 5;
+			if (Math.randomRange(0, 100) < 15) {
+				this.inventory[i] = Math.round(Math.randomRange(0, 5));
+			}
 		}
 	}
+
+	this.AdjustPrices();
 }
 
 pr_island.CheckInventory = function () {	// Returns an array of indices that have cargo
@@ -84,7 +107,7 @@ pr_island.SellTo = function (itemIndex, price) {
 	// Play Buy sound.
 	this.inventory[itemIndex]++;
 	this.itemsBought[itemIndex]++;
-	
+
 	G.inventory.cargo[itemIndex]--;
 	G.inventory.money += price;
 }
