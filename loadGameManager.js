@@ -48,6 +48,18 @@ G.inventory = {
 			cargoTotal += G.inventory.cargo[cargo[i]];
 		}
 		return cargoTotal;
+	},
+	CanBuy: function (itemIndex, price) {
+		if (G.inventory.cargo[itemIndex] < G.stats.hold && G.inventory.money > price &&
+			(G.inventory.cargo[itemIndex] > 0 || G.inventory.CheckCargo().length < G.stats.inventory))
+		{
+			return true;
+		} else {
+			return false;
+		}
+	},
+	CanSell: function (itemIndex) {
+		return G.inventory.cargo[itemIndex] > 0;
 	}
 };
 G.stats = {

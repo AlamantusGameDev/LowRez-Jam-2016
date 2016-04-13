@@ -15,7 +15,11 @@ var pr_island = OS.P.Add("Island", {
 
 	canTrade: true,
 
-	inventory:		[],
+	// inventory:		[],
+	inventory: 		[0, 5, 0, 0,
+	                 0, 0, 3, 0,
+	                 0, 4, 0, 0,
+	                 0, 0, 0, 6],
 	priceDifferences: [],
 	itemsSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
 					 0, 0, 0, 0,
@@ -38,10 +42,10 @@ pr_island.GetMapPosition = function () {
 }
 
 pr_island.SetUp = function () {
-	for (var i = 0; i < 15; i++) {
-		this.inventory[i] = Math.round(Math.randomRange(0, 20));
+	for (var i = 0; i < 16; i++) {
+		// this.inventory[i] = Math.round(Math.randomRange(0, 20));
 		this.priceDifferences[i] = Math.round(Math.randomRange(-50, 50));
-		if (G.economy.cargoItemWorth[i] + this.priceDifferences[i]) {
+		if (G.economy.cargoItemWorth[i] + this.priceDifferences[i] < 0) {
 			this.priceDifferences[i] = -G.economy.cargoItemWorth[i] + 1;
 		}
 	}
@@ -60,7 +64,7 @@ pr_island.AdjustPrices = function () {
 
 pr_island.CheckInventory = function () {	// Returns an array of indices that have cargo
 	var indicesWithCargo = [];
-	for (var i = 0; i < G.inventory.cargo.length; i++) {
+	for (var i = 0; i < this.inventory.length; i++) {
 		if (this.inventory[i] > 0) {
 			indicesWithCargo.push(i);
 		}
@@ -71,18 +75,25 @@ pr_island.CheckInventory = function () {	// Returns an array of indices that hav
 pr_island.TradeWith = function () {
 	// Change music to Trade.
 	guiControl.trade.island = this.self;
+	guiControl.trade.haggleAmount = 0;
 	guiControl.trade.activateDelay = 5;
 	guiControl.trade.show = true;
 }
 
-pr_island.SellTo = function (itemIndex, amount) {
+pr_island.SellTo = function (itemIndex, price) {
 	// Play Buy sound.
-	this.inventory[itemIndex] += amount;
-	this.itemsBought[itemIndex] += amount;
+	this.inventory[itemIndex]++;
+	this.itemsBought[itemIndex]++;
+	
+	G.inventory.cargo[itemIndex]--;
+	G.inventory.money += price;
 }
 
-pr_island.BuyFrom = function (itemIndex, amount) {
+pr_island.BuyFrom = function (itemIndex, price) {
 	// Play Sell sound.
-	this.inventory[itemIndex] -= amount;
-	this.itemsSold[itemIndex] += amount;
+	this.inventory[itemIndex]--;
+	this.itemsBought[itemIndex]++;
+
+	G.inventory.cargo[itemIndex]++;
+	G.inventory.money -= price;
 }
