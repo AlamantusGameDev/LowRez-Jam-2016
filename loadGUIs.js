@@ -29,12 +29,17 @@ var guiControl = {
 	},
 	drawCursor: function (xPosition, yPosition) {
 		OS.context.drawImage(guiControl.cursor, xPosition, yPosition);
+	},
+	drawPageArrow: function (direction, xPosition, yPosition) {
+		OS.context.drawImage(guiControl.arrows, (direction == "left") ? 0 : pixel(4), 0, pixel(4), pixel(7), xPosition, yPosition, pixel(4), pixel(7));
 	}
 }
 guiControl.background = new Image();
 guiControl.background.src = "images/guiBackground.png";
 guiControl.cursor = new Image();
 guiControl.cursor.src = "images/guiCursor.png";
+guiControl.arrows = new Image();
+guiControl.arrows.src = "images/arrows.png";
 
 guiControl.itemSheet = new Image();
 guiControl.itemSheet.src = "images/items_sheet.png";

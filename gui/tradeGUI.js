@@ -147,6 +147,11 @@ function drawTradeGUI() {
 				guiControl.drawItem(items[guiControl.trade.page], guiControl.trade.leftBorder, guiControl.trade.rowTop(1) - pixel(5));
 				guiControl.drawPixelText(itemPriceDisplay, guiControl.trade.leftBorder + pixel(guiControl.iconSize + 4), guiControl.trade.rowTop(1) - pixel(5) + pixel(), 8, "black", 6);
 
+				if (items.length > 1) {
+					guiControl.drawPageArrow("left", guiControl.trade.padding, guiControl.trade.rowTop(1) - pixel(5));
+					guiControl.drawPageArrow("right", OS.camera.width - pixel(4) - guiControl.trade.padding, guiControl.trade.rowTop(1) - pixel(5));
+				}
+
 				// Amounts
 				guiControl.drawPixelText("Shop" + guiControl.trade.island.inventory[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(2) - pixel(6) + pixel(), 4, "black", 4);
 				guiControl.drawPixelText("Own " + G.inventory.cargo[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(3) - pixel(6) + pixel(), 4, (G.inventory.cargo[items[guiControl.trade.page]] < G.stats.hold) ? "black" : "yellow", 4);
@@ -240,6 +245,11 @@ function drawTradeGUI() {
 				var itemPriceDisplay = itemPrice.toString() + " c";
 				guiControl.drawItem(items[guiControl.trade.page], guiControl.trade.leftBorder, guiControl.trade.rowTop(1) - pixel(5));
 				guiControl.drawPixelText(itemPriceDisplay, guiControl.trade.leftBorder + pixel(guiControl.iconSize + 4), guiControl.trade.rowTop(1) - pixel(5) + pixel(), 8, "black", 6);
+
+				if (items.length > 1) {
+					guiControl.drawPageArrow("left", guiControl.trade.padding, guiControl.trade.rowTop(1) - pixel(5));
+					guiControl.drawPageArrow("right", OS.camera.width - pixel(4) - guiControl.trade.padding, guiControl.trade.rowTop(1) - pixel(5));
+				}
 
 				// Amounts
 				guiControl.drawPixelText("Shop" + guiControl.trade.island.inventory[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(2) - pixel(6) + pixel(), 4, "black", 4);
