@@ -1,11 +1,10 @@
 OS.S.defaultStep = 1 / 120;
 OS.S.pixelScale = 4;
 OS.SetCamera({
-	width: 64 * OS.S.pixelScale,
-	height: 64 * OS.S.pixelScale,
-	hBorder: 24 * OS.S.pixelScale,
-	vBorder: 24 * OS.S.pixelScale
-});
+	width: pixel(64),
+	height: pixel(64),
+	hBorder: pixel(24),
+	vBorder: pixel(24)});
 
 function start()
 {
@@ -16,7 +15,11 @@ function start()
     OS.AddScript("loadRooms.js");
 }
 
+function pixel(number) {
+	return ((typeof number !== 'undefined') ? number : 1) * OS.S.pixelScale;
+}
+
 function randomSmidge() {
 // Return a random amount between -10 and 10 on the pixel scale.
-	return (Math.round(Math.randomRange(-10, 10)) * OS.S.pixelScale);
+	return (pixel(Math.round(Math.randomRange(-10, 10))));
 }

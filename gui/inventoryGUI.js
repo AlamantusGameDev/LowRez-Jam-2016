@@ -8,7 +8,7 @@ function inventoryGUI() {
 
 function drawInventoryGUI() {
 	if (guiControl.inventory.show) {
-		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, 2 * OS.S.pixelScale, 2 * OS.S.pixelScale, 240, 240);
+		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, pixel(2), pixel(2), 240, 240);
 
 		if (ct_down().down) {
 			guiControl.inventory.cursorPosition++;
@@ -27,19 +27,19 @@ function drawInventoryGUI() {
 			}
 
 			// Title
-			guiControl.drawPixelText("Storage", guiControl.leftBorder - (2 * OS.S.pixelScale), guiControl.topOfBackground, 8, "black", 6);
+			guiControl.drawPixelText("Storage", guiControl.leftBorder - pixel(2), guiControl.topOfBackground, 8, "black", 6);
 			// Money icon
 			guiControl.drawIcon(7, 2, guiControl.leftBorder, guiControl.rowTop(0));
-			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(0) + OS.S.pixelScale, 8, "black", 6);
+			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(0) + pixel(), 8, "black", 6);
 			// Supplies icon
 			guiControl.drawIcon(9, 2, guiControl.leftBorder, guiControl.rowTop(1));
-			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(1) + OS.S.pixelScale, 8, "black", 6);
+			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(1) + pixel(), 8, "black", 6);
 			// Cargo icon
 			guiControl.drawIcon(1, 0, guiControl.leftBorder, guiControl.rowTop(2));
-			guiControl.drawPixelText(G.inventory.CargoTotal().toString(), guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(2) + OS.S.pixelScale, 8, "black", 6);
+			guiControl.drawPixelText(G.inventory.CargoTotal().toString(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(2) + pixel(), 8, "black", 6);
 			
 			// Close Text
-			guiControl.drawPixelText("Close", guiControl.leftBorder, guiControl.rowTop(3) + OS.S.pixelScale, 8, "black", 6);
+			guiControl.drawPixelText("Close", guiControl.leftBorder, guiControl.rowTop(3) + pixel(), 8, "black", 6);
 			
 			// Draw cursor
 			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition));
@@ -74,18 +74,18 @@ function drawInventoryGUI() {
 			}
 
 			// Title
-			guiControl.drawPixelText("Money", guiControl.leftBorder - (2 * OS.S.pixelScale), guiControl.topOfBackground, 8, "black", 6);
+			guiControl.drawPixelText("Money", guiControl.leftBorder - pixel(2), guiControl.topOfBackground, 8, "black", 6);
 
-			guiControl.drawPixelText("Actual Amt", guiControl.leftBorder - (5 * OS.S.pixelScale), guiControl.rowTop(0) + OS.S.pixelScale, 10, "black", 4);
+			guiControl.drawPixelText("Actual Amt", guiControl.leftBorder - pixel(5), guiControl.rowTop(0) + pixel(), 10, "black", 4);
 			// Money icon
-			guiControl.drawIcon(7, 2, guiControl.leftBorder - (5 * OS.S.pixelScale), guiControl.rowTop(1) - (3 * OS.S.pixelScale));
-			guiControl.drawPixelText(G.inventory.money.toString(), guiControl.leftBorder - (5 * OS.S.pixelScale) + ((guiControl.iconSize + 2) * OS.S.pixelScale), guiControl.rowTop(1) + (2 * OS.S.pixelScale) - (3 * OS.S.pixelScale), 10, "black", 4);
+			guiControl.drawIcon(7, 2, guiControl.leftBorder - pixel(5), guiControl.rowTop(1) - pixel(3));
+			guiControl.drawPixelText(G.inventory.money.toString(), guiControl.leftBorder - pixel(5) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 10, "black", 4);
 			
 			// Back Text
-			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - (3 * OS.S.pixelScale), 8, "black", 6);
+			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - (4 * OS.S.pixelScale));
+			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
 
 			// Button Action
 			if (ct_confirm().down || ct_cancel().down) {
@@ -103,25 +103,25 @@ function drawInventoryGUI() {
 			}
 
 			// Title
-			guiControl.drawPixelText("Supplies", guiControl.leftBorder - (6 * OS.S.pixelScale), guiControl.topOfBackground, 8, "black", 6);
+			guiControl.drawPixelText("Supplies", guiControl.leftBorder - pixel(6), guiControl.topOfBackground, 8, "black", 6);
 
-			guiControl.drawPixelText("Heal Crew?", guiControl.leftBorder - (5 * OS.S.pixelScale), guiControl.rowTop(0) + OS.S.pixelScale, 10, "black", 4);
+			guiControl.drawPixelText("Heal Crew?", guiControl.leftBorder - pixel(5), guiControl.rowTop(0) + pixel(), 10, "black", 4);
 			// Supplies icon
-			guiControl.drawIcon(9, 2, guiControl.leftBorder - (5 * OS.S.pixelScale), guiControl.rowTop(1) - (3 * OS.S.pixelScale));
-			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder - (5 * OS.S.pixelScale) + ((guiControl.iconSize + 2) * OS.S.pixelScale), guiControl.rowTop(1) + (2 * OS.S.pixelScale) - (3 * OS.S.pixelScale), 2, "black", 4);
+			guiControl.drawIcon(9, 2, guiControl.leftBorder - pixel(5), guiControl.rowTop(1) - pixel(3));
+			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder - pixel(5) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 2, "black", 4);
 			// Illness icon
-			guiControl.drawIcon(4, 1, guiControl.leftBorder - (5 * OS.S.pixelScale) + (24 * OS.S.pixelScale), guiControl.rowTop(1) - (3 * OS.S.pixelScale));
-			guiControl.drawPixelText(G.stats.illness.toString(), guiControl.leftBorder - (5 * OS.S.pixelScale) + (24 * OS.S.pixelScale) + ((guiControl.iconSize + 2) * OS.S.pixelScale), guiControl.rowTop(1) + (2 * OS.S.pixelScale) - (3 * OS.S.pixelScale), 2, "black", 4);
+			guiControl.drawIcon(4, 1, guiControl.leftBorder - pixel(5) + pixel(24), guiControl.rowTop(1) - pixel(3));
+			guiControl.drawPixelText(G.stats.illness.toString(), guiControl.leftBorder - pixel(5) + pixel(24) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 2, "black", 4);
 
 			// Yes/No options
-			guiControl.drawPixelText("No", guiControl.leftBorder, guiControl.rowTop(2) - (3 * OS.S.pixelScale), 3, "black", 6);
-			guiControl.drawPixelText("Yes", guiControl.leftBorder, guiControl.rowTop(3) - (3 * OS.S.pixelScale), 3, "black", 6);
+			guiControl.drawPixelText("No", guiControl.leftBorder, guiControl.rowTop(2) - pixel(3), 3, "black", 6);
+			guiControl.drawPixelText("Yes", guiControl.leftBorder, guiControl.rowTop(3) - pixel(3), 3, "black", 6);
 			
 			// Back Text
-			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - (3 * OS.S.pixelScale), 8, "black", 6);
+			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
 			
 			// Draw cursor
-			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition + 2) - (4 * OS.S.pixelScale));
+			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition + 2) - pixel(4));
 
 			// Button Action
 			if (ct_confirm().down) {
@@ -154,20 +154,20 @@ function drawInventoryGUI() {
 			}
 
 			// Title
-			guiControl.drawPixelText("Cargo", guiControl.leftBorder - (2 * OS.S.pixelScale), guiControl.topOfBackground, 8, "black", 6);
+			guiControl.drawPixelText("Cargo", guiControl.leftBorder - pixel(2), guiControl.topOfBackground, 8, "black", 6);
 
 			// Cargo icons
 			var cargo = G.inventory.CheckCargo();	// Contains the item ids that have more than 1 item
 			for (var i = 0; i < cargo.length; i++) {
 				guiControl.drawItem(cargo[i], guiControl.leftBorder, guiControl.rowTop(i));
-				guiControl.drawPixelText(G.inventory.cargo[cargo[i]], guiControl.leftBorder + ((guiControl.iconSize + 4) * OS.S.pixelScale), guiControl.rowTop(i) + OS.S.pixelScale, 8, "black", 6);
+				guiControl.drawPixelText(G.inventory.cargo[cargo[i]], guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(i) + pixel(), 8, "black", 6);
 			}
 
 			// Back Text
-			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - (3 * OS.S.pixelScale), 8, "black", 6);
+			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - (4 * OS.S.pixelScale));
+			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
 
 			// Button Action
 			if (ct_confirm().down || ct_cancel().down) {

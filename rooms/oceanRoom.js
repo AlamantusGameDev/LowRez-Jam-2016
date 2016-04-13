@@ -1,12 +1,17 @@
 function oceanRoom () {
     // Create objects on room creation for persistence.
     G.player = rm_Ocean.AddObject(OS.P["Ship"]);
-    G.player.x = ((rm_Ocean.width / OS.S.pixelScale) / 2) * OS.S.pixelScale;
-    G.player.y = ((rm_Ocean.height / OS.S.pixelScale) / 2) * OS.S.pixelScale;
+    G.player.x = pixel((rm_Ocean.width / OS.S.pixelScale) / 2);
+    G.player.y = pixel((rm_Ocean.height / OS.S.pixelScale) / 2);
     console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
     G.oceanParticle = rm_Ocean.AddObject(OS.P["Ocean Particle"]);
     G.oceanParticle.x = G.player.x + randomSmidge();
     G.oceanParticle.y = G.player.y + randomSmidge();
+
+    var island1 = rm_Ocean.AddObject(OS.P["Island"]);
+    island1.x = pixel((rm_Ocean.width / OS.S.pixelScale) / 2) + island1.xBound + G.player.xBound;
+    island1.y = pixel((rm_Ocean.height / OS.S.pixelScale) / 2);
+    console.log(island1.name + " created at " + island1.x + ", " + island1.y);
     
     // When room is loaded, explicitly set room to rm_Ocean, just in case "Default" doesn't work/is loaded too slowly
     // to make sure DoFirst runs.
@@ -17,9 +22,6 @@ rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
 rm_Ocean.speedGaugeImg = new Image();
 rm_Ocean.speedGaugeImg.src = "images/speed_gauge_sheet.png";
 
-var island1 = rm_Ocean.AddObject(OS.P["Island"]);
-island1.x = (((rm_Ocean.width / OS.S.pixelScale) / 2) + 64) * OS.S.pixelScale;
-island1.y = ((rm_Ocean.height / OS.S.pixelScale) / 2) * OS.S.pixelScale;
 
 rm_Ocean.DoFirst = function () {
     // Reset camera whenever room starts
@@ -85,9 +87,9 @@ rm_Ocean.DoLast = function () {
 
 rm_Ocean.DrawEnergyBar = function () {
     var percentage = G.stats.energy / G.stats.maxEnergy;
-    var barHeight = 2 * OS.S.pixelScale;
+    var barHeight = pixel(2);
     var maxBarWidth = 32;
-    var barWidth = Math.round(maxBarWidth * percentage) * OS.S.pixelScale;
+    var barWidth = pixel(Math.round(maxBarWidth * percentage));
 
     var saveFillStyle = OS.context.fillStyle;
     OS.context.fillStyle = "#0055FF";

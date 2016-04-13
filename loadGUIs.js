@@ -4,19 +4,19 @@ function loadGUIs() {
 }
 
 var guiControl = {
-	topOfBackground: (2 + 2) * OS.S.pixelScale,
-	upperBorder: (13 + 2) * OS.S.pixelScale,
-	lowerBorder: (3 + 2) * OS.S.pixelScale,
-	leftBorder: (10 + 2) * OS.S.pixelScale,
-	rightBorder: (5 + 2) * OS.S.pixelScale,
+	topOfBackground: pixel(2 + 2),
+	upperBorder: pixel(13 + 2),
+	lowerBorder: pixel(3 + 2),
+	leftBorder: pixel(10 + 2),
+	rightBorder: pixel(5 + 2),
 	iconSize: 8,
-	iconScaled: 8 * OS.S.pixelScale,
+	iconScaled: pixel(8),
 
 	iconPosition: function (cellPosition) {
 		return (guiControl.iconScaled * cellPosition);
 	},
 	rowTop: function (rowNumber) {
-		return guiControl.upperBorder + ((guiControl.iconSize + 2) * rowNumber * OS.S.pixelScale);
+		return guiControl.upperBorder + pixel((guiControl.iconSize + 2) * rowNumber);
 	},
 
 	drawIcon: function (cellX, cellY, xPosition, yPosition) {
@@ -48,9 +48,9 @@ guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 // 5x6 font modified from http://atariage.com/forums/topic/165697-fonts/page-4#entry2081600
 	text = text.toString().toUpperCase();
 	
-	var letterSizeX = ((size == 6) ? size - 1 : size) * OS.S.pixelScale;
-	var letterSizeY = size * OS.S.pixelScale;
-	var maxWrapWidth = Math.floor(OS.camera.width / (letterSizeX + OS.S.pixelScale));
+	var letterSizeX = pixel((size == 6) ? size - 1 : size);
+	var letterSizeY = pixel(size);
+	var maxWrapWidth = Math.floor(OS.camera.width / (letterSizeX + pixel(1)));
 	
 	wrapWidth = (wrapWidth <= 0 || wrapWidth > maxWrapWidth) ? maxWrapWidth : wrapWidth;
 	
@@ -234,8 +234,8 @@ guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 		var horizontal = i - (wrapWidth * lineNumber);
 		var letterSheetX = letterSizeX * letterCellX;
 		var letterSheetY = letterSizeY * letterCellY;
-		var letterX = x + (letterSizeX * horizontal) + (OS.S.pixelScale * horizontal);	//Places a space between characters horizontally
-		var letterY = y + (letterSizeY * lineNumber) + (OS.S.pixelScale * lineNumber);	//Places a space between characters vertically
+		var letterX = x + (letterSizeX * horizontal) + pixel(horizontal);	//Places a space between characters horizontally
+		var letterY = y + (letterSizeY * lineNumber) + pixel(lineNumber);	//Places a space between characters vertically
 		OS.context.drawImage(alphabet, letterSheetX, letterSheetY, letterSizeX, letterSizeY, letterX, letterY, letterSizeX, letterSizeY);
 	}
 }

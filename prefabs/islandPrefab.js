@@ -69,17 +69,20 @@ pr_island.CheckInventory = function () {	// Returns an array of indices that hav
 }
 
 pr_island.TradeWith = function () {
+	// Change music to Trade.
 	guiControl.trade.island = this.self;
 	guiControl.trade.activateDelay = 5;
 	guiControl.trade.show = true;
 }
 
 pr_island.SellTo = function (itemIndex, amount) {
+	// Play Buy sound.
 	this.inventory[itemIndex] += amount;
 	this.itemsBought[itemIndex] += amount;
 }
 
 pr_island.BuyFrom = function (itemIndex, amount) {
-	this.inventory[itemIndex] += amount;
+	// Play Sell sound.
+	this.inventory[itemIndex] -= amount;
 	this.itemsSold[itemIndex] += amount;
 }

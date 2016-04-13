@@ -25,8 +25,8 @@ pr_ocean.Do = function () {
 	// Move around randomly.
 	this.moveTimer++;
 	if (this.moveTimer >= 120) {
-		this.x += 1 * Math.round(Math.randomRange(-1, 1)) * OS.S.pixelScale;
-		this.y += 1 * Math.round(Math.randomRange(-1, 1)) * OS.S.pixelScale;
+		this.x += 1 * pixel(Math.round(Math.randomRange(-1, 1)));
+		this.y += 1 * pixel(Math.round(Math.randomRange(-1, 1)));
 		this.moveTimer = 0;
 	}
 }
