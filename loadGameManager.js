@@ -68,7 +68,7 @@ G.stats = {
     speed: 1,		// How many pixels you move.
     hull: 3,		// Your HP, pretty much. How many times you can crash without exploding.
     maxHull: 3,		// How much your hull can refill to.
-    popularity: 1,	// Haggle success rate in percentage.
+    popularity: 5,	// Haggle success rate in percentage.
     haggling: 10,	// How much you can increase the asking price by.
     crew: 2,		// How many crew members you have. Influences how fast your energy recovers.
     energy: 25,		// Drains rate determined by current speed. When drained, currentSpeed reduces until you have enough energy to continue.
