@@ -14,6 +14,8 @@ var pr_island = OS.P.Add("Island", {
 	mapColor: "#00AB00",
 
 	canTrade: true,
+	haggleAmount: 0,
+	timesHaggledToday: 0,
 
 	inventory:		[0, 0, 0, 0,
 					 0, 0, 0, 0,

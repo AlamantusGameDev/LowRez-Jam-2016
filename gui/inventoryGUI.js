@@ -2,12 +2,15 @@ function inventoryGUI() {
 	guiControl.inventory = {
 		screen: "main",
 		cursorPosition: 0,
-		show: false
+		show: false,
+		activateDelay: 0
 	}
 }
 
 function drawInventoryGUI() {
 	if (guiControl.inventory && guiControl.inventory.show) {
+		guiControl.inventory.activateDelay -= (guiControl.inventory.activateDelay > 0) ? 1 : 0;
+
 		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, pixel(2), pixel(2), 240, 240);
 
 		if (ct_down().down) {
@@ -28,6 +31,10 @@ function drawInventoryGUI() {
 
 			// Title
 			guiControl.drawPixelText("Storage", guiControl.leftBorder - pixel(2), guiControl.topOfBackground, 8, "black", 6);
+
+			guiControl.drawPageArrow("left", pixel(4), guiControl.topOfBackground);
+			guiControl.drawPageArrow("right", OS.camera.width - pixel(4) - pixel(4), guiControl.topOfBackground);
+
 			// Money icon
 			guiControl.drawIcon(7, 2, guiControl.leftBorder, guiControl.rowTop(0));
 			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(0) + pixel(), 8, "black", 6);
@@ -45,23 +52,39 @@ function drawInventoryGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition));
 
 			// Button Action
-			if (ct_confirm().down) {
-				switch (guiControl.inventory.cursorPosition) {
-					case 0:
-						guiControl.inventory.screen = "money";
-						break;
-					case 1:
-						guiControl.inventory.screen = "supplies";
-						break;
-					case 2:
-						guiControl.inventory.screen = "cargo";
-						break;
-					default:
-						guiControl.inventory.show = false;
-						break;
-				}
+			if (guiControl.inventory.activateDelay <= 0) {
+				if (ct_confirm().down) {
+					switch (guiControl.inventory.cursorPosition) {
+						case 0:
+							guiControl.inventory.screen = "money";
+							break;
+						case 1:
+							guiControl.inventory.screen = "supplies";
+							break;
+						case 2:
+							guiControl.inventory.screen = "cargo";
+							break;
+						default:
+							guiControl.inventory.show = false;
+							break;
+					}
 
-				guiControl.inventory.cursorPosition = 0;
+					guiControl.inventory.cursorPosition = 0;
+					guiControl.inventory.activateDelay = 5;
+				}
+				if (ct_cancel().down) {
+					guiControl.inventory.show = false;
+				}
+				if (ct_left().down) {
+					guiControl.inventory.show = false;
+					guiControl.map.activateDelay = 5;
+					guiControl.map.show = true;
+				}
+				if (ct_right().down) {
+					guiControl.inventory.show = false;
+					guiControl.map.activateDelay = 5;
+					guiControl.map.show = true;
+				}
 			}
 		}
 		else if (guiControl.inventory.screen == "money") {
@@ -88,9 +111,12 @@ function drawInventoryGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
 
 			// Button Action
-			if (ct_confirm().down || ct_cancel().down) {
-				guiControl.inventory.screen = "main";
-				guiControl.inventory.cursorPosition = 0;
+			if (guiControl.inventory.activateDelay <= 0) {
+				if (ct_confirm().down || ct_cancel().down) {
+					guiControl.inventory.screen = "main";
+					guiControl.inventory.activateDelay = 5;
+					guiControl.inventory.cursorPosition = 0;
+				}
 			}
 		}
 		else if (guiControl.inventory.screen == "supplies") {
@@ -115,7 +141,7 @@ function drawInventoryGUI() {
 
 			// Yes/No options
 			guiControl.drawPixelText("No", guiControl.leftBorder, guiControl.rowTop(2) - pixel(3), 3, "black", 6);
-			guiControl.drawPixelText("Yes", guiControl.leftBorder, guiControl.rowTop(3) - pixel(3), 3, "black", 6);
+			guiControl.drawPixelText("Yes", guiControl.leftBorder, guiControl.rowTop(3) - pixel(3), 3, (G.inventory.supplies > 0 && G.stats.illness > 0) ? "black" : "white", 6);
 			
 			// Back Text
 			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
@@ -124,24 +150,30 @@ function drawInventoryGUI() {
 			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition + 2) - pixel(4));
 
 			// Button Action
-			if (ct_confirm().down) {
-				switch (guiControl.inventory.cursorPosition) {
-					case 1:
-						if (G.inventory.supplies > 0 && G.stats.illness > 0) {	//If cursor is over yes, heal illness with supplies.
-							G.inventory.supplies--;
-							G.stats.illness--;
-						}
-						break;
-					default:
-						guiControl.inventory.screen = "main";
-						guiControl.inventory.cursorPosition = 1;	// The position where "Supplies" is on main screen.
-						break;
-				}
-			}
+			if (guiControl.inventory.activateDelay <= 0) {
+				if (ct_confirm().down) {
+					switch (guiControl.inventory.cursorPosition) {
+						case 1:
+							if (G.inventory.supplies > 0 && G.stats.illness > 0) {	//If cursor is over yes, heal illness with supplies.
+								G.inventory.supplies--;
+								G.stats.illness--;
+							}
+							break;
+						default:
+							guiControl.inventory.screen = "main";
+							guiControl.inventory.cursorPosition = 1;	// The position where "Supplies" is on main screen.
+							break;
+					}
 
-			if (ct_cancel().down) {
-				guiControl.inventory.screen = "main";
-				guiControl.inventory.cursorPosition = 1;	// The position where "Supplies" is on main screen.
+					// Give a cooldown so you don't accidentally do something you don't want.
+					guiControl.inventory.activateDelay = 5;
+				}
+
+				if (ct_cancel().down) {
+					guiControl.inventory.screen = "main";
+					guiControl.inventory.activateDelay = 5;
+					guiControl.inventory.cursorPosition = 1;	// The position where "Supplies" is on main screen.
+				}
 			}
 		}
 		else if (guiControl.inventory.screen == "cargo") {
@@ -170,9 +202,12 @@ function drawInventoryGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
 
 			// Button Action
-			if (ct_confirm().down || ct_cancel().down) {
-				guiControl.inventory.screen = "main";
-				guiControl.inventory.cursorPosition = 2;
+			if (guiControl.inventory.activateDelay <= 0) {
+				if (ct_confirm().down || ct_cancel().down) {
+					guiControl.inventory.screen = "main";
+					guiControl.inventory.activateDelay = 5;
+					guiControl.inventory.cursorPosition = 2;
+				}
 			}
 		}
 	}

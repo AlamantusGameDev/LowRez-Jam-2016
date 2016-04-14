@@ -8,7 +8,6 @@ function tradeGUI() {
 		activateDelay: 0,
 
 		island: null,
-		haggleAmount: 0,
 
 		padding: pixel(2),
 		leftBorder: pixel(12),
@@ -82,36 +81,44 @@ function drawTradeGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition));
 
 			// Button Action
-			if (guiControl.trade.activateDelay <= 0 && ct_confirm().down) {
-				switch (guiControl.trade.cursorPosition) {
-					case 0:
-						if (guiControl.trade.island.CheckInventory().length > 0) {
-							guiControl.trade.screen = "buy";
-						}
-						else {
-							// Play Cannot_Buy sound.
-						}
-						break;
-					case 1:
-						if (G.inventory.CheckCargo().length > 0) {
-							guiControl.trade.screen = "sell";
-						} else {
-							// Play Cannot_Buy sound.
-						}
-						break;
-					case 2:
-						guiControl.trade.screen = "gossip";
-						break;
-					default:
-						// Change music to Sail.
-						guiControl.trade.show = false;
-						break;
-				}
+			if (guiControl.trade.activateDelay <= 0) {
+				if (ct_confirm().down) {
+					switch (guiControl.trade.cursorPosition) {
+						case 0:
+							if (guiControl.trade.island.CheckInventory().length > 0) {
+								guiControl.trade.screen = "buy";
+								guiControl.trade.activateDelay = 5;
+							}
+							else {
+								// Play Cannot_Buy sound.
+							}
+							break;
+						case 1:
+							if (G.inventory.CheckCargo().length > 0) {
+								guiControl.trade.screen = "sell";
+								guiControl.trade.activateDelay = 5;
+							} else {
+								// Play Cannot_Buy sound.
+							}
+							break;
+						case 2:
+							guiControl.trade.screen = "gossip";
+							guiControl.trade.activateDelay = 5;
+							break;
+						default:
+							// Change music to Sail.
+							guiControl.trade.show = false;
+							break;
+					}
 
-				// Play Select sound.
-				guiControl.trade.cursorPosition = 0;
-				guiControl.trade.page = 0;
-				// console.log(guiControl.trade.screen);
+					// Play Select sound.
+					guiControl.trade.cursorPosition = 0;
+					guiControl.trade.page = 0;
+					// console.log(guiControl.trade.screen);
+				}
+				if (ct_cancel().down) {
+					guiControl.trade.show = false;
+				}
 			}
 		}
 		else if (guiControl.trade.screen == "buy") {
@@ -143,7 +150,7 @@ function drawTradeGUI() {
 			}
 
 			if (items.length > 0) {
-				var itemPrice = G.economy.cargoItemWorth[items[guiControl.trade.page]] + guiControl.trade.island.priceDifferences[items[guiControl.trade.page]] - guiControl.trade.haggleAmount;
+				var itemPrice = G.economy.cargoItemWorth[items[guiControl.trade.page]] + guiControl.trade.island.priceDifferences[items[guiControl.trade.page]] - guiControl.trade.island.haggleAmount;
 				if (itemPrice < 1) itemPrice = 1;
 				var itemPriceDisplay = itemPrice.toString() + " c";
 				guiControl.drawItem(items[guiControl.trade.page], guiControl.trade.leftBorder, guiControl.trade.rowTop(1) - pixel(5));
@@ -166,7 +173,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText(G.inventory.CheckCargo().length.toString(), OS.camera.width - pixel(20) + (guiControl.iconScaled + pixel()), guiControl.trade.rowTop(4) - pixel(4), 4, (G.inventory.CheckCargo().length < G.stats.inventory) ? "black" : "yellow", 6);
 
 			// Yes/No Options
-			guiControl.drawPixelText("Hagl?", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (items.length > 0 && guiControl.trade.haggleAmount == 0) ? "black" : "white", 6);
+			guiControl.drawPixelText("Hagl?", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (guiControl.trade.island.timesHaggledToday >= G.stats.popularity) ? "yellow" : ((items.length > 0 && guiControl.trade.island.haggleAmount == 0) ? "black" : "white"), 6);
 			guiControl.drawPixelText("Yes", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) - pixel(2), 8, (items.length > 0 && G.inventory.CanBuy(items[guiControl.trade.page], itemPrice)) ? "black" : "white", 6);
 
 			// Back Text
@@ -176,39 +183,43 @@ function drawTradeGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(3));
 
 			// Button Action
-			if (ct_confirm().down) {
-				switch (guiControl.trade.cursorPosition) {
-					case 0:		// Haggle
-						if (items.length > 0 &&
-							guiControl.trade.haggleAmount == 0 && Math.floor(Math.randomRange(0, 100)) < G.stats.popularity)	// If you haven't haggled yet and get a random number less than your popularity, haggle successfully.
-						{
-							guiControl.trade.haggleAmount = G.stats.haggling;
-							// Play Sell sound.
-						} else {
-							// Play Cannot_Buy sound.
-						}
-						break;
-					case 1:		// Buy
-						if (items.length > 0 &&
-							G.inventory.CanBuy(items[guiControl.trade.page], itemPrice)) {	//If cursor is over yes and you can buy, buy it.
-							guiControl.trade.island.BuyFrom(items[guiControl.trade.page], itemPrice);
-						} else {
-							// Play Cannot_Buy sound.
-						}
-						break;
-					default:
-						guiControl.trade.screen = "main";
-						guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
-						break;
+			if (guiControl.trade.activateDelay <= 0) {
+				if (ct_confirm().down) {
+					switch (guiControl.trade.cursorPosition) {
+						case 0:		// Haggle
+							if (items.length > 0 && (guiControl.trade.island.timesHaggledToday <= G.stats.popularity) &&	// If there are items and you haven't haggled too much
+								guiControl.trade.island.haggleAmount == 0 && Math.floor(Math.randomRange(0, 100)) < G.stats.popularity)	// Or you haven't haggled yet and get a random number less than your popularity, haggle successfully.
+							{
+								guiControl.trade.island.haggleAmount = G.stats.haggling;
+								// Play Sell sound.
+							} else {
+								// Play Cannot_Buy sound.
+								guiControl.trade.island.timesHaggledToday++;
+							}
+							break;
+						case 1:		// Buy
+							if (items.length > 0 &&
+								G.inventory.CanBuy(items[guiControl.trade.page], itemPrice)) {	//If cursor is over yes and you can buy, buy it.
+								guiControl.trade.island.BuyFrom(items[guiControl.trade.page], itemPrice);
+							} else {
+								// Play Cannot_Buy sound.
+							}
+							break;
+						default:
+							guiControl.trade.screen = "main";
+							guiControl.trade.activateDelay = 5;
+							guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
+							break;
+					}
+					// Play Select sound.
+					// console.log(guiControl.trade.screen);
 				}
-				// Play Select sound.
-				// console.log(guiControl.trade.screen);
-			}
-
-			if (ct_cancel().down) {
-				guiControl.trade.screen = "main";
-				guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
-				// console.log(guiControl.trade.screen);
+				if (ct_cancel().down) {
+					guiControl.trade.screen = "main";
+					guiControl.trade.activateDelay = 5;
+					guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
+					// console.log(guiControl.trade.screen);
+				}
 			}
 		}
 		else if (guiControl.trade.screen == "sell") {
@@ -241,7 +252,7 @@ function drawTradeGUI() {
 
 			if (items.length > 0) {
 				var itemPrice = G.economy.cargoItemWorth[items[guiControl.trade.page]] + guiControl.trade.island.priceDifferences[items[guiControl.trade.page]];
-				var priceCut = 0.5 + ((guiControl.trade.haggleAmount == 0) ? 0 : (G.stats.popularity * 0.01 * 0.5)); // If haggled successfully, lessen the price cut by half of your popularity's percent worth.
+				var priceCut = 0.5 + ((guiControl.trade.island.haggleAmount == 0) ? 0 : (G.stats.popularity * 0.01 * 0.5)); // If haggled successfully, lessen the price cut by half of your popularity's percent worth.
 				itemPrice = Math.round(itemPrice * priceCut);
 				if (itemPrice < 1) itemPrice = 1;
 				var itemPriceDisplay = itemPrice.toString() + " c";
@@ -265,7 +276,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText(G.inventory.CheckCargo().length.toString(), OS.camera.width - pixel(20) + (guiControl.iconScaled + pixel()), guiControl.trade.rowTop(4) - pixel(4), 4, (G.inventory.CheckCargo().length > 0) ? "black" : "yellow", 6);
 
 			// Yes/No Options
-			guiControl.drawPixelText("Hagl?", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (items.length > 0 && guiControl.trade.haggleAmount == 0) ? "black" : "white", 6);
+			guiControl.drawPixelText("Hagl?", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (guiControl.trade.island.timesHaggledToday >= G.stats.popularity) ? "yellow" : ((items.length > 0 && guiControl.trade.island.haggleAmount == 0) ? "black" : "white"), 6);
 			guiControl.drawPixelText("Yes", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) - pixel(2), 8, (items.length > 0 && G.inventory.CanSell(items[guiControl.trade.page])) ? "black" : "white", 6);
 
 			// Back Text
@@ -275,40 +286,44 @@ function drawTradeGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(3));
 
 			// Button Action
-			if (ct_confirm().down) {
-				switch (guiControl.trade.cursorPosition) {
-					case 0:		// Haggle
-						if (items.length > 0 &&
-							guiControl.trade.haggleAmount == 0 && Math.floor(Math.randomRange(0, 100)) < G.stats.popularity)		// If you haven't haggled yet and get a random number less than your popularity, haggle successfully.
-						{
-							guiControl.trade.haggleAmount = G.stats.haggling;
-							// Play Sell sound.
-						} else {
-							// Play Cannot_Buy sound.
-						}
-						break;
-					case 1:		// Sell
-						if (items.length > 0 &&
-							G.inventory.CanSell(items[guiControl.trade.page]))	//If cursor is over yes and you can buy, buy it.
-						{
-							guiControl.trade.island.SellTo(items[guiControl.trade.page], itemPrice);
-						} else {
-							// Play Cannot_Buy sound.
-						}
-						break;
-					default:
-						guiControl.trade.screen = "main";
-						guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
-						break;
+			if (guiControl.trade.activateDelay <= 0) {
+				if (ct_confirm().down) {
+					switch (guiControl.trade.cursorPosition) {
+						case 0:		// Haggle
+							if (items.length > 0 && (guiControl.trade.island.timesHaggledToday <= G.stats.popularity) &&
+								guiControl.trade.island.haggleAmount == 0 && Math.floor(Math.randomRange(0, 100)) < G.stats.popularity)		// If you haven't haggled yet and get a random number less than your popularity, haggle successfully.
+							{
+								// Play Sell sound.
+								guiControl.trade.island.haggleAmount = G.stats.haggling;
+							} else {
+								// Play Cannot_Buy sound.
+								guiControl.trade.island.timesHaggledToday++;
+							}
+							break;
+						case 1:		// Sell
+							if (items.length > 0 &&
+								G.inventory.CanSell(items[guiControl.trade.page]))	//If cursor is over yes and you can buy, buy it.
+							{
+								guiControl.trade.island.SellTo(items[guiControl.trade.page], itemPrice);
+							} else {
+								// Play Cannot_Buy sound.
+							}
+							break;
+						default:
+							guiControl.trade.screen = "main";
+							guiControl.trade.activateDelay = 5;
+							guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
+							break;
+					}
+					// Play Select sound.
+					// console.log(guiControl.trade.screen);
 				}
-				// Play Select sound.
-				// console.log(guiControl.trade.screen);
-			}
-
-			if (ct_cancel().down) {
-				guiControl.trade.screen = "main";
-				guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
-				// console.log(guiControl.trade.screen);
+				if (ct_cancel().down) {
+					guiControl.trade.screen = "main";
+					guiControl.trade.activateDelay = 5;
+					guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
+					// console.log(guiControl.trade.screen);
+				}
 			}
 		}
 		else if (guiControl.trade.screen == "gossip") {
@@ -333,11 +348,13 @@ function drawTradeGUI() {
 			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(4) - pixel(3));
 
 			// Button Action
-			if (ct_confirm().down || ct_cancel().down) {
-				guiControl.trade.screen = "main";
-				guiControl.trade.cursorPosition = 2;
-				// Play Select sound.
-				// console.log(guiControl.trade.screen);
+			if (guiControl.trade.activateDelay <= 0) {
+				if (ct_confirm().down || ct_cancel().down) {
+					// Play Select sound.
+					guiControl.trade.screen = "main";
+					guiControl.trade.activateDelay = 5;
+					guiControl.trade.cursorPosition = 2;
+				}
 			}
 		}
 	}

@@ -22,7 +22,7 @@ rm_Ocean.clockImg.src = "images/clock_sheet.png";
 
 rm_Ocean.DoFirst = function () {
     G.player.x = (pixel(64) * 25) - pixel(32) - G.player.xBound;
-    G.player.y = pixel(64) * 25;
+    G.player.y = pixel(64) * 22;
     console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
 
     G.oceanParticle.x = G.player.x + randomSmidge();
@@ -60,13 +60,10 @@ rm_Ocean.Do = function () {
     }
 
     if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
-        if (!guiControl.inventory.show && !guiControl.trade.show) {
+        if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
             if (ct_cancel().down) {
+                guiControl.inventory.activateDelay = 5;
                 guiControl.inventory.show = true;
-            }
-            if (ct_esc.down) {
-                guiControl.trade.show = true;
-                G.player.speed = 0;
             }
         }
     }
@@ -113,6 +110,8 @@ rm_Ocean.DrawClock = function () {
             G.economy.UpdateEconomy();
 
             for (var i = 0; i < G.map.length; i++) {
+                G.map[i].island.haggleAmount = 0;
+                G.map[i].island.timesHaggledToday = 0;
                 G.map[i].island.SimulateTrade();
             }
         }
@@ -129,21 +128,21 @@ rm_Ocean.DrawClock = function () {
 rm_Ocean.GenerateMap = function () {
     var island1 = rm_Ocean.AddObject(OS.P["Island"], {
         x: pixel(64) * 25, //Exact center of map.
-        y: pixel(64) * 25
+        y: pixel(64) * 22
     });
     
     console.log(island1.name + " created at " + island1.x + ", " + island1.y);
     G.map.push({
         island: island1,
         drawX: 25,
-        drawY: 25,
+        drawY: 22,
         drawWidth: 1,
         drawHeight: 1
     });
 
     var usedXSquares = [];
     var usedYSquares = [];
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 9; i++) {
         var xSquare = Math.round(Math.randomRange(1, 49));
         while (usedXSquares.indexOf(xSquare) != -1 &&
                usedXSquares.indexOf(xSquare + 1) != -1 && usedXSquares.indexOf(xSquare - 1) != -1 &&
@@ -153,7 +152,7 @@ rm_Ocean.GenerateMap = function () {
         }
         usedXSquares.push(xSquare);
 
-        var ySquare = Math.round(Math.randomRange(1, 49));
+        var ySquare = Math.round(Math.randomRange(1, 43));
         while (usedYSquares.indexOf(ySquare) != -1 &&
                usedYSquares.indexOf(ySquare + 1) != -1 && usedYSquares.indexOf(ySquare - 1) != -1 &&
                usedYSquares.indexOf(ySquare + 2) != -1 && usedYSquares.indexOf(ySquare - 2) != -1)

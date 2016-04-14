@@ -26,9 +26,13 @@ var pr_ship = OS.P.Add("Ship", {
 	energyRefillTimer: 0
 });
 
+pr_ship.BeforeDo = function () {
+	this.GetMapPosition();
+}
+
 pr_ship.Do = function () {
-	if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
-		if (!guiControl.inventory.show && !guiControl.trade.show) {
+	if (guiControl && guiControl.inventory && guiControl.map && guiControl.trade) {   // Force it to wait until loaded.
+		if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
 			if (ct_left().down) {
 				this.direction += 45;
 			} else if (ct_right().down) {
@@ -65,6 +69,12 @@ pr_ship.Do = function () {
 pr_ship.AfterDo = function () {
 	this.CheckMovement();
 	this.UpdateEnergy();
+}
+
+pr_ship.GetMapPosition = function () {
+	this.mapX = pixel(Math.round(this.x / pixel(64)));
+	this.mapY = pixel(Math.round(this.y / pixel(64)));
+	console.log(this.mapX + ", " + this.mapY);
 }
 
 pr_ship.CheckInteraction = function () {
