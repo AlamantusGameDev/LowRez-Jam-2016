@@ -56,7 +56,7 @@ pr_island.AdjustPrices = function () {
 		if (this.inventory[i] > 10) {
 			this.priceDifferences[i] = -Math.round(this.inventory[i] * Math.randomRange(1, 3));
 		} else if (this.inventory[i] < 5) {
-			this.priceDifferences[i] = Math.round(this.inventory[i] * Math.randomRange(1, 3));
+			this.priceDifferences[i] = Math.round((10 - this.inventory[i]) * Math.randomRange(1, 3));
 		} else {
 			this.priceDifferences[i] = 0;
 		}
