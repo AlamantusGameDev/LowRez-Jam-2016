@@ -1,17 +1,14 @@
 function oceanRoom () {
     // Create objects on room creation for persistence.
     G.player = rm_Ocean.AddObject(OS.P["Ship"]);
-    G.player.x = pixel((rm_Ocean.width / OS.S.pixelScale) / 2);
-    G.player.y = pixel((rm_Ocean.height / OS.S.pixelScale) / 2);
+    G.player.x = (pixel(64) * 25) - pixel(32) - G.player.xBound;
+    G.player.y = pixel(64) * 25;
     console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
     G.oceanParticle = rm_Ocean.AddObject(OS.P["Ocean Particle"]);
     G.oceanParticle.x = G.player.x + randomSmidge();
     G.oceanParticle.y = G.player.y + randomSmidge();
 
-    var island1 = rm_Ocean.AddObject(OS.P["Island"]);
-    island1.x = pixel((rm_Ocean.width / OS.S.pixelScale) / 2) + island1.xBound + G.player.xBound;
-    island1.y = pixel((rm_Ocean.height / OS.S.pixelScale) / 2);
-    console.log(island1.name + " created at " + island1.x + ", " + island1.y);
+    rm_Ocean.GenerateMap();
     
     // When room is loaded, explicitly set room to rm_Ocean, just in case "Default" doesn't work/is loaded too slowly
     // to make sure DoFirst runs.
@@ -92,4 +89,51 @@ rm_Ocean.DrawEnergyBar = function () {
     OS.context.fillStyle = "#0055FF";
     OS.context.fillRect(64, OS.camera.height - barHeight - 16, barWidth, barHeight);
     OS.context.fillStyle = saveFillStyle;
+}
+
+rm_Ocean.GenerateMap = function () {
+    var island1 = rm_Ocean.AddObject(OS.P["Island"], {
+        x: pixel(64) * 25, //Exact center of map.
+        y: pixel(64) * 25
+    });
+    
+    console.log(island1.name + " created at " + island1.x + ", " + island1.y);
+    G.map.push({
+        island: island1
+    });
+
+    var usedXSquares = [];
+    var usedYSquares = [];
+    for (var i = 0; i < 5; i++) {
+        var xSquare = Math.round(Math.randomRange(1, 49));
+        while (usedXSquares.indexOf(xSquare) != -1 &&
+               usedXSquares.indexOf(xSquare + 1) != -1 && usedXSquares.indexOf(xSquare - 1) != -1 &&
+               usedXSquares.indexOf(xSquare + 2) != -1 && usedXSquares.indexOf(xSquare - 2) != -1)
+        {
+            xSquare = Math.round(Math.randomRange(1, 49));
+        }
+        usedXSquares.push(xSquare);
+
+        var ySquare = Math.round(Math.randomRange(1, 49));
+        while (usedYSquares.indexOf(ySquare) != -1 &&
+               usedYSquares.indexOf(ySquare + 1) != -1 && usedYSquares.indexOf(ySquare - 1) != -1 &&
+               usedYSquares.indexOf(ySquare + 2) != -1 && usedYSquares.indexOf(ySquare - 2) != -1)
+        {
+            ySquare = Math.round(Math.randomRange(1, 49));
+        }
+        usedYSquares.push(ySquare);
+
+        var xPosition = pixel(64) * xSquare;
+        var yPosition = pixel(64) * ySquare;
+        
+        G.map.push({
+            island: rm_Ocean.AddObject(OS.P["Island"], {
+                x: xPosition,
+                y: yPosition
+            }),
+            drawX: xSquare,
+            drawY: ySquare
+        });
+        console.log(G.map[i + 1].island.name + " created at " + G.map[i + 1].island.x + ", " + G.map[i + 1].island.y);
+    }
 }
