@@ -559,12 +559,13 @@ Oversimplified.Room.prototype.Draw = function () {
 
 // Add a GameObject or PremadeObject to the room.
 Oversimplified.Room.prototype.AddObject = function (newObjectName, newObjectOptions) {
+    newObjectOptions = (typeof newObjectOptions !== 'undefined') ? newObjectOptions : {};
     var self = this;
     
     if (newObjectName.type == "GameObject") {    //Create from prefabricated object
         var newID = Oversimplified.nextID++;
         var newName = newObjectName.name + newID.toString();
-        self.objects[newName] = Oversimplified.CopyObject(newObjectName, newID, newName);
+        self.objects[newName] = Oversimplified.CopyObject(newObjectName, newID, newName, newObjectOptions);
         
         return self.objects[newName];
     }
@@ -1256,7 +1257,7 @@ Oversimplified.CreateObject = function (newObjectName, x, y, imageSrc, maskImage
 newID and newName are optional. If excluded, they are auto-populated with the next id value and the original object's name.
 Use "identical" to copy name and id of original object.
 */
-Oversimplified.CopyObject = function (object, newID, newName) {
+Oversimplified.CopyObject = function (object, newID, newName, objectOptions) {
     var resultingCopy = {};
     if (newID != "identical") {
         resultingCopy.id = typeof newID !== 'undefined' ? newID : Oversimplified.nextID++;
@@ -1292,6 +1293,10 @@ Oversimplified.CopyObject = function (object, newID, newName) {
         if (typeof resultingCopy[property] === 'undefined') {
             resultingCopy[property] = object[property];
         }
+    }
+    for (var option in objectOptions) {
+        //Overwrite any properties.
+        resultingCopy[option] = objectOptions[option];
     }
     
     return resultingCopy;
