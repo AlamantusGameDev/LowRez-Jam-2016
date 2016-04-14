@@ -995,16 +995,10 @@ Oversimplified.GameObjectsAtPoint = function (x, y) {
     var objectsAtPoint = [];
     for (var obj in Oversimplified.O) {
         var object = Oversimplified.O[obj];
-        for (var i = 0; i < 2 * object.xBound; i++) {
-            for (var j = 0; j < 2 * object.yBound; j++) {
-                var xToCheck = (object.x - object.xBound) + i;
-                var yToCheck = (object.y - object.yBound) + j;
-                
-                if (xToCheck == x && yToCheck == y)
-                {
-                    objectsAtPoint.push(object);
-                }
-            }
+        if (x <= object.x + object.xBound && x >= object.x - object.xBound &&
+            y <= object.y + object.yBound && y >= object.y - object.yBound)
+        {
+            objectsAtPoint.push(object);
         }
     }
     
