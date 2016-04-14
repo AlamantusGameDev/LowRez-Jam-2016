@@ -14,7 +14,7 @@ rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
 rm_Ocean.speedGaugeImg = new Image();
 rm_Ocean.speedGaugeImg.src = "images/speed_gauge_sheet.png";
 
-rm_Ocean.clockTimerCutoff = (1 / OS.S.defaultStep) * 60 * 10;   // 10 minute day.
+rm_Ocean.clockTimerCutoff = (1 / OS.S.defaultStep) * 60 * 5;   // 5 minute day.
 rm_Ocean.clockTimerCount = 0;
 rm_Ocean.clockImg = new Image();
 rm_Ocean.clockImg.src = "images/clock_sheet.png";
@@ -67,9 +67,13 @@ rm_Ocean.Do = function () {
             }
         }
     }
+
+    this.RunClock();
 }
 
 rm_Ocean.DrawAbove = function () {
+    this.DrawNightDarkness();
+
     // Draw the speed indicator in Bottom Left corner.
     OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
 
@@ -89,19 +93,7 @@ rm_Ocean.DoLast = function () {
     //rm_Ocean.objects = {};
 }
 
-rm_Ocean.DrawEnergyBar = function () {
-    var percentage = G.stats.energy / G.stats.maxEnergy;
-    var barHeight = pixel(2);
-    var maxBarWidth = 32;
-    var barWidth = pixel(Math.round(maxBarWidth * percentage));
-
-    var saveFillStyle = OS.context.fillStyle;
-    OS.context.fillStyle = "#0055FF";
-    OS.context.fillRect(64, OS.camera.height - barHeight - 16, barWidth, barHeight);
-    OS.context.fillStyle = saveFillStyle;
-}
-
-rm_Ocean.DrawClock = function () {
+rm_Ocean.RunClock = function () {
     if (guiControl.trade && !guiControl.trade.show) {   // Only advance time when not trading.
         rm_Ocean.clockTimerCount++;
         if (rm_Ocean.clockTimerCount > rm_Ocean.clockTimerCutoff) {
@@ -116,13 +108,42 @@ rm_Ocean.DrawClock = function () {
             }
         }
     }
+}
 
+rm_Ocean.DrawNightDarkness = function () {
+    var alphaFormula = (Math.sin((((this.clockTimerCount / (this.clockTimerCutoff * Math.PI)) * 10) * 1.5) - 2) - 0.4);
+    if (alphaFormula < 0) alphaFormula = 0;
+    
+    if (alphaFormula > 0) {
+        var saveGlobalAlpha = OS.context.globalAlpha;
+        var tmp = Oversimplified.context.fillStyle;
+        OS.context.globalAlpha = alphaFormula;
+        Oversimplified.context.fillStyle = "#112189";
+        Oversimplified.context.fillRect(0, 0, Oversimplified.camera.width, Oversimplified.camera.height);
+        Oversimplified.context.fillStyle = tmp;
+        Oversimplified.context.globalAlpha = saveGlobalAlpha;
+    }
+}
+
+rm_Ocean.DrawEnergyBar = function () {
+    var percentage = G.stats.energy / G.stats.maxEnergy;
+    var barHeight = pixel(2);
+    var maxBarWidth = 32;
+    var barWidth = pixel(Math.round(maxBarWidth * percentage));
+
+    var saveFillStyle = OS.context.fillStyle;
+    OS.context.fillStyle = "#0055FF";
+    OS.context.fillRect(64, OS.camera.height - barHeight - 16, barWidth, barHeight);
+    OS.context.fillStyle = saveFillStyle;
+}
+
+rm_Ocean.DrawClock = function () {
     var screenX = OS.camera.width - pixel(9) - pixel(2);
     var screenY = OS.camera.height - pixel(9) - pixel(2);
-    var percentOfClock = rm_Ocean.clockTimerCount / rm_Ocean.clockTimerCutoff;
+    var percentOfClock = this.clockTimerCount / this.clockTimerCutoff;
     var clockFrameX = Math.floor(16 * percentOfClock) * pixel(9);
-    OS.context.drawImage(rm_Ocean.clockImg, clockFrameX, 0, pixel(9), pixel(9), screenX, screenY, pixel(9), pixel(9));
-    // console.log(rm_Ocean.clockTimerCount);
+    OS.context.drawImage(this.clockImg, clockFrameX, 0, pixel(9), pixel(9), screenX, screenY, pixel(9), pixel(9));
+    // console.log(this.clockTimerCount);
 }
 
 rm_Ocean.GenerateMap = function () {
