@@ -91,14 +91,18 @@ G.economy = {	// Aww yea, supply and demand.
 							 0, 0, 0, 0,
 							 0, 0, 0, 0,
 							 0, 0, 0, 0],
-	CheckEconomy: function () {
+	UpdateEconomy: function () {
+		// console.log(G.economy.cargoItemWorth);
 		for (var i = 0; i < G.economy.cargoItemWorth.length; i++) {
 			var totalPriceDifference = 0;
 			for (var m = 0; m < G.map.length; m++) {
-				totalPriceDifference += G.map.island.priceDifferences[i];
+				// console.log("map: " + G.map[m].island);
+				totalPriceDifference += G.map[m].island.priceDifferences[i];
+				// console.log(G.map[m].island.priceDifferences[i]);
 			}
 			G.economy.cargoItemWorth[i] += Math.round(totalPriceDifference / G.map.length);	// Apply the average price difference for the item.
 		}
+		// console.log(G.economy.cargoItemWorth);
 	}
 };
 

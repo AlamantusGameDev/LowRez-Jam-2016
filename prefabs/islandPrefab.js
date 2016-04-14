@@ -15,7 +15,10 @@ var pr_island = OS.P.Add("Island", {
 
 	canTrade: true,
 
-	inventory:		[],
+	inventory:		[0, 0, 0, 0,
+					 0, 0, 0, 0,
+					 0, 0, 0, 0,
+					 0, 0, 0, 0],
 	priceDifferences: [],
 	itemsSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
 					 0, 0, 0, 0,
@@ -43,8 +46,10 @@ pr_island.SetUp = function () {
 			this.inventory[i] = Math.round(Math.randomRange(0, 20));
 		}
 	}
+	// console.log(this.name + " stock: " + this.inventory);
 
 	this.AdjustPrices();
+	// console.log(this.name + " pricing: " + this.priceDifferences);
 
 	if (this.CheckInventory().length < 4) {
 		this.SetUp();
@@ -58,7 +63,7 @@ pr_island.AdjustPrices = function () {
 		} else if (this.inventory[i] < 5) {
 			this.priceDifferences[i] = Math.round((10 - this.inventory[i]) * Math.randomRange(1, 3));
 		} else {
-			this.priceDifferences[i] = 0;
+			this.priceDifferences[i] = Math.round(Math.randomRange(-2, 2));
 		}
 
 		if (G.economy.cargoItemWorth[i] + this.priceDifferences[i] < 0) {
@@ -97,7 +102,8 @@ pr_island.CheckInventory = function () {	// Returns an array of indices that hav
 
 pr_island.TradeWith = function () {
 	// Change music to Trade.
-	guiControl.trade.island = this.self;
+	// console.log(this.inventory);
+	guiControl.trade.island = this;
 	guiControl.trade.haggleAmount = 0;
 	guiControl.trade.activateDelay = 5;
 	guiControl.trade.show = true;
