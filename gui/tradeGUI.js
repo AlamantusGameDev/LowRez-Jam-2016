@@ -20,8 +20,10 @@ function tradeGUI() {
 }
 
 function drawTradeGUI() {
-	if (guiControl.trade.show) {
+	if (guiControl.trade && guiControl.trade.show) {
 		guiControl.trade.activateDelay -= (guiControl.trade.activateDelay > 0) ? 1 : 0;
+		// console.log("trade screen island: " + guiControl.trade.island.name);
+		// Draw background color.
 		var tmp = Oversimplified.context.fillStyle;
 	    Oversimplified.context.fillStyle = "#D9BEA5";
 	    Oversimplified.context.fillRect(0, 0, Oversimplified.camera.width, Oversimplified.camera.height);

@@ -7,7 +7,7 @@ function inventoryGUI() {
 }
 
 function drawInventoryGUI() {
-	if (guiControl.inventory.show) {
+	if (guiControl.inventory && guiControl.inventory.show) {
 		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, pixel(2), pixel(2), 240, 240);
 
 		if (ct_down().down) {

@@ -27,22 +27,24 @@ var pr_ship = OS.P.Add("Ship", {
 });
 
 pr_ship.Do = function () {
-	if (!guiControl.inventory.show && !guiControl.trade.show) {
-		if (ct_left().down) {
-			this.direction += 45;
-		} else if (ct_right().down) {
-			this.direction -= 45;
-		}
-		this.direction = Math.clampAngle(this.direction);
-	
-		if (ct_up().down) {
-			this.currentSpeed++;
-		} else if (ct_down().down) {
-			this.currentSpeed--;
-		}
-		this.AdjustSpeedBasedOnEnergy();
+	if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
+		if (!guiControl.inventory.show && !guiControl.trade.show) {
+			if (ct_left().down) {
+				this.direction += 45;
+			} else if (ct_right().down) {
+				this.direction -= 45;
+			}
+			this.direction = Math.clampAngle(this.direction);
+		
+			if (ct_up().down) {
+				this.currentSpeed++;
+			} else if (ct_down().down) {
+				this.currentSpeed--;
+			}
+			this.AdjustSpeedBasedOnEnergy();
 
-		this.CheckInteraction();
+			this.CheckInteraction();
+		}
 	}
 
 	this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
@@ -71,6 +73,7 @@ pr_ship.CheckInteraction = function () {
 		if (objectsFound.length > 0) {
 			for (var i = 0; i < objectsFound.length; i++) {
 				if (objectsFound[i].canTrade) {
+					// console.log("interacting with island: " + objectsFound[i].name);
 					objectsFound[i].TradeWith();
 				}
 			}

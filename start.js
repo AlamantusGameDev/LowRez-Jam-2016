@@ -1,4 +1,5 @@
 OS.S.defaultStep = 1 / 120;
+OS.S.numberOfScriptsToLoad = 13;	// Excludes the titleScreen.js room, which is not loaded yet.
 OS.S.pixelScale = 4;
 OS.SetCamera({
 	width: pixel(64),

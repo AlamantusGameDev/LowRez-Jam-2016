@@ -39,7 +39,7 @@ rm_Ocean.DoFirst = function () {
 }
 rm_Ocean.Do = function () {
     // Move G.oceanParticle around based on player's movement.
-    G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
+    if (G.oceanParticle.CheckPosition) G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
 
     this.waveTimer--;
     if (this.waveTimer <= 0) {
@@ -50,13 +50,15 @@ rm_Ocean.Do = function () {
         this.waveTimer = Math.round(Math.randomRange(30, 150));
     }
 
-    if (!guiControl.inventory.show && !guiControl.trade.show) {
-        if (ct_cancel().down) {
-            guiControl.inventory.show = true;
-        }
-        if (ct_esc.down) {
-            guiControl.trade.show = true;
-            G.player.speed = 0;
+    if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
+        if (!guiControl.inventory.show && !guiControl.trade.show) {
+            if (ct_cancel().down) {
+                guiControl.inventory.show = true;
+            }
+            if (ct_esc.down) {
+                guiControl.trade.show = true;
+                G.player.speed = 0;
+            }
         }
     }
 }
