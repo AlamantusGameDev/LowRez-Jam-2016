@@ -92,18 +92,18 @@ G.economy = {	// Aww yea, supply and demand.
 							 0, 0, 0, 0,
 							 0, 0, 0, 0],
 	CheckEconomy: function () {
-		for (var i = 0; i < this.cargoSold; i++) {
-			var soldBoughtDifference = this.cargoBought[i] - this.cargoSold[i];
-
-			if (Math.abs(soldBoughtDifference) > (this.cargoItemWorth[i] * 0.75)) {	// If the difference is greater than 75% of the worth,
-				this.cargoItemWorth[i] += Math.round(soldBoughtDifference * 0.5);	// Adjust the worth by half of the difference.
-
-				if (this.cargoItemWorth[i] < 1) {
-					this.cargoItemWorth[i] = 1;		// Make worth never drop below 1.
-				}
+		for (var i = 0; i < G.economy.cargoItemWorth.length; i++) {
+			var totalPriceDifference = 0;
+			for (var m = 0; m < G.map.length; m++) {
+				totalPriceDifference += G.map.island.priceDifferences[i];
 			}
+			G.economy.cargoItemWorth[i] += Math.round(totalPriceDifference / G.map.length);	// Apply the average price difference for the item.
 		}
 	}
 };
 
-function loadGameManager () {}
+function loadGameManager () {
+	for (var i = 0; i < G.economy.cargoItemWorth.length; i++) {
+		G.economy.cargoItemWorth[i] += Math.round(Math.randomRange(-5, 5));
+	}
+}

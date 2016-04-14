@@ -110,6 +110,7 @@ pr_island.SellTo = function (itemIndex, price) {
 
 	G.inventory.cargo[itemIndex]--;
 	G.inventory.money += price;
+	G.economy.cargoSold[itemIndex]++;
 }
 
 pr_island.BuyFrom = function (itemIndex, price) {
@@ -119,4 +120,5 @@ pr_island.BuyFrom = function (itemIndex, price) {
 
 	G.inventory.cargo[itemIndex]++;
 	G.inventory.money -= price;
+	G.economy.cargoBought[itemIndex]++;
 }
