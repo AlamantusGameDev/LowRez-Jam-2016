@@ -1285,12 +1285,20 @@ Oversimplified.CopyObject = function (object, newID, newName, objectOptions) {
     }
     for (var property in object) {
         if (typeof resultingCopy[property] === 'undefined') {
-            resultingCopy[property] = object[property];
+            if (object[property].slice) {      // If it's an array, copy its values.
+                resultingCopy[property] = object[property].slice();
+            } else {
+                resultingCopy[property] = object[property];
+            }
         }
     }
     for (var option in objectOptions) {
         //Overwrite any properties.
-        resultingCopy[option] = objectOptions[option];
+        if (object[option].slice) {      // If it's an array, copy its values.
+            resultingCopy[option] = object[option].slice();
+        } else {
+            resultingCopy[option] = objectOptions[option];
+        }
     }
     
     return resultingCopy;
