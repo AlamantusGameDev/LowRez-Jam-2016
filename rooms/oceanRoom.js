@@ -11,19 +11,12 @@ function oceanRoom () {
 }
 
 rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
-rm_Ocean.speedGaugeImg = new Image();
-rm_Ocean.speedGaugeImg.src = "images/speed_gauge_sheet.png";
-
-rm_Ocean.clockTimerCutoff = (1 / OS.S.defaultStep) * 60 * 5;   // 5 minute day.
 rm_Ocean.clockTimerCount = 0;
-rm_Ocean.clockImg = new Image();
-rm_Ocean.clockImg.src = "images/clock_sheet.png";
-
 
 rm_Ocean.DoFirst = function () {
-    G.player.x = (pixel(64) * 25) - pixel(32) - G.player.xBound;
-    G.player.y = pixel(64) * 22;
-    console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
+    G.player.x = (this.squareSize * (this.squaresX / 2)) - (this.squareSize / 2) - G.player.xBound;
+    G.player.y = (this.squareSize * (this.squaresY / 2));
+    // console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
 
     G.oceanParticle.x = G.player.x + randomSmidge();
     G.oceanParticle.y = G.player.y + randomSmidge();
@@ -59,15 +52,11 @@ rm_Ocean.Do = function () {
         this.waveTimer = Math.round(Math.randomRange(30, 150));
     }
 
-    if (guiControl && guiControl.inventory && guiControl.map && guiControl.trade) {   // Force it to wait until loaded.
+    if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
         if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
             if (ct_cancel().down) {
                 guiControl.inventory.activateDelay = 5;
                 guiControl.inventory.show = true;
-            }
-            if (ct_m.down) {
-                guiControl.map.activateDelay = 5;
-                guiControl.map.show = true;
             }
         }
     }
@@ -151,47 +140,41 @@ rm_Ocean.DrawClock = function () {
 }
 
 rm_Ocean.GenerateMap = function () {
-    var xSquares = [25];
-    var ySquares = [22];
-
-    while(xSquares.length < 10){
-        var randomX = Math.round(Math.randomRange(1, 48));
-        var foundX = false;
-        for(var i = 0; i < xSquares.length; i++){
-            // console.log(i + ": " + (xSquares[i] - 3) + " <= " + randomX + " <= " + (xSquares[i] + 3) + "?");
-            if (randomX >= xSquares[i] - 3 && randomX <= xSquares[i] + 3) {
-                foundX = true;
-                break;
-            }
-        }
-        if (!foundX) xSquares[xSquares.length] = randomX;
-    }
-    while(ySquares.length < 10){
-        var randomY = Math.round(Math.randomRange(1, 42));
-        var foundY = false;
-        for(var i = 0; i < ySquares.length; i++){
-            // console.log(i + ": " + (ySquares[i] - 3) + " <= " + randomY + " <= " + (ySquares[i] + 3) + "?");
-            if (randomY >= ySquares[i] - 3 && randomY <= ySquares[i] + 3) {
-                foundY = true;
-                // console.log("It's between! Do not add!");
-                break;
-            }
-        }
-        if (!foundY) ySquares[ySquares.length] = randomY;
-    }
-
-    for (var i = 0; i < xSquares.length; i++) {
-        G.map.push({
-            island: rm_Ocean.AddObject(OS.P["Island"], {
-                x: pixel(64) * xSquares[i],
-                y: pixel(64) * ySquares[i]
-            }),
-            drawX: xSquares[i],
-            drawY: ySquares[i],
-            drawWidth: 1,
-            drawHeight: 1
-        });
-        // console.log(G.map[i + 1].island.name + " created at " + G.map[i + 1].island.x + ", " + G.map[i + 1].island.y);
-    }
-    console.log(xSquares + "\n" + ySquares);
+	var xSquares = [25];
+	var ySquares = [22];
+	while (xSquares.length < this.numberOfIslands) {
+		var randomNumber = Math.round(Math.randomRange(2, this.squaresX - 2));
+		var found = false;
+		for (var i = 0; i < xSquares.length; i++) {
+			if (xSquares[i] - ((this.squaresX / this.numberOfIslands) / 2) < randomNumber && randomNumber < xSquares[i] + ((this.squaresX / this.numberOfIslands) / 2)) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) xSquares.push(randomNumber);
+	}
+	while (ySquares.length < this.numberOfIslands) {
+		var randomNumber = Math.round(Math.randomRange(2, this.squaresY - 2));
+		var found = false;
+		for (var i = 0; i < ySquares.length; i++) {
+			if (ySquares[i] - ((this.squaresY / this.numberOfIslands) / 2) < randomNumber && randomNumber < ySquares[i] + ((this.squaresY / this.numberOfIslands) / 2)) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) ySquares.push(randomNumber);
+	}
+	
+	for (var i = 0; i < this.numberOfIslands; i++) {
+		G.map.push({
+			island: rm_Ocean.AddObject(OS.P["Island"], {
+				x: this.squareSize * xSquares[i],
+				y: this.squareSize * ySquares[i]
+			}),
+			drawX: xSquares[i],
+			drawY: ySquares[i],
+			drawWidth: 1,
+			drawHeight: 1
+		});
+	}
 }
