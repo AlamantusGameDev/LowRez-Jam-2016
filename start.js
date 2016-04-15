@@ -1,6 +1,7 @@
 OS.S.defaultStep = 1 / 120;
 OS.S.numberOfScriptsToLoad = 14;	// Excludes the titleScreen.js room, which is not loaded yet.
 OS.S.pixelScale = 4;
+// Oversimplified.DEBUG.showMessages = false;
 OS.SetCamera({
 	width: pixel(64),
 	height: pixel(64),

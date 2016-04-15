@@ -74,7 +74,7 @@ pr_ship.AfterDo = function () {
 pr_ship.GetMapPosition = function () {
 	this.mapX = pixel(Math.round(this.x / pixel(64)));
 	this.mapY = pixel(Math.round(this.y / pixel(64)));
-	console.log(this.mapX + ", " + this.mapY);
+	// console.log(this.mapX + ", " + this.mapY);
 }
 
 pr_ship.CheckInteraction = function () {

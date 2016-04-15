@@ -6,6 +6,7 @@ var pr_island = OS.P.Add("Island", {
 	solid: true,
 	imageSrc: "images/island.png",
 	animations: [ani_island_1],
+	depth: -50,
 
 	mapX: 0,
 	mapY: 0,

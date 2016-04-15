@@ -11,6 +11,7 @@ var ct_shift = OS.C.Add("Shift", OS.Keycode.shift);
 var ct_space = OS.C.Add("Space", OS.Keycode.space);
 var ct_z = OS.C.Add("Z", OS.Keycode.z);
 var ct_x = OS.C.Add("X", OS.Keycode.x);
+var ct_m = OS.C.Add("M", OS.Keycode.m);
 var ct_esc = OS.C.Add("Cancel", OS.Keycode.escape);
 
 function loadControls () {}
