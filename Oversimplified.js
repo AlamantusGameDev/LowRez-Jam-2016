@@ -1150,6 +1150,7 @@ Oversimplified.Sound = function (name, source, secondarySource) {
     
     document.getElementById("audio").appendChild(this.audioElement);
     this.audioElement.load();
+    this.element = this.audioElement;
 }
 Oversimplified.Sound.prototype.type = "Sound";
 
@@ -1192,6 +1193,7 @@ Oversimplified.Tune = function (name, source, secondarySource, duration) {
     
     document.getElementById("audio").appendChild(this.audioElement);
     this.audioElement.load();
+    this.element = this.audioElement;
 }
 Oversimplified.Tune.prototype.type = "Tune";
 
