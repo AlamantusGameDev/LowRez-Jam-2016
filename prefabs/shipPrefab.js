@@ -214,7 +214,7 @@ pr_ship.AdjustSpeedBasedOnEnergy = function () {
 pr_ship.CheckIllnessIncrease = function () {
 	var percentChance = G.stats.crew + ((this.currentSpeed / (G.stats.energy + 0.001)) * G.stats.illness);	// +0.001 on the off-chance that energy reaches 0.
 	if (Math.randomRange(0, 100) < percentChance) {
-		// Play Illness sound.
+		snd_illness.Play();
 		G.stats.illness++;
 		this.drawSickIndicator += secondsWorthOfFrames(1.5);
 	}

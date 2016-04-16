@@ -14,6 +14,8 @@ rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
 rm_Ocean.clockTimerCount = 1;   // Set it to 1 so it doesn't check for player illness immediately!
 
 rm_Ocean.DoFirst = function () {
+    mus_sail.Play();
+
     G.player.x = (this.squareSize * (this.squaresX / 2)) - (this.squareSize / 2) - G.player.xBound;
     G.player.y = (this.squareSize * (this.squaresY / 2));
     // console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
@@ -40,21 +42,22 @@ rm_Ocean.DoFirst = function () {
     // G.economy.UpdateEconomy();
 }
 rm_Ocean.Do = function () {
-    // Move G.oceanParticle around based on player's movement.
-    if (G.oceanParticle.CheckPosition) G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
-
-    this.waveTimer--;
-    if (this.waveTimer <= 0) {
-        var wave = this.AddObject(OS.P["Wave Particle"]);
-        wave.x = G.player.x + (randomSmidge() * 4);
-        wave.y = G.player.y + (randomSmidge() * 4);
-
-        this.waveTimer = Math.round(Math.randomRange(30, 150));
-    }
-
     if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
         if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
+            // Move G.oceanParticle around based on player's movement.
+            if (G.oceanParticle.CheckPosition) G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
+
+            this.waveTimer--;
+            if (this.waveTimer <= 0) {
+                var wave = this.AddObject(OS.P["Wave Particle"]);
+                wave.x = G.player.x + (randomSmidge() * 4);
+                wave.y = G.player.y + (randomSmidge() * 4);
+
+                this.waveTimer = Math.round(Math.randomRange(30, 150));
+            }
+
             if (ct_cancel().down) {
+                snd_select.Play();
                 guiControl.inventory.activateDelay = 5;
                 guiControl.inventory.show = true;
             }

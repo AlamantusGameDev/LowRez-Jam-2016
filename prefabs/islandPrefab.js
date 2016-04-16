@@ -117,6 +117,8 @@ pr_island.CheckInventory = function () {	// Returns an array of indices that hav
 pr_island.TradeWith = function () {
 	// Change music to Trade.
 	// console.log(this.inventory);
+	mus_sail.Stop();
+	mus_trade.Play();
 	guiControl.trade.island = this;
 	guiControl.trade.haggleAmount = 0;
 	guiControl.trade.activateDelay = 5;

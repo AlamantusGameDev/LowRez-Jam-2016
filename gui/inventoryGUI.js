@@ -14,9 +14,11 @@ function drawInventoryGUI() {
 		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, pixel(2), pixel(2), 240, 240);
 
 		if (ct_down().down) {
+			snd_cursordown.Play();
 			guiControl.inventory.cursorPosition++;
 		}
 		if (ct_up().down) {
+			snd_cursorup.Play();
 			guiControl.inventory.cursorPosition--;
 		}
 		
@@ -69,18 +71,22 @@ function drawInventoryGUI() {
 							break;
 					}
 
+					snd_select.Play();
 					guiControl.inventory.cursorPosition = 0;
 					guiControl.inventory.activateDelay = 5;
 				}
 				if (ct_cancel().down) {
+					snd_select.Play();
 					guiControl.inventory.show = false;
 				}
 				if (ct_left().down) {
+					snd_cursorup.Play();
 					guiControl.inventory.show = false;
 					guiControl.map.activateDelay = 5;
 					guiControl.map.show = true;
 				}
 				if (ct_right().down) {
+					snd_cursordown.Play();
 					guiControl.inventory.show = false;
 					guiControl.map.activateDelay = 5;
 					guiControl.map.show = true;
@@ -113,6 +119,7 @@ function drawInventoryGUI() {
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
+					snd_select.Play();
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
 					guiControl.inventory.cursorPosition = 0;
@@ -147,6 +154,7 @@ function drawInventoryGUI() {
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
+					snd_select.Play();
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
 					guiControl.inventory.cursorPosition = 1;
@@ -193,6 +201,7 @@ function drawInventoryGUI() {
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
+					snd_select.Play();
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
 					guiControl.inventory.cursorPosition = 2;	// The position where "Supplies" is on main screen.

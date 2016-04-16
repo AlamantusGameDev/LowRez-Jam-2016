@@ -10,6 +10,11 @@ var pr_wave = OS.P.Add("Wave Particle", {
 	lifeTimer: 100,
 });
 
+pr_wave.DoFirst = function () {
+	if (!snd_wave.IsPlaying()) {
+		snd_wave.Play();
+	}
+}
 pr_wave.Do = function () {
 	// Move around randomly.
 	this.lifeTimer--;

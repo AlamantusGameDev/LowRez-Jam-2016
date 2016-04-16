@@ -29,19 +29,19 @@ function drawTradeGUI() {
 	    Oversimplified.context.fillStyle = tmp;
 
 		if (ct_down().down) {
-			// Play Move_Cursor sound.
+			snd_cursordown.Play();
 			guiControl.trade.cursorPosition++;
 		}
 		if (ct_up().down) {
-			// Play Move_Cursor_Up sound.
+			snd_cursorup.Play();
 			guiControl.trade.cursorPosition--;
 		}
 		if (ct_right().down) {
-			// Play Move_Cursor sound.
+			snd_cursordown.Play();
 			guiControl.trade.page++;
 		}
 		if (ct_left().down) {
-			// Play Move_Cursor_Up sound.
+			snd_cursorup.Play();
 			guiControl.trade.page--;
 		}
 		
@@ -86,37 +86,45 @@ function drawTradeGUI() {
 					switch (guiControl.trade.cursorPosition) {
 						case 0:
 							if (guiControl.trade.island.CheckInventory().length > 0) {
+								snd_select.Play();
 								guiControl.trade.screen = "buy";
 								guiControl.trade.activateDelay = 5;
 							}
 							else {
-								// Play Cannot_Buy sound.
+								snd_cannotbuy.Play();
 							}
 							break;
 						case 1:
+								snd_select.Play();
 							if (G.inventory.CheckCargo().length > 0) {
 								guiControl.trade.screen = "sell";
 								guiControl.trade.activateDelay = 5;
 							} else {
-								// Play Cannot_Buy sound.
+								snd_cannotbuy.Play();
 							}
 							break;
 						case 2:
+							snd_select.Play();
 							guiControl.trade.screen = "tavern";
 							guiControl.trade.activateDelay = 5;
 							break;
 						default:
-							// Change music to Sail.
+							snd_select.Play();
+							mus_trade.Stop();
+							mus_sail.Play();
 							guiControl.trade.show = false;
 							break;
 					}
 
-					// Play Select sound.
+					// snd_select.Play();
 					guiControl.trade.cursorPosition = 0;
 					guiControl.trade.page = 0;
 					// console.log(guiControl.trade.screen);
 				}
 				if (ct_cancel().down) {
+					snd_select.Play();
+					mus_trade.Stop();
+					mus_sail.Play();
 					guiControl.trade.show = false;
 				}
 			}
@@ -190,31 +198,34 @@ function drawTradeGUI() {
 							if (items.length > 0 && (guiControl.trade.island.timesHaggledToday <= G.stats.popularity) &&	// If there are items and you haven't haggled too much
 								guiControl.trade.island.haggleAmount == 0 && Math.floor(Math.randomRange(0, 100)) < G.stats.popularity)	// Or you haven't haggled yet and get a random number less than your popularity, haggle successfully.
 							{
+								snd_sell.Play();
 								guiControl.trade.island.haggleAmount = G.stats.haggling;
-								// Play Sell sound.
 							} else {
-								// Play Cannot_Buy sound.
+								snd_cannotbuy.Play();
 								guiControl.trade.island.timesHaggledToday++;
 							}
 							break;
 						case 1:		// Buy
 							if (items.length > 0 &&
-								G.inventory.CanBuy(items[guiControl.trade.page], itemPrice)) {	//If cursor is over yes and you can buy, buy it.
+								G.inventory.CanBuy(items[guiControl.trade.page], itemPrice))	//If cursor is over yes and you can buy, buy it.
+							{
+								snd_buy.Play();
 								guiControl.trade.island.BuyFrom(items[guiControl.trade.page], itemPrice);
 							} else {
-								// Play Cannot_Buy sound.
+								snd_cannotbuy.Play();
 							}
 							break;
 						default:
+							snd_select.Play();
 							guiControl.trade.screen = "main";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
 							break;
 					}
-					// Play Select sound.
 					// console.log(guiControl.trade.screen);
 				}
 				if (ct_cancel().down) {
+					snd_select.Play();
 					guiControl.trade.screen = "main";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
@@ -293,10 +304,10 @@ function drawTradeGUI() {
 							if (items.length > 0 && (guiControl.trade.island.timesHaggledToday <= G.stats.popularity) &&
 								guiControl.trade.island.haggleAmount == 0 && Math.floor(Math.randomRange(0, 100)) < G.stats.popularity)		// If you haven't haggled yet and get a random number less than your popularity, haggle successfully.
 							{
-								// Play Sell sound.
+								snd_sell.Play();
 								guiControl.trade.island.haggleAmount = G.stats.haggling;
 							} else {
-								// Play Cannot_Buy sound.
+								snd_cannotbuy.Play();
 								guiControl.trade.island.timesHaggledToday++;
 							}
 							break;
@@ -304,21 +315,23 @@ function drawTradeGUI() {
 							if (items.length > 0 &&
 								G.inventory.CanSell(items[guiControl.trade.page]))	//If cursor is over yes and you can buy, buy it.
 							{
+								snd_sell.Play();
 								guiControl.trade.island.SellTo(items[guiControl.trade.page], itemPrice);
 							} else {
-								// Play Cannot_Buy sound.
+								snd_cannotbuy.Play();
 							}
 							break;
 						default:
+							snd_select.Play();
 							guiControl.trade.screen = "main";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
 							break;
 					}
-					// Play Select sound.
 					// console.log(guiControl.trade.screen);
 				}
 				if (ct_cancel().down) {
+					snd_select.Play();
 					guiControl.trade.screen = "main";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
@@ -363,18 +376,21 @@ function drawTradeGUI() {
 				if (ct_confirm().down) {
 					switch (guiControl.trade.cursorPosition) {
 						case 0:
+							snd_select.Play();
 							guiControl.trade.screen = "gossip";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
 							break;
 						case 1:
 							if (G.stats.illness > 0 && G.inventory.money > innPrice) {	//If cursor is over yes, heal illness with supplies.
+								snd_heal.Play();
 								guiControl.trade.island.StayAtInn();
 							} else {
-								// Play Cant_Buy sound.
+								snd_cannotbuy.Play();
 							}
 							break;
 						default:
+							snd_select.Play();
 							guiControl.trade.screen = "main";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
@@ -386,6 +402,7 @@ function drawTradeGUI() {
 				}
 
 				if (ct_cancel().down) {
+					snd_select.Play();
 					guiControl.trade.screen = "main";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
@@ -416,7 +433,7 @@ function drawTradeGUI() {
 			// Button Action
 			if (guiControl.trade.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
-					// Play Select sound.
+					snd_select.Play();
 					guiControl.trade.screen = "tavern";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 0;
