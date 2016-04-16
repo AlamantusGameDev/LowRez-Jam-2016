@@ -22,6 +22,8 @@ var pr_island = OS.P.Add("Island", {
 					 0, 0, 0, 0,
 					 0, 0, 0, 0,
 					 0, 0, 0, 0],
+	innPriceDifference: 0,
+	innStays: 0,
 	priceDifferences: [],
 	itemsSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
 					 0, 0, 0, 0,
@@ -73,6 +75,9 @@ pr_island.AdjustPrices = function () {
 			this.priceDifferences[i] = -G.economy.cargoItemWorth[i] + 1;
 		}
 	}
+
+	var priceDifferencesOrdered = this.priceDifferences.slice().sort(sortNumber);
+	this.innPriceDifference += Math.round(Math.randomRange(priceDifferencesOrdered[0], priceDifferencesOrdered[priceDifferencesOrdered.length -1])) - Math.round(Math.randomRange(0, this.innStays));
 }
 
 pr_island.SimulateTrade = function () {
@@ -91,6 +96,12 @@ pr_island.SimulateTrade = function () {
 	}
 
 	this.AdjustPrices();
+}
+
+pr_island.NewDay = function () {
+	this.haggleAmount = 0;
+    this.timesHaggledToday = 0;
+    this.SimulateTrade();
 }
 
 pr_island.CheckInventory = function () {	// Returns an array of indices that have cargo
@@ -130,4 +141,13 @@ pr_island.BuyFrom = function (itemIndex, price) {
 	G.inventory.cargo[itemIndex]++;
 	G.inventory.money -= price;
 	G.economy.cargoBought[itemIndex]++;
+}
+
+pr_island.StayAtInn = function () {
+	// Play Sell sound.
+	this.innStays++;
+
+	G.stats.illness--;
+	G.inventory.money -= G.economy.innCost + this.innPriceDifference;
+	G.economy.innStays++;
 }

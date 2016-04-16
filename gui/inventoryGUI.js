@@ -38,12 +38,12 @@ function drawInventoryGUI() {
 			// Money icon
 			guiControl.drawIcon(7, 2, guiControl.leftBorder, guiControl.rowTop(0));
 			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(0) + pixel(), 8, "black", 6);
-			// Supplies icon
-			guiControl.drawIcon(9, 2, guiControl.leftBorder, guiControl.rowTop(1));
-			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(1) + pixel(), 8, "black", 6);
 			// Cargo icon
-			guiControl.drawIcon(1, 0, guiControl.leftBorder, guiControl.rowTop(2));
-			guiControl.drawPixelText(G.inventory.CargoTotal().toString(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(2) + pixel(), 8, "black", 6);
+			guiControl.drawIcon(1, 0, guiControl.leftBorder, guiControl.rowTop(1));
+			guiControl.drawPixelText(G.inventory.CargoTotal().toString(), guiControl.leftBorder + pixel(guiControl.iconSize + 4), guiControl.rowTop(1) + pixel(), 8, "black", 6);
+			// Stats icon
+			// guiControl.drawIcon(9, 2, guiControl.leftBorder, guiControl.rowTop(2));
+			guiControl.drawPixelText("Status", guiControl.leftBorder, guiControl.rowTop(2) + pixel(), 8, "black", 6);
 			
 			// Close Text
 			guiControl.drawPixelText("Close", guiControl.leftBorder, guiControl.rowTop(3) + pixel(), 8, "black", 6);
@@ -59,10 +59,10 @@ function drawInventoryGUI() {
 							guiControl.inventory.screen = "money";
 							break;
 						case 1:
-							guiControl.inventory.screen = "supplies";
+							guiControl.inventory.screen = "cargo";
 							break;
 						case 2:
-							guiControl.inventory.screen = "cargo";
+							guiControl.inventory.screen = "status";
 							break;
 						default:
 							guiControl.inventory.show = false;
@@ -97,7 +97,7 @@ function drawInventoryGUI() {
 			}
 
 			// Title
-			guiControl.drawPixelText("Money", guiControl.leftBorder - pixel(2), guiControl.topOfBackground, 8, "black", 6);
+			guiControl.drawPixelText("Money", guiControl.leftBorder + pixel(3), guiControl.topOfBackground, 8, "black", 6);
 
 			guiControl.drawPixelText("Actual Amt", guiControl.leftBorder - pixel(5), guiControl.rowTop(0) + pixel(), 10, "black", 4);
 			// Money icon
@@ -119,63 +119,6 @@ function drawInventoryGUI() {
 				}
 			}
 		}
-		else if (guiControl.inventory.screen == "supplies") {
-			// Limit Cursor
-			if (guiControl.inventory.cursorPosition < 0) {
-				guiControl.inventory.cursorPosition = 2;
-			}
-			if (guiControl.inventory.cursorPosition > 2) {
-				guiControl.inventory.cursorPosition = 0;
-			}
-
-			// Title
-			guiControl.drawPixelText("Supplies", guiControl.leftBorder - pixel(6), guiControl.topOfBackground, 8, "black", 6);
-
-			guiControl.drawPixelText("Heal Crew?", guiControl.leftBorder - pixel(5), guiControl.rowTop(0) + pixel(), 10, "black", 4);
-			// Supplies icon
-			guiControl.drawIcon(9, 2, guiControl.leftBorder - pixel(5), guiControl.rowTop(1) - pixel(3));
-			guiControl.drawPixelText(G.inventory.supplies.toString(), guiControl.leftBorder - pixel(5) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 2, "black", 4);
-			// Illness icon
-			guiControl.drawIcon(4, 1, guiControl.leftBorder - pixel(5) + pixel(24), guiControl.rowTop(1) - pixel(3));
-			guiControl.drawPixelText(G.stats.illness.toString(), guiControl.leftBorder - pixel(5) + pixel(24) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 2, "black", 4);
-
-			// Yes/No options
-			guiControl.drawPixelText("No", guiControl.leftBorder, guiControl.rowTop(2) - pixel(3), 3, "black", 6);
-			guiControl.drawPixelText("Yes", guiControl.leftBorder, guiControl.rowTop(3) - pixel(3), 3, (G.inventory.supplies > 0 && G.stats.illness > 0) ? "black" : "white", 6);
-			
-			// Back Text
-			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
-			
-			// Draw cursor
-			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition + 2) - pixel(4));
-
-			// Button Action
-			if (guiControl.inventory.activateDelay <= 0) {
-				if (ct_confirm().down) {
-					switch (guiControl.inventory.cursorPosition) {
-						case 1:
-							if (G.inventory.supplies > 0 && G.stats.illness > 0) {	//If cursor is over yes, heal illness with supplies.
-								G.inventory.supplies--;
-								G.stats.illness--;
-							}
-							break;
-						default:
-							guiControl.inventory.screen = "main";
-							guiControl.inventory.cursorPosition = 1;	// The position where "Supplies" is on main screen.
-							break;
-					}
-
-					// Give a cooldown so you don't accidentally do something you don't want.
-					guiControl.inventory.activateDelay = 5;
-				}
-
-				if (ct_cancel().down) {
-					guiControl.inventory.screen = "main";
-					guiControl.inventory.activateDelay = 5;
-					guiControl.inventory.cursorPosition = 1;	// The position where "Supplies" is on main screen.
-				}
-			}
-		}
 		else if (guiControl.inventory.screen == "cargo") {
 			// Limit Cursor
 			if (guiControl.inventory.cursorPosition < 0) {
@@ -186,7 +129,7 @@ function drawInventoryGUI() {
 			}
 
 			// Title
-			guiControl.drawPixelText("Cargo", guiControl.leftBorder - pixel(2), guiControl.topOfBackground, 8, "black", 6);
+			guiControl.drawPixelText("Cargo", guiControl.leftBorder + pixel(3), guiControl.topOfBackground, 8, "black", 6);
 
 			// Cargo icons
 			var cargo = G.inventory.CheckCargo();	// Contains the item ids that have more than 1 item
@@ -206,7 +149,53 @@ function drawInventoryGUI() {
 				if (ct_confirm().down || ct_cancel().down) {
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
-					guiControl.inventory.cursorPosition = 2;
+					guiControl.inventory.cursorPosition = 1;
+				}
+			}
+		}
+		else if (guiControl.inventory.screen == "status") {
+			// Limit Cursor
+			if (guiControl.inventory.cursorPosition < 0) {
+				guiControl.inventory.cursorPosition = 0;
+			}
+			if (guiControl.inventory.cursorPosition > 0) {
+				guiControl.inventory.cursorPosition = 0;
+			}
+
+			// guiControl.drawPageArrow("left", pixel(4), guiControl.topOfBackground);
+			// guiControl.drawPageArrow("right", OS.camera.width - pixel(4) - pixel(4), guiControl.topOfBackground);
+
+			// Title
+			guiControl.drawPixelText("Status", guiControl.leftBorder + pixel(), guiControl.topOfBackground, 8, "black", 6);
+
+			// Illness icon
+			guiControl.drawIcon(4, 1, guiControl.leftBorder - pixel(6), guiControl.rowTop(0));
+			guiControl.drawPixelText(G.stats.illness.toString(), guiControl.leftBorder - pixel(6) + (guiControl.iconScaled + pixel(2)), guiControl.rowTop(0) + pixel(2), 2, "black", 4);
+			
+			guiControl.drawPixelText("This will show more data when stati can change.", guiControl.leftBorder - pixel(5), guiControl.rowTop(1), 10, "black", 4);
+			/*// Energy icon
+			guiControl.drawIcon(9, 2, guiControl.leftBorder - pixel(5), guiControl.rowTop(0) - pixel(3));
+			guiControl.drawPixelText(G.stats.energy.toString(), guiControl.leftBorder - pixel(5) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 2, "black", 4);
+			// Illness icon
+			guiControl.drawIcon(4, 1, guiControl.leftBorder - pixel(5) + pixel(24), guiControl.rowTop(1) - pixel(3));
+			guiControl.drawPixelText(G.stats.illness.toString(), guiControl.leftBorder - pixel(5) + pixel(24) + pixel(guiControl.iconSize + 2), guiControl.rowTop(1) + pixel(2) - pixel(3), 2, "black", 4);
+
+			// Yes/No options
+			guiControl.drawPixelText("No", guiControl.leftBorder, guiControl.rowTop(2) - pixel(3), 3, "black", 6);
+			guiControl.drawPixelText("Yes", guiControl.leftBorder, guiControl.rowTop(3) - pixel(3), 3, (G.inventory.supplies > 0 && G.stats.illness > 0) ? "black" : "white", 6);
+			*/
+			// Back Text
+			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
+			
+			// Draw cursor
+			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(3));
+
+			// Button Action
+			if (guiControl.inventory.activateDelay <= 0) {
+				if (ct_confirm().down || ct_cancel().down) {
+					guiControl.inventory.screen = "main";
+					guiControl.inventory.activateDelay = 5;
+					guiControl.inventory.cursorPosition = 2;	// The position where "Supplies" is on main screen.
 				}
 			}
 		}

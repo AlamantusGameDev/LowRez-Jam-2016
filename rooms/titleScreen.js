@@ -12,6 +12,8 @@ rm_TitleScreen.DrawBelow = function () {
     Oversimplified.context.fillStyle = "#D9BEA5";
     Oversimplified.context.fillRect(0, 0, Oversimplified.camera.width, Oversimplified.camera.height);
     Oversimplified.context.fillStyle = tmp;
+
+    
 }
 rm_TitleScreen.DoLast = function () {
     // Clear Objects on room exit. This is best practice unless you need persistent objects.

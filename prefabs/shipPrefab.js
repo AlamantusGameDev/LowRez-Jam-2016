@@ -23,7 +23,10 @@ var pr_ship = OS.P.Add("Ship", {
 	moveStepProgress: 0,
 	doTakeStep: false,
 
-	energyRefillTimer: 0
+	energyRefillTimer: 0,
+
+	drawSickIndicator: 0,
+	drawSickIndicatorTime: secondsWorthOfFrames(1.5)
 });
 
 pr_ship.BeforeDo = function () {
@@ -69,6 +72,18 @@ pr_ship.Do = function () {
 pr_ship.AfterDo = function () {
 	this.CheckMovement();
 	this.UpdateEnergy();
+}
+
+pr_ship.DrawAbove = function () {
+	this.drawSickIndicator--;
+	if (this.drawSickIndicator < 0) {
+		this.drawSickIndicator = 0;
+	}
+	if (this.drawSickIndicator > 0) {
+		var sickIndicatorHeight = Math.round((this.drawSickIndicatorTime - this.drawSickIndicator) / 2) / OS.S.pixelScale;
+		var sickIndicatorY = this.y - sickIndicatorHeight - Oversimplified.camera.y - (guiControl.iconScaled / 2);
+		guiControl.drawIcon(4, 1, this.x - Oversimplified.camera.x - (guiControl.iconScaled / 2), sickIndicatorY);
+	}
 }
 
 pr_ship.GetMapPosition = function () {
@@ -193,5 +208,14 @@ pr_ship.AdjustSpeedBasedOnEnergy = function () {
 		this.currentSpeed > 1 && G.stats.energy < (G.stats.maxEnergy * 0.05))
 	{
 		this.currentSpeed--;
+	}
+}
+
+pr_ship.CheckIllnessIncrease = function () {
+	var percentChance = G.stats.crew + ((this.currentSpeed / (G.stats.energy + 0.001)) * G.stats.illness);	// +0.001 on the off-chance that energy reaches 0.
+	if (Math.randomRange(0, 100) < percentChance) {
+		// Play Illness sound.
+		G.stats.illness++;
+		this.drawSickIndicator += secondsWorthOfFrames(1.5);
 	}
 }

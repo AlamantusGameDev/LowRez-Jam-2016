@@ -79,18 +79,20 @@ G.stats = {
 G.economy = {	// Aww yea, supply and demand.
 // Items are determined by their index, and their position on the sheet determines their index.
 // So the second item on the top row is index 1, and to get its value, you get `G.economy.cargoItemWorth[1]`
-	cargoItemWorth: 		[10, 20, 30, 30,	//Can be adjusted based on sales.
-							 40, 20, 50, 80,
-							 65, 20, 20, 30,
-							 30, 60, 45, 70],
-	cargoSold: 				[0, 0, 0, 0,		// The more you sell, the lower the price gets
-							 0, 0, 0, 0,
-							 0, 0, 0, 0,
-							 0, 0, 0, 0],
-	cargoBought:			[0, 0, 0, 0,		// The more you buy, the higher the price gets
-							 0, 0, 0, 0,
-							 0, 0, 0, 0,
-							 0, 0, 0, 0],
+	innCost:		50,
+	innStays:		0,
+	cargoItemWorth: [10, 20, 30, 30,	//Can be adjusted based on sales.
+					 40, 20, 50, 80,
+					 65, 20, 20, 30,
+					 30, 60, 45, 70],
+	cargoSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
+					 0, 0, 0, 0,
+					 0, 0, 0, 0,
+					 0, 0, 0, 0],
+	cargoBought:	[0, 0, 0, 0,		// The more you buy, the higher the price gets
+					 0, 0, 0, 0,
+					 0, 0, 0, 0,
+					 0, 0, 0, 0],
 	UpdateEconomy: function () {
 		// console.log(G.economy.cargoItemWorth);
 		for (var i = 0; i < G.economy.cargoItemWorth.length; i++) {
@@ -102,6 +104,11 @@ G.economy = {	// Aww yea, supply and demand.
 			}
 			G.economy.cargoItemWorth[i] += Math.round(totalPriceDifference / G.map.length);	// Apply the average price difference for the item.
 		}
+		var totalInnCost = 0;
+		for (var m = 0; m < G.map.length; m++) {
+			totalInnCost += G.map[m].island.innPriceDifference;
+		}
+		G.economy.innCost += Math.round(totalInnCost / G.map.length);	// Apply the average inn price.
 		// console.log(G.economy.cargoItemWorth);
 	}
 };

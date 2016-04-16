@@ -72,7 +72,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText((G.inventory.CheckCargo().length > 0) ? "Sell" : "No Cargo!", guiControl.trade.leftBorder, guiControl.trade.rowTop(1) + pixel(), 10, (G.inventory.CheckCargo().length > 0) ? "black" : "white", 6);
 			// Cargo icon
 			// guiControl.drawIcon(1, 0, guiControl.trade.leftBorder, guiControl.trade.rowTop(2));
-			guiControl.drawPixelText("Gossip", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) + pixel(), 8, "black", 6);
+			guiControl.drawPixelText("Tavern", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) + pixel(), 8, "black", 6);
 			
 			// Close Text
 			guiControl.drawPixelText("Leave", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) + pixel(), 8, "black", 6);
@@ -102,7 +102,7 @@ function drawTradeGUI() {
 							}
 							break;
 						case 2:
-							guiControl.trade.screen = "gossip";
+							guiControl.trade.screen = "tavern";
 							guiControl.trade.activateDelay = 5;
 							break;
 						default:
@@ -326,6 +326,72 @@ function drawTradeGUI() {
 				}
 			}
 		}
+		else if (guiControl.trade.screen == "tavern") {
+			// Limit Cursor
+			if (guiControl.trade.cursorPosition < 0) {
+				guiControl.trade.cursorPosition = 2;
+			}
+			if (guiControl.trade.cursorPosition > 2) {
+				guiControl.trade.cursorPosition = 0;
+			}
+
+			// Title
+			guiControl.drawPixelText("Tavern", guiControl.leftBorder - pixel(6), guiControl.topOfBackground, 8, "black", 6);
+
+			var innPrice = G.economy.innCost + guiControl.trade.island.innPriceDifference;
+			guiControl.drawPixelText("Heal costs " + innPrice.toString() + " C", guiControl.leftBorder - pixel(5), guiControl.trade.rowTop(0) - pixel(), 10, "black", 4);
+
+			// Money icon
+			guiControl.drawIcon(7, 2, guiControl.trade.padding, guiControl.trade.rowTop(1) - pixel());
+			guiControl.drawPixelText(G.inventory.moneyDisplay(), guiControl.trade.padding + pixel(guiControl.iconSize + 2), guiControl.trade.rowTop(1) + pixel(), 10, "black", 4);
+			
+			// Options
+			guiControl.drawPixelText("Gossip", guiControl.leftBorder, guiControl.trade.rowTop(2) - pixel(), 0, "black", 6);
+			guiControl.drawPixelText("Heal", guiControl.leftBorder, guiControl.trade.rowTop(3) - pixel(), 4, (G.inventory.money > innPrice && G.stats.illness > 0) ? "black" : "white", 6);
+			// Illness icon
+			guiControl.drawIcon(4, 1, guiControl.leftBorder + pixel(30), guiControl.trade.rowTop(3) - pixel(2));
+			guiControl.drawPixelText(G.stats.illness.toString(), guiControl.leftBorder + pixel(30) + pixel(guiControl.iconSize + 2), guiControl.trade.rowTop(3), 2, (G.stats.illness == 0) ? "yellow" : "black", 4);
+			
+			// Back Text
+			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.trade.rowTop(4) - pixel(), 8, "black", 6);
+			
+			// Draw cursor
+			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(2));
+
+			// Button Action
+			if (guiControl.trade.activateDelay <= 0) {
+				if (ct_confirm().down) {
+					switch (guiControl.trade.cursorPosition) {
+						case 0:
+							guiControl.trade.screen = "gossip";
+							guiControl.trade.activateDelay = 5;
+							guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
+							break;
+						case 1:
+							if (G.stats.illness > 0 && G.inventory.money > innPrice) {	//If cursor is over yes, heal illness with supplies.
+								guiControl.trade.island.StayAtInn();
+							} else {
+								// Play Cant_Buy sound.
+							}
+							break;
+						default:
+							guiControl.trade.screen = "main";
+							guiControl.trade.activateDelay = 5;
+							guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
+							break;
+					}
+
+					// Give a cooldown so you don't accidentally do something you don't want.
+					guiControl.trade.activateDelay = 5;
+				}
+
+				if (ct_cancel().down) {
+					guiControl.trade.screen = "main";
+					guiControl.trade.activateDelay = 5;
+					guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
+				}
+			}
+		}
 		else if (guiControl.trade.screen == "gossip") {
 			// console.log(guiControl.trade.screen);
 			// Limit Cursor
@@ -351,9 +417,9 @@ function drawTradeGUI() {
 			if (guiControl.trade.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
 					// Play Select sound.
-					guiControl.trade.screen = "main";
+					guiControl.trade.screen = "tavern";
 					guiControl.trade.activateDelay = 5;
-					guiControl.trade.cursorPosition = 2;
+					guiControl.trade.cursorPosition = 0;
 				}
 			}
 		}

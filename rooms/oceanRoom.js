@@ -11,7 +11,7 @@ function oceanRoom () {
 }
 
 rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
-rm_Ocean.clockTimerCount = 0;
+rm_Ocean.clockTimerCount = 1;   // Set it to 1 so it doesn't check for player illness immediately!
 
 rm_Ocean.DoFirst = function () {
     G.player.x = (this.squareSize * (this.squaresX / 2)) - (this.squareSize / 2) - G.player.xBound;
@@ -95,10 +95,14 @@ rm_Ocean.RunClock = function () {
             G.economy.UpdateEconomy();
 
             for (var i = 0; i < G.map.length; i++) {
-                G.map[i].island.haggleAmount = 0;
-                G.map[i].island.timesHaggledToday = 0;
-                G.map[i].island.SimulateTrade();
+                G.map[i].island.NewDay();
             }
+        }
+
+        if (rm_Ocean.clockTimerCount == 0 ||
+            rm_Ocean.clockTimerCount == Math.round(rm_Ocean.clockTimerCutoff * 0.33) ||
+            rm_Ocean.clockTimerCount == Math.round(rm_Ocean.clockTimerCutoff * 0.66)) {
+            G.player.CheckIllnessIncrease();
         }
     }
 }
