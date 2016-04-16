@@ -1,5 +1,5 @@
 OS.S.defaultStep = 1 / 120;
-OS.S.numberOfScriptsToLoad = 14;	// Excludes the titleScreen.js room, which is not loaded yet.
+OS.S.numberOfScriptsToLoad = 15;	// Excludes the titleScreen.js room, which is not loaded yet.
 OS.S.pixelScale = 4;
 // Oversimplified.DEBUG.showMessages = false;
 OS.SetCamera({
@@ -11,6 +11,7 @@ OS.SetCamera({
 function start()
 {
     OS.AddScript("loadControls.js");
+    OS.AddScript("loadAudio.js");
     OS.AddScript("loadGameManager.js");
     OS.AddScript("loadPrefabs.js");
     OS.AddScript("loadGUIs.js");
