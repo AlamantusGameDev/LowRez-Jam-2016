@@ -623,6 +623,7 @@ Oversimplified.GameObject = function (name, options) {// x, y, imageSrc, maskIma
     
     var self = this;
     this.self = self;
+    this.doFirstHasRun = false;
     
     //Required Options
     this.name = name;
@@ -795,6 +796,11 @@ Oversimplified.GameObject.prototype.Update = function () {
     this.screenY = this.y - Oversimplified.camera.y;
 	this.xPrevious = this.x;
 	this.yPrevious = this.y;
+
+    if (!this.doFirstHasRun) {
+        this.DoFirst();
+        this.doFirstHasRun = true;
+    }
     
     this.BeforeDo();
     this.Do();
@@ -1159,6 +1165,10 @@ Oversimplified.Sound.prototype.Play = function () {
     this.element.volume = Oversimplified.Settings.soundVolume;
     this.element.play();
 }
+Oversimplified.Sound.prototype.Stop = function () {
+    this.element.pause();
+    this.element.currentTime = 0;
+}
 Oversimplified.Sound.prototype.IsPlaying = function () {
     return !this.element.paused && !this.element.ended && 0 < this.element.currentTime;
 }
@@ -1202,6 +1212,10 @@ Oversimplified.Tune.prototype.Play = function () {
     this.element.volume = Oversimplified.Settings.musicVolume;
     this.element.loop = true;
     this.element.play();
+}
+Oversimplified.Tune.prototype.Stop = function () {
+    this.element.pause();
+    this.element.currentTime = 0;
 }
 Oversimplified.Tune.prototype.CheckLoop = function () {
     if (this.duration < this.element.duration) {
