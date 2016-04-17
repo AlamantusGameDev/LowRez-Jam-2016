@@ -1,7 +1,7 @@
-var mus_title = new OS.Tune("Title", "audio/music/cloudisland(theme2).mp3", "audio/music/cloudisland(theme2).wav");
-var mus_sail = new OS.Tune("Sailing", "audio/music/cloudisland(soaring).mp3", "audio/music/cloudisland(soaring).wav");
-var mus_trade = new OS.Tune("Trade", "audio/music/cloudisland(theme1-noeffects).mp3", "audio/music/cloudisland(theme1-noeffects).wav");
-var mus_credits = new OS.Tune("Credits", "audio/music/cloudisland(theme1-effects).mp3", "audio/music/cloudisland(theme1-effects).wav");
+var mus_title = new OS.Tune("Title", "audio/music/title.mp3", "audio/music/title.wav");
+var mus_sail = new OS.Tune("Sailing", "audio/music/ocean.mp3", "audio/music/ocean.wav");
+var mus_trade = new OS.Tune("Trade", "audio/music/trade.mp3", "audio/music/trade.wav");
+var mus_credits = new OS.Tune("Credits", "audio/music/credits.mp3", "audio/music/credits.wav");
 
 var snd_buy = new OS.Sound("Buy", "audio/sounds/Buy.wav", "audio/sounds/Buy.mp3");
 var snd_cannotbuy = new OS.Sound("Cannot Buy", "audio/sounds/Cannot_Buy.wav", "audio/sounds/Cannot_Buy.mp3");
