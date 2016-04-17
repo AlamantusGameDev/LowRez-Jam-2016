@@ -33,7 +33,7 @@ function drawTradeGUI() {
 			guiControl.trade.cursorPosition++;
 		}
 		if (ct_up().down) {
-			snd_cursorup.Play();
+			snd_cursordown.Play();
 			guiControl.trade.cursorPosition--;
 		}
 		if (ct_right().down) {
@@ -41,7 +41,7 @@ function drawTradeGUI() {
 			guiControl.trade.page++;
 		}
 		if (ct_left().down) {
-			snd_cursorup.Play();
+			snd_cursordown.Play();
 			guiControl.trade.page--;
 		}
 		
@@ -109,7 +109,7 @@ function drawTradeGUI() {
 							guiControl.trade.activateDelay = 5;
 							break;
 						default:
-							snd_select.Play();
+							snd_cursorup.Play();
 							mus_trade.Stop();
 							mus_sail.Play();
 							guiControl.trade.show = false;
@@ -122,7 +122,7 @@ function drawTradeGUI() {
 					// console.log(guiControl.trade.screen);
 				}
 				if (ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					mus_trade.Stop();
 					mus_sail.Play();
 					guiControl.trade.show = false;
@@ -216,7 +216,7 @@ function drawTradeGUI() {
 							}
 							break;
 						default:
-							snd_select.Play();
+							snd_cursorup.Play();
 							guiControl.trade.screen = "main";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
@@ -225,7 +225,7 @@ function drawTradeGUI() {
 					// console.log(guiControl.trade.screen);
 				}
 				if (ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.trade.screen = "main";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 0;	// The position where "Buy" is on main screen.
@@ -322,7 +322,7 @@ function drawTradeGUI() {
 							}
 							break;
 						default:
-							snd_select.Play();
+							snd_cursorup.Play();
 							guiControl.trade.screen = "main";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
@@ -331,7 +331,7 @@ function drawTradeGUI() {
 					// console.log(guiControl.trade.screen);
 				}
 				if (ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.trade.screen = "main";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 1;	// The position where "Sell" is on main screen.
@@ -390,7 +390,7 @@ function drawTradeGUI() {
 							}
 							break;
 						default:
-							snd_select.Play();
+							snd_cursorup.Play();
 							guiControl.trade.screen = "main";
 							guiControl.trade.activateDelay = 5;
 							guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
@@ -402,7 +402,7 @@ function drawTradeGUI() {
 				}
 
 				if (ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.trade.screen = "main";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 2;	// The position where "Supplies" is on main screen.
@@ -433,7 +433,7 @@ function drawTradeGUI() {
 			// Button Action
 			if (guiControl.trade.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.trade.screen = "tavern";
 					guiControl.trade.activateDelay = 5;
 					guiControl.trade.cursorPosition = 0;

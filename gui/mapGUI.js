@@ -39,12 +39,12 @@ function drawMapGUI() {
 		
 		// Button Action
 		if (guiControl.map.activateDelay <= 0) {
-			if (ct_cancel().down) {
-				snd_select.Play();
+			if (ct_confirm().down || ct_cancel().down) {
+				snd_cursorup.Play();
 				guiControl.map.show = false;
 			}
 			if (ct_left().down) {
-				snd_cursorup.Play();
+				snd_cursordown.Play();
 				guiControl.map.show = false;
 				guiControl.inventory.activateDelay = 5;
 				guiControl.inventory.show = true;

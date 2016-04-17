@@ -178,7 +178,7 @@ rm_Ocean.GenerateMap = function () {
 	}
 	
 	for (var i = 0; i < this.numberOfIslands; i++) {
-		G.map.push({
+		G.map[i] = {
 			island: rm_Ocean.AddObject(OS.P["Island"], {
 				x: this.squareSize * xSquares[i],
 				y: this.squareSize * ySquares[i]
@@ -187,6 +187,6 @@ rm_Ocean.GenerateMap = function () {
 			drawY: ySquares[i],
 			drawWidth: 1,
 			drawHeight: 1
-		});
+		};
 	}
 }

@@ -22,7 +22,7 @@ function drawTitleScreen() {
             guiControl.title.cursorPosition++;
         }
         if (ct_up().down) {
-            snd_cursorup.Play();
+            snd_cursordown.Play();
             guiControl.title.cursorPosition--;
         }
         

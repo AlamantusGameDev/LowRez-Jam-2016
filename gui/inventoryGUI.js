@@ -18,7 +18,7 @@ function drawInventoryGUI() {
 			guiControl.inventory.cursorPosition++;
 		}
 		if (ct_up().down) {
-			snd_cursorup.Play();
+			snd_cursordown.Play();
 			guiControl.inventory.cursorPosition--;
 		}
 		
@@ -58,29 +58,32 @@ function drawInventoryGUI() {
 				if (ct_confirm().down) {
 					switch (guiControl.inventory.cursorPosition) {
 						case 0:
+							snd_select.Play();
 							guiControl.inventory.screen = "money";
 							break;
 						case 1:
+							snd_select.Play();
 							guiControl.inventory.screen = "cargo";
 							break;
 						case 2:
+							snd_select.Play();
 							guiControl.inventory.screen = "status";
 							break;
 						default:
+							snd_cursorup.Play();
 							guiControl.inventory.show = false;
 							break;
 					}
 
-					snd_select.Play();
 					guiControl.inventory.cursorPosition = 0;
 					guiControl.inventory.activateDelay = 5;
 				}
 				if (ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.inventory.show = false;
 				}
 				if (ct_left().down) {
-					snd_cursorup.Play();
+					snd_cursordown.Play();
 					guiControl.inventory.show = false;
 					guiControl.map.activateDelay = 5;
 					guiControl.map.show = true;
@@ -119,7 +122,7 @@ function drawInventoryGUI() {
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
 					guiControl.inventory.cursorPosition = 0;
@@ -154,7 +157,7 @@ function drawInventoryGUI() {
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
 					guiControl.inventory.cursorPosition = 1;
@@ -201,7 +204,7 @@ function drawInventoryGUI() {
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
 				if (ct_confirm().down || ct_cancel().down) {
-					snd_select.Play();
+					snd_cursorup.Play();
 					guiControl.inventory.screen = "main";
 					guiControl.inventory.activateDelay = 5;
 					guiControl.inventory.cursorPosition = 2;	// The position where "Supplies" is on main screen.
