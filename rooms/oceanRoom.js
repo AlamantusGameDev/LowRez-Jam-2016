@@ -43,19 +43,10 @@ rm_Ocean.DoFirst = function () {
 }
 rm_Ocean.Do = function () {
     if (G.gameStarted) {
-        if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
+        if (guiControl && guiControl.inventory && guiControl.map && guiControl.trade) {   // Force it to wait until loaded.
             if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
                 // Move G.oceanParticle around based on player's movement.
                 if (G.oceanParticle.CheckPosition) G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
-
-                this.waveTimer--;
-                if (this.waveTimer <= 0) {
-                    var wave = this.AddObject(OS.P["Wave Particle"]);
-                    wave.x = G.player.x + (randomSmidge() * 4);
-                    wave.y = G.player.y + (randomSmidge() * 4);
-
-                    this.waveTimer = Math.round(Math.randomRange(30, 150));
-                }
 
                 if (ct_cancel().down) {
                     snd_select.Play();
@@ -66,6 +57,19 @@ rm_Ocean.Do = function () {
         }
 
         this.RunClock();
+    }
+    // Make waves even if the game hasn't started, but not when on trade screen.
+    if (guiControl && guiControl.trade) {   // Force it to wait until loaded.
+        if (!guiControl.trade.show) {
+            this.waveTimer--;
+            if (this.waveTimer <= 0) {
+                var wave = this.AddObject(OS.P["Wave Particle"]);
+                wave.x = G.player.x + (randomSmidge() * 4);
+                wave.y = G.player.y + (randomSmidge() * 4);
+
+                this.waveTimer = Math.round(Math.randomRange(30, 150));
+            }
+        }
     }
 }
 
