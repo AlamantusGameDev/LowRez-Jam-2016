@@ -95,8 +95,8 @@ function drawTradeGUI() {
 							}
 							break;
 						case 1:
-								snd_select.Play();
 							if (G.inventory.CheckCargo().length > 0) {
+								snd_select.Play();
 								guiControl.trade.screen = "sell";
 								guiControl.trade.activateDelay = 5;
 							} else {

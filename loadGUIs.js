@@ -1,4 +1,5 @@
 function loadGUIs() {
+	OS.AddScript("gui/titleScreen.js");
 	OS.AddScript("gui/inventoryGUI.js");
 	OS.AddScript("gui/mapGUI.js");
 	OS.AddScript("gui/tradeGUI.js");
@@ -35,6 +36,8 @@ var guiControl = {
 		OS.context.drawImage(guiControl.arrows, (direction == "left") ? 0 : pixel(4), 0, pixel(4), pixel(7), xPosition, yPosition, pixel(4), pixel(7));
 	}
 }
+guiControl.titleImage = new Image();
+guiControl.titleImage.src = "images/title.png";
 guiControl.background = new Image();
 guiControl.background.src = "images/guiBackground.png";
 guiControl.cursor = new Image();

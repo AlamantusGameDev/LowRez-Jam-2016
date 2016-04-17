@@ -19,7 +19,7 @@ var pr_ship = OS.P.Add("Ship", {
 	currentSpeed: 0,
 	pointInFront : {x: 0, y: 0 },
 	moveStepSize: 3,
-	moveStepAmount: 5 * Oversimplified.R[Oversimplified.R.currentRoom].stepSpeed,
+	moveStepAmount: 5 * OS.R[OS.R.currentRoom].stepSpeed,
 	moveStepProgress: 0,
 	doTakeStep: false,
 
@@ -30,59 +30,68 @@ var pr_ship = OS.P.Add("Ship", {
 });
 
 pr_ship.BeforeDo = function () {
-	this.GetMapPosition();
+	if (G.gameStarted) {
+		this.GetMapPosition();
+	}
 }
 
 pr_ship.Do = function () {
-	if (guiControl && guiControl.inventory && guiControl.map && guiControl.trade) {   // Force it to wait until loaded.
-		if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
-			if (ct_left().down) {
-				this.direction += 45;
-			} else if (ct_right().down) {
-				this.direction -= 45;
-			}
-			this.direction = Math.clampAngle(this.direction);
-		
-			if (ct_up().down) {
-				this.currentSpeed++;
-			} else if (ct_down().down) {
-				this.currentSpeed--;
-			}
-			this.AdjustSpeedBasedOnEnergy();
+	if (G.gameStarted) {
+		if (guiControl && guiControl.inventory && guiControl.map && guiControl.trade) {   // Force it to wait until loaded.
+			if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
+				if (ct_left().down) {
+					this.direction += 45;
+				} else if (ct_right().down) {
+					this.direction -= 45;
+				}
+				this.direction = Math.clampAngle(this.direction);
+			
+				if (ct_up().down) {
+					this.currentSpeed++;
+				} else if (ct_down().down) {
+					this.currentSpeed--;
+				}
+				this.AdjustSpeedBasedOnEnergy();
 
-			this.CheckInteraction();
+				this.CheckInteraction();
+			}
 		}
+
+		this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
+		
+		this.moveStepProgress += this.currentSpeed * this.moveStepAmount;
+		if (this.moveStepProgress >= this.moveStepSize) {
+			this.moveStepProgress -= this.moveStepSize;
+			console.log("take step");
+			this.doTakeStep = true;
+		} else {
+			this.doTakeStep = false;
+		}
+
+
+		this.SeamlessScroll();
+		// console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
 	}
-
-	this.currentSpeed = Math.clamp(this.currentSpeed, 0, 4);
-	
-	this.moveStepProgress += this.currentSpeed * this.moveStepAmount;
-	if (this.moveStepProgress >= this.moveStepSize) {
-		this.moveStepProgress -= this.moveStepSize;
-		this.doTakeStep = true;
-	} else {
-		this.doTakeStep = false;
-	}
-
-
-	this.SeamlessScroll();
-	// console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);
 }
 
 pr_ship.AfterDo = function () {
-	this.CheckMovement();
-	this.UpdateEnergy();
+	if (G.gameStarted) {
+		this.CheckMovement();
+		this.UpdateEnergy();
+	}
 }
 
 pr_ship.DrawAbove = function () {
-	this.drawSickIndicator--;
-	if (this.drawSickIndicator < 0) {
-		this.drawSickIndicator = 0;
-	}
-	if (this.drawSickIndicator > 0) {
-		var sickIndicatorHeight = Math.round((this.drawSickIndicatorTime - this.drawSickIndicator) / 2) / OS.S.pixelScale;
-		var sickIndicatorY = this.y - sickIndicatorHeight - Oversimplified.camera.y - (guiControl.iconScaled / 2);
-		guiControl.drawIcon(4, 1, this.x - Oversimplified.camera.x - (guiControl.iconScaled / 2), sickIndicatorY);
+	if (G.gameStarted) {
+		this.drawSickIndicator--;
+		if (this.drawSickIndicator < 0) {
+			this.drawSickIndicator = 0;
+		}
+		if (this.drawSickIndicator > 0) {
+			var sickIndicatorHeight = Math.round((this.drawSickIndicatorTime - this.drawSickIndicator) / 2) / OS.S.pixelScale;
+			var sickIndicatorY = this.y - sickIndicatorHeight - Oversimplified.camera.y - (guiControl.iconScaled / 2);
+			guiControl.drawIcon(4, 1, this.x - Oversimplified.camera.x - (guiControl.iconScaled / 2), sickIndicatorY);
+		}
 	}
 }
 

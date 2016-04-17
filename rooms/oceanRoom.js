@@ -14,7 +14,7 @@ rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
 rm_Ocean.clockTimerCount = 1;   // Set it to 1 so it doesn't check for player illness immediately!
 
 rm_Ocean.DoFirst = function () {
-    mus_sail.Play();
+    mus_title.Play();
 
     G.player.x = (this.squareSize * (this.squaresX / 2)) - (this.squareSize / 2) - G.player.xBound;
     G.player.y = (this.squareSize * (this.squaresY / 2));
@@ -42,46 +42,50 @@ rm_Ocean.DoFirst = function () {
     // G.economy.UpdateEconomy();
 }
 rm_Ocean.Do = function () {
-    if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
-        if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
-            // Move G.oceanParticle around based on player's movement.
-            if (G.oceanParticle.CheckPosition) G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
+    if (G.gameStarted) {
+        if (guiControl && guiControl.inventory && guiControl.trade) {   // Force it to wait until loaded.
+            if (!guiControl.inventory.show && !guiControl.map.show && !guiControl.trade.show) {
+                // Move G.oceanParticle around based on player's movement.
+                if (G.oceanParticle.CheckPosition) G.oceanParticle.CheckPosition(G.player.x, G.player.y, G.player.direction);
 
-            this.waveTimer--;
-            if (this.waveTimer <= 0) {
-                var wave = this.AddObject(OS.P["Wave Particle"]);
-                wave.x = G.player.x + (randomSmidge() * 4);
-                wave.y = G.player.y + (randomSmidge() * 4);
+                this.waveTimer--;
+                if (this.waveTimer <= 0) {
+                    var wave = this.AddObject(OS.P["Wave Particle"]);
+                    wave.x = G.player.x + (randomSmidge() * 4);
+                    wave.y = G.player.y + (randomSmidge() * 4);
 
-                this.waveTimer = Math.round(Math.randomRange(30, 150));
-            }
+                    this.waveTimer = Math.round(Math.randomRange(30, 150));
+                }
 
-            if (ct_cancel().down) {
-                snd_select.Play();
-                guiControl.inventory.activateDelay = 5;
-                guiControl.inventory.show = true;
+                if (ct_cancel().down) {
+                    snd_select.Play();
+                    guiControl.inventory.activateDelay = 5;
+                    guiControl.inventory.show = true;
+                }
             }
         }
-    }
 
-    this.RunClock();
+        this.RunClock();
+    }
 }
 
 rm_Ocean.DrawAbove = function () {
-    this.DrawNightDarkness();
+    if (G.gameStarted) {
+        this.DrawNightDarkness();
 
-    // Draw the speed indicator in Bottom Left corner.
-    OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
+        // Draw the speed indicator in Bottom Left corner.
+        OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
 
-    this.DrawEnergyBar();
+        this.DrawEnergyBar();
 
-    this.DrawClock();
+        this.DrawClock();
 
-    // drawPixelText("Testing 1 2 3!", 0, 0, 0, "white", 4);
-    // drawPixelText("Testing 1 2 3!", 0, 64, 0, "white", 6);
-    drawInventoryGUI();
-    drawMapGUI();
-    drawTradeGUI();
+        drawInventoryGUI();
+        drawMapGUI();
+        drawTradeGUI();
+    } else {
+        drawTitleScreen();
+    }
 }
 
 rm_Ocean.DoLast = function () {
@@ -95,6 +99,7 @@ rm_Ocean.RunClock = function () {
         if (rm_Ocean.clockTimerCount > rm_Ocean.clockTimerCutoff) {
             rm_Ocean.clockTimerCount = 0;
             // Play New_Day sound.
+            // Save the game.
             G.economy.UpdateEconomy();
 
             for (var i = 0; i < G.map.length; i++) {

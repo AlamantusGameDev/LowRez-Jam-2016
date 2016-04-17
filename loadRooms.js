@@ -1,5 +1,3 @@
-// var rm_TitleScreen = OS.R.Add("Default");
-// var rm_Ocean = OS.R.Add("Ocean", {
 var rm_Ocean = OS.R.Add("Default", {
 	// Putting my room "constants" here.
 	width: pixel(64) * 50,	//50x45 map of 64x64 squares. This will allow a single pixel on the map to represent a 64x square and fit comfortably on screen.
@@ -18,9 +16,7 @@ rm_Ocean.clockImg = new Image();
 rm_Ocean.clockImg.src = "images/clock_sheet.png";
 
 function loadRooms() {
-    // OS.AddScript("rooms/titleScreen.js");
     OS.AddScript("rooms/oceanRoom.js");
     
-    // OS.SetRoom(rm_TitleScreen);
     OS.SetRoom(rm_Ocean);
 }
