@@ -1381,7 +1381,7 @@ Oversimplified.Load = function (location) {
     // Load data from specified location in browser's Local Storage
     if(typeof(Storage) !== "undefined") {
         if (localStorage.getItem(location)) {
-            if (Oversimplified.DEBUG.showMessages) console.log("Successfully saved " + data + " to localStorage[\"" + location + "\"].");
+            if (Oversimplified.DEBUG.showMessages) console.log("Successfully loaded from localStorage[\"" + location + "\"].");
             return localStorage.getItem(location);
         } else {
             if (Oversimplified.DEBUG.showMessages) console.log("No data saved in localStorage[\"" + location + "\"].");
