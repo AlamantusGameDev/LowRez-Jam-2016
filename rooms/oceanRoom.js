@@ -99,7 +99,7 @@ rm_Ocean.RunClock = function () {
         if (rm_Ocean.clockTimerCount > rm_Ocean.clockTimerCutoff) {
             rm_Ocean.clockTimerCount = 0;
             // Play New_Day sound.
-            // Save the game.
+            G.SaveGame();
             G.economy.UpdateEconomy();
 
             for (var i = 0; i < G.map.length; i++) {

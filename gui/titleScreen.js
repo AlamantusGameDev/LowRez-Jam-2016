@@ -41,9 +41,9 @@ function drawTitleScreen() {
         // New Game
         guiControl.drawPixelText("New Game", guiControl.title.leftBorder, guiControl.title.rowTop(0), 10, "white", 6);
         // Load Game
-        guiControl.drawPixelText("Continue", guiControl.title.leftBorder, guiControl.title.rowTop(1), 10, (false) ? "white" : "black", 6);
+        guiControl.drawPixelText("Continue", guiControl.title.leftBorder, guiControl.title.rowTop(1), 10, (G.savedGameExists) ? "white" : "black", 6);
         // Options
-        guiControl.drawPixelText("Options", guiControl.title.leftBorder, guiControl.title.rowTop(2) + pixel(), 8, "black", 6);
+        guiControl.drawPixelText("Options", guiControl.title.leftBorder, guiControl.title.rowTop(2) + pixel(), 8, (guiControl.optionsScreen) ? "white" : "black", 6);
         
         // Draw cursor
         OS.context.drawImage(guiControl.cursor, guiControl.title.leftBorder - (guiControl.iconScaled), guiControl.title.rowTop(guiControl.title.cursorPosition));
@@ -58,9 +58,11 @@ function drawTitleScreen() {
                         mus_sail.Play();
                         guiControl.title.show = false;
                         G.gameStarted = true;
+                        G.SaveGame();
                         break;
                     case 1:
-                        if (false) {    // once loading is in, allow this.
+                        if (G.savedGameExists) {    // once loading is in, allow this.
+                            G.LoadGame();
                             snd_select.Play();
                             mus_title.Stop();
                             mus_sail.Play();
