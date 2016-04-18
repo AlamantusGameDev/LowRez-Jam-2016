@@ -53,6 +53,11 @@ rm_Ocean.Do = function () {
                     guiControl.inventory.activateDelay = 5;
                     guiControl.inventory.show = true;
                 }
+                if (ct_m.down) {
+                    snd_select.Play();
+                    guiControl.map.activateDelay = 5;
+                    guiControl.map.show = true;
+                }
             }
         }
 
@@ -108,7 +113,7 @@ rm_Ocean.RunClock = function () {
             for (var i = 0; i < G.map.length; i++) {
                 G.map[i].island.NewDay();
             }
-            
+
             G.SaveGame();
         }
 

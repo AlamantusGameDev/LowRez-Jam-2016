@@ -39,7 +39,7 @@ function drawMapGUI() {
 		
 		// Button Action
 		if (guiControl.map.activateDelay <= 0) {
-			if (ct_confirm().down || ct_cancel().down) {
+			if (ct_confirm().down || ct_cancel().down || ct_m.down) {
 				snd_cursorup.Play();
 				guiControl.map.show = false;
 			}
