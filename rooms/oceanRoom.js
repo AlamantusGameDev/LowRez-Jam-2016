@@ -103,12 +103,13 @@ rm_Ocean.RunClock = function () {
         if (rm_Ocean.clockTimerCount > rm_Ocean.clockTimerCutoff) {
             rm_Ocean.clockTimerCount = 0;
             // Play New_Day sound.
-            G.SaveGame();
             G.economy.UpdateEconomy();
 
             for (var i = 0; i < G.map.length; i++) {
                 G.map[i].island.NewDay();
             }
+            
+            G.SaveGame();
         }
 
         if (rm_Ocean.clockTimerCount == 0 ||

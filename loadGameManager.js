@@ -186,7 +186,7 @@ G.LoadGame = function () {
 		G.stats.illness = loadObject.stats.illness;
 		G.economy.innCost = loadObject.economy.innCost;
 		G.economy.innStays = loadObject.economy.innStays;
-		G.economy.itemWorth = loadObject.economy.itemWorth.slice();
+		G.economy.cargoItemWorth = loadObject.economy.itemWorth.slice();
 		G.economy.cargoSold = loadObject.economy.cargoSold.slice();
 		G.economy.cargoBought = loadObject.economy.cargoBought.slice();
 
