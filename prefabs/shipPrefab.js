@@ -62,12 +62,10 @@ pr_ship.Do = function () {
 		this.moveStepProgress += this.currentSpeed * this.moveStepAmount;
 		if (this.moveStepProgress >= this.moveStepSize) {
 			this.moveStepProgress -= this.moveStepSize;
-			console.log("take step");
 			this.doTakeStep = true;
 		} else {
 			this.doTakeStep = false;
 		}
-
 
 		this.SeamlessScroll();
 		// console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);

@@ -66,7 +66,6 @@ function drawTitleScreen() {
                             snd_select.Play();
                             mus_title.Stop();
                             mus_sail.Play();
-                            // Run Load Data
                             guiControl.title.show = false;
                             G.gameStarted = true;
                         } else {
