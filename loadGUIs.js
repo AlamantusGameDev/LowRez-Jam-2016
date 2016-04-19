@@ -45,6 +45,19 @@ guiControl.cursor.src = "images/guiCursor.png";
 guiControl.arrows = new Image();
 guiControl.arrows.src = "images/arrows.png";
 
+guiControl.alpha_black4 = new Image();
+guiControl.alpha_black4.src = "images/alphabet_black_4px.png";
+guiControl.alpha_white4 = new Image();
+guiControl.alpha_white4.src = "images/alphabet_white_4px.png";
+guiControl.alpha_yellow4 = new Image();
+guiControl.alpha_yellow4.src = "images/alphabet_yellow_4px.png";
+guiControl.alpha_black6 = new Image();
+guiControl.alpha_black6.src = "images/alphabet_black_6px.png";
+guiControl.alpha_white6 = new Image();
+guiControl.alpha_white6.src = "images/alphabet_white_6px.png";
+guiControl.alpha_yellow6 = new Image();
+guiControl.alpha_yellow6.src = "images/alphabet_yellow_6px.png";
+
 guiControl.itemSheet = new Image();
 guiControl.itemSheet.src = "images/items_sheet.png";
 guiControl.icons = new Image();
@@ -63,8 +76,7 @@ guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 	
 	wrapWidth = (wrapWidth <= 0 || wrapWidth > maxWrapWidth) ? maxWrapWidth : wrapWidth;
 	
-	var alphabet = new Image();
-	alphabet.src = "images/alphabet_" + color + "_" + size.toString() + "px.png";
+	var alphabet = guiControl["alpha_" + color + size.toString()];
 
 	// Make words wrap nicely, but let punctuation wrap.
 	var wordsInText = text.split(" ");
