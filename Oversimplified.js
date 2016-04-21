@@ -308,9 +308,9 @@ Oversimplified.Control = function (keycode) {
     this.keyCode = keycode;
     this.keyName = Oversimplified.Key[keycode];
     
-    this.down = false;
+    this.down = this.pressed = false;
     this.held = false;
-    this.up = false;
+    this.up = this.released = false;
 }
 Oversimplified.Control.prototype.type = "Control";
 Oversimplified.Control.prototype.Check = function () {
@@ -320,14 +320,14 @@ Oversimplified.Control.prototype.Check = function () {
         this.held = false;
     }
     if (Oversimplified.pressedKeys.indexOf(this.keyCode) != -1) {
-        this.down = true;
+        this.down = this.pressed = true;
     } else {
-        this.down = false;
+        this.down = this.pressed = false;
     }
     if (Oversimplified.releasedKeys.indexOf(this.keyCode) != -1) {
-        this.up = true;
+        this.up = this.released = true;
     } else {
-        this.up = false;
+        this.up = this.released = false;
     }
 }
 
@@ -582,6 +582,10 @@ Oversimplified.Room.prototype.AddObject = function (objectOrNewName, objectOptio
         
         return self.objects[objectOrNewName];
     }
+}
+
+Oversimplified.Create = function (objectOrNewName, objectOptions) {
+    return Oversimplified.Rooms[Oversimplified.Rooms.currentRoom].AddObject(objectOrNewName, objectOptions);
 }
 
 // Change to the specified room.
@@ -1065,55 +1069,6 @@ Oversimplified.Animation = function (name, width, height, options) {
     this.yOffset = typeof options.yOffset !== 'undefined' ? options.yOffset : 0;
 }
 Oversimplified.Animation.prototype.type = "Animation";
-
-Oversimplified.GUIs = {};
-Oversimplified.GUIs.Add = function (guiName, guiOptions) {
-    if (typeof Oversimplified.GUIs[guiName] === 'undefined') {
-        Oversimplified.GUIs[guiName] = new Oversimplified.Animation(guiName, guiOptions);
-        return Oversimplified.GUIs[guiName];
-    } else {
-        if (Oversimplified.DEBUG.showMessages) console.log("A GUI with the name \"" + guiName + "\" already exists!");
-        return false;
-    }
-}
-
-Oversimplified.GUI = function (name, options) {
-    this.id = OS.nextID++;
-    this.name = name;
-
-    this.x = (typeof options.x !== 'undefined') ? options.x : 0;
-    this.y = (typeof options.y !== 'undefined') ? options.y : 0;
-    this.width = (typeof options.width !== 'undefined') ? options.width : 0;
-    this.height = (typeof options.height !== 'undefined') ? options.height : 0;
-    this.xScroll = (typeof options.xScroll !== 'undefined') ? options.xScroll : 0;
-    this.yScroll = (typeof options.yScroll !== 'undefined') ? options.yScroll : 0;
-
-    // Borders are amount of space in pixels left of x, above y, right of width, and below height
-    // that an element can scroll to before becoming invisible.
-    this.leftBorder = (typeof options.leftBorder !== 'undefined') ? options.leftBorder : 0;
-    this.rightBorder = (typeof options.rightBorder !== 'undefined') ? options.rightBorder : 0;
-    this.topBorder = (typeof options.topBorder !== 'undefined') ? options.topBorder : 0;
-    this.bottomBorder = (typeof options.bottomBorder !== 'undefined') ? options.bottomBorder : 0;
-
-    this.elements = [];
-
-    this.show = (typeof options.show !== 'undefined') ? options.show : false;
-}
-
-Oversimplified.GUI.prototype.AddElement = function (options) {
-    var newElement = {
-        GUI: this,
-        index: this.elements.length++,
-        x: (typeof options.x !== 'undefined') ? options.x : 0,
-        y: (typeof options.y !== 'undefined') ? options.y : 0,
-        width: (typeof options.width !== 'undefined') ? options.width : 0,
-        height: (typeof options.height !== 'undefined') ? options.height : 0
-    };
-    this.elements.push(newElement);
-
-    return this.elements[newElement.index];
-}
-
 
 /*  Effects namespace
 */
