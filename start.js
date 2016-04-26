@@ -3,10 +3,10 @@ OS.S.numberOfScriptsToLoad = 16;
 OS.S.pixelScale = 4;
 // Oversimplified.DEBUG.showMessages = false;
 OS.SetCamera({
-	width: pixel(64),
-	height: pixel(64),
-	hBorder: pixel(24),
-	vBorder: pixel(24)});
+	width: pixel(160),	// 640
+	height: pixel(120),	// 480
+	hBorder: pixel(64),
+	vBorder: pixel(48)});
 
 function start()
 {
