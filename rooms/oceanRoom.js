@@ -82,18 +82,17 @@ rm_Ocean.DrawAbove = function () {
     if (G.gameStarted) {
         this.DrawNightDarkness();
 
-        // Draw the speed indicator in Bottom Left corner.
-        OS.context.drawImage(rm_Ocean.speedGaugeImg, G.player.currentSpeed * 32, 0, 32, 32, 16, OS.camera.height - 32 - 16, 32, 32);
+        guiControl.drawSpeedGauge();
 
-        this.DrawEnergyBar();
+        guiControl.drawEnergyBar();
 
-        this.DrawClock();
+        guiControl.drawClock();
 
-        drawInventoryGUI();
-        drawMapGUI();
-        drawTradeGUI();
+        guiControl.inventory.Draw();
+        guiControl.map.Draw();
+        guiControl.trade.Draw();
     } else {
-        drawTitleScreen();
+        guiControl.title.Draw();
     }
 }
 
@@ -138,27 +137,6 @@ rm_Ocean.DrawNightDarkness = function () {
         Oversimplified.context.fillStyle = tmp;
         Oversimplified.context.globalAlpha = saveGlobalAlpha;
     }
-}
-
-rm_Ocean.DrawEnergyBar = function () {
-    var percentage = G.stats.energy / G.stats.maxEnergy;
-    var barHeight = pixel(2);
-    var maxBarWidth = 32;
-    var barWidth = pixel(Math.round(maxBarWidth * percentage));
-
-    var saveFillStyle = OS.context.fillStyle;
-    OS.context.fillStyle = "#0055FF";
-    OS.context.fillRect(64, OS.camera.height - barHeight - 16, barWidth, barHeight);
-    OS.context.fillStyle = saveFillStyle;
-}
-
-rm_Ocean.DrawClock = function () {
-    var screenX = OS.camera.width - pixel(9) - pixel(2);
-    var screenY = OS.camera.height - pixel(9) - pixel(2);
-    var percentOfClock = this.clockTimerCount / this.clockTimerCutoff;
-    var clockFrameX = Math.floor(16 * percentOfClock) * pixel(9);
-    OS.context.drawImage(this.clockImg, clockFrameX, 0, pixel(9), pixel(9), screenX, screenY, pixel(9), pixel(9));
-    // console.log(this.clockTimerCount);
 }
 
 rm_Ocean.GenerateMap = function () {

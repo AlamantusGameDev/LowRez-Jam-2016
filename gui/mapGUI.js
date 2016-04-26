@@ -1,15 +1,15 @@
-function mapGUI() {
-	guiControl.map = {
-		show: false,
-		activateDelay: 0
-	}
+function mapGUI() {}
+
+guiControl.map = {
+	show: false,
+	activateDelay: 0
 }
 
-function drawMapGUI() {
+guiControl.map.Draw = function () {
 	if (guiControl.map && guiControl.map.show) {
 		guiControl.map.activateDelay -= (guiControl.map.activateDelay > 0) ? 1 : 0;
 
-		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, pixel(2), pixel(2), 240, 240);
+		guiControl.drawGUIBackground();
 		
 		// Title
 		guiControl.drawPixelText("Map", guiControl.leftBorder + pixel(10), guiControl.topOfBackground, 8, "black", 6);

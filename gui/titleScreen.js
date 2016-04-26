@@ -1,20 +1,20 @@
-function titleScreen () {
-    guiControl.title = {
-        screen: "main",
-        show: true,
-        cursorPosition: 0,
-        activateDelay: 0,
+function titleScreen () {}
 
-        padding: pixel(2),
-        leftBorder: pixel(12),
+guiControl.title = {
+    screen: "main",
+    show: true,
+    cursorPosition: 0,
+    activateDelay: 0,
 
-        rowTop: function (rowNumber) {
-            return pixel(32) + pixel(2) + pixel((guiControl.iconSize + 2) * rowNumber);
-        }
+    padding: pixel(2),
+    leftBorder: pixel(12),
+
+    rowTop: function (rowNumber) {
+        return pixel(32) + pixel(2) + pixel((guiControl.iconSize + 2) * rowNumber);
     }
 }
 
-function drawTitleScreen() {
+guiControl.title.Draw = function () {
     if (guiControl.title && guiControl.title.show) {
         guiControl.title.activateDelay -= (guiControl.title.activateDelay > 0) ? 1 : 0;
 
@@ -38,7 +38,7 @@ function drawTitleScreen() {
             }
 
             // Title
-            OS.context.drawImage(guiControl.titleImage, 0, 0);
+            guiControl.drawTitleImage();
 
             // New Game
             guiControl.drawPixelText("New Game", guiControl.title.leftBorder, guiControl.title.rowTop(0), 10, "white", 6);
@@ -48,7 +48,7 @@ function drawTitleScreen() {
             guiControl.drawPixelText("Options", guiControl.title.leftBorder, guiControl.title.rowTop(2) + pixel(), 8, (guiControl.optionsScreen) ? "white" : "black", 6);
             
             // Draw cursor
-            OS.context.drawImage(guiControl.cursor, guiControl.title.leftBorder - (guiControl.iconScaled), guiControl.title.rowTop(guiControl.title.cursorPosition));
+            guiControl.drawCursor(guiControl.title.leftBorder - (guiControl.iconScaled), guiControl.title.rowTop(guiControl.title.cursorPosition));
 
             // Button Action
             if (guiControl.title.activateDelay <= 0) {

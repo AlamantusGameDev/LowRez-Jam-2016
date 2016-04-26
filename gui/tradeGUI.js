@@ -1,24 +1,24 @@
-function tradeGUI() {
-	guiControl.trade = {
-		screen: "main",	// "main", "buy", "sell", "gossip"
-		cursorPosition: 0,
-		page: 0,		// horizontal page on item lists. Base 1 to match number of pages var "pages" within the gui.
-		itemsPerPage: 3,
-		show: false,
-		activateDelay: 0,
+function tradeGUI() {}
 
-		island: null,
+guiControl.trade = {
+	screen: "main",	// "main", "buy", "sell", "gossip"
+	cursorPosition: 0,
+	page: 0,		// horizontal page on item lists. Base 1 to match number of pages var "pages" within the gui.
+	itemsPerPage: 3,
+	show: false,
+	activateDelay: 0,
 
-		padding: pixel(2),
-		leftBorder: pixel(12),
+	island: null,
 
-		rowTop: function (rowNumber) {
-			return (guiControl.trade.padding + pixel(6) + (guiControl.trade.padding * 3)) + pixel((guiControl.iconSize + 3) * rowNumber);
-		}
+	padding: pixel(2),
+	leftBorder: pixel(12),
+
+	rowTop: function (rowNumber) {
+		return (guiControl.trade.padding + pixel(6) + (guiControl.trade.padding * 3)) + pixel((guiControl.iconSize + 3) * rowNumber);
 	}
 }
 
-function drawTradeGUI() {
+guiControl.trade.Draw = function () {
 	if (guiControl.trade && guiControl.trade.show) {
 		guiControl.trade.activateDelay -= (guiControl.trade.activateDelay > 0) ? 1 : 0;
 		// console.log("trade screen island: " + guiControl.trade.island.name);
@@ -78,7 +78,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText("Leave", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) + pixel(), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition));
+			guiControl.drawCursor(guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition));
 
 			// Button Action
 			if (guiControl.trade.activateDelay <= 0) {
@@ -188,7 +188,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - pixel(2), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(3));
+			guiControl.drawCursor(guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(3));
 
 			// Button Action
 			if (guiControl.trade.activateDelay <= 0) {
@@ -294,7 +294,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - pixel(2), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(3));
+			guiControl.drawCursor(guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(guiControl.trade.cursorPosition + 2) - pixel(3));
 
 			// Button Action
 			if (guiControl.trade.activateDelay <= 0) {
@@ -428,7 +428,7 @@ function drawTradeGUI() {
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - pixel(2), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(4) - pixel(3));
+			guiControl.drawCursor(guiControl.trade.leftBorder - (guiControl.iconScaled), guiControl.trade.rowTop(4) - pixel(3));
 
 			// Button Action
 			if (guiControl.trade.activateDelay <= 0) {

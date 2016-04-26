@@ -14,6 +14,32 @@ var guiControl = {
 	iconSize: 8,
 	iconScaled: pixel(8),
 
+	drawEnergyBar: function () {
+	    var percentage = G.stats.energy / G.stats.maxEnergy;
+	    var barHeight = pixel(2);
+	    var maxBarWidth = 32;
+	    var barWidth = pixel(Math.round(maxBarWidth * percentage));
+
+	    var saveFillStyle = OS.context.fillStyle;
+	    OS.context.fillStyle = "#0055FF";
+	    OS.context.fillRect(64, OS.camera.height - barHeight - pixel(4), barWidth, barHeight);
+	    OS.context.fillStyle = saveFillStyle;
+	},
+	drawClock: function () {
+	    var screenX = OS.camera.width - pixel(9) - pixel(2);
+	    var screenY = OS.camera.height - pixel(9) - pixel(2);
+	    var percentOfClock = guiControl.clockTimerCount / guiControl.clockTimerCutoff;
+	    var clockFrameX = guiControl.gui_sheet.clock.x + (Math.floor(pixel(4) * percentOfClock) * pixel(9));
+	    OS.context.drawImage(guiControl.gui_sheet, clockFrameX, guiControl.gui_sheet.clock.y, pixel(9), pixel(9), screenX, screenY, pixel(9), pixel(9));
+	},
+	drawSpeedGauge: function () {
+	    var screenX = pixel(4);
+	    var screenY = OS.camera.height - guiControl.iconScaled - pixel(4);
+	    var sheetX = guiControl.gui_sheet.gauge.x + (G.player.currentSpeed * guiControl.iconScaled);
+	    var sheetY = guiControl.gui_sheet.gauge.y;
+	    OS.context.drawImage(guiControl.gui_sheet, sheetX, sheetY, guiControl.iconScaled, guiControl.iconScaled, screenX, screenY, guiControl.iconScaled, guiControl.iconScaled);
+	},
+
 	iconPosition: function (cellPosition) {
 		return (guiControl.iconScaled * cellPosition);
 	},
@@ -22,46 +48,50 @@ var guiControl = {
 	},
 
 	drawIcon: function (cellX, cellY, xPosition, yPosition) {
-		OS.context.drawImage(guiControl.icons, guiControl.iconPosition(cellX), guiControl.iconPosition(cellY), guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
+		var iconSheetX = guiControl.gui_sheet.icons.x + guiControl.iconPosition(cellX);
+		var iconSheetY = guiControl.gui_sheet.icons.y + guiControl.iconPosition(cellY);
+		OS.context.drawImage(guiControl.gui_sheet, iconSheetX, iconSheetY, guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
 	},
 	drawItem: function (itemId, xPosition, yPosition) {
 		var cellX = itemId % 4;
 		var cellY = Math.floor(itemId / 4);
-		OS.context.drawImage(guiControl.itemSheet, guiControl.iconPosition(cellX), guiControl.iconPosition(cellY), guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
+		var itemSheetX = guiControl.gui_sheet.items.x + guiControl.iconPosition(cellX);
+		var itemSheetY = guiControl.gui_sheet.items.y + guiControl.iconPosition(cellY);
+		OS.context.drawImage(guiControl.gui_sheet, itemSheetX, itemSheetY, guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
+	},
+	drawTitleImage: function () {
+		OS.context.drawImage(guiControl.gui_sheet, guiControl.gui_sheet.titleImage.x, guiControl.gui_sheet.titleImage.y, guiControl.gui_sheet.titleImage.width, guiControl.gui_sheet.titleImage.height, 0, 0, guiControl.gui_sheet.titleImage.width, guiControl.gui_sheet.titleImage.height);
+	},
+	drawGUIBackground: function () {
+		OS.context.drawImage(guiControl.gui_sheet, guiControl.gui_sheet.guiBackground.x, guiControl.gui_sheet.guiBackground.y, guiControl.gui_sheet.guiBackground.width, guiControl.gui_sheet.guiBackground.height, pixel(2), pixel(2), guiControl.gui_sheet.guiBackground.width, guiControl.gui_sheet.guiBackground.height);
 	},
 	drawCursor: function (xPosition, yPosition) {
-		OS.context.drawImage(guiControl.cursor, xPosition, yPosition);
+		OS.context.drawImage(guiControl.gui_sheet, guiControl.gui_sheet.guiCursor.x, guiControl.gui_sheet.guiCursor.y, guiControl.iconScaled, guiControl.iconScaled, xPosition, yPosition, guiControl.iconScaled, guiControl.iconScaled);
 	},
 	drawPageArrow: function (direction, xPosition, yPosition) {
-		OS.context.drawImage(guiControl.arrows, (direction == "left") ? 0 : pixel(4), 0, pixel(4), pixel(7), xPosition, yPosition, pixel(4), pixel(7));
+		var arrowSheetX = guiControl.gui_sheet.arrows.x + ((direction == "left") ? 0 : pixel(4));
+		OS.context.drawImage(guiControl.gui_sheet, arrowSheetX, guiControl.gui_sheet.arrows.y, pixel(4), pixel(7), xPosition, yPosition, pixel(4), pixel(7));
 	}
 }
-guiControl.titleImage = new Image();
-guiControl.titleImage.src = "images/title.png";
-guiControl.background = new Image();
-guiControl.background.src = "images/guiBackground.png";
-guiControl.cursor = new Image();
-guiControl.cursor.src = "images/guiCursor.png";
-guiControl.arrows = new Image();
-guiControl.arrows.src = "images/arrows.png";
+guiControl.gui_sheet = new Image();
+guiControl.gui_sheet.src = "images/gui_sheet.png";
+guiControl.gui_sheet.clock = { x: 0, y: 0 };
+guiControl.gui_sheet.gauge = { x: 288, y: 132 };
+guiControl.gui_sheet.arrows = { x: 256, y: 134 };
+guiControl.gui_sheet.guiCursor = { x: 256, y: 164 };
+guiControl.gui_sheet.guiBackground = { x: 0, y: 36, width: pixel(61), height: pixel(61) };
+guiControl.gui_sheet.titleImage = { x: 0, y: 276, width: pixel(64), height: pixel(33) };
+guiControl.gui_sheet.icons = { x: 256, y: 36 };
+guiControl.gui_sheet.items = { x: 448, y: 132 };
 
-guiControl.alpha_black4 = new Image();
-guiControl.alpha_black4.src = "images/alphabet_black_4px.png";
-guiControl.alpha_white4 = new Image();
-guiControl.alpha_white4.src = "images/alphabet_white_4px.png";
-guiControl.alpha_yellow4 = new Image();
-guiControl.alpha_yellow4.src = "images/alphabet_yellow_4px.png";
-guiControl.alpha_black6 = new Image();
-guiControl.alpha_black6.src = "images/alphabet_black_6px.png";
-guiControl.alpha_white6 = new Image();
-guiControl.alpha_white6.src = "images/alphabet_white_6px.png";
-guiControl.alpha_yellow6 = new Image();
-guiControl.alpha_yellow6.src = "images/alphabet_yellow_6px.png";
-
-guiControl.itemSheet = new Image();
-guiControl.itemSheet.src = "images/items_sheet.png";
-guiControl.icons = new Image();
-guiControl.icons.src = "images/icons_sheet.png";
+guiControl.alphabet_sheet = new Image();
+guiControl.alphabet_sheet.src = "images/alphabets_sheet.png";
+guiControl.alphabet_sheet.black4 = { x: 0, y: 0 };
+guiControl.alphabet_sheet.black6 = { x: 0, y: 112 };
+guiControl.alphabet_sheet.white4 = { x: 96, y: 0 };
+guiControl.alphabet_sheet.white6 = { x: 120, y: 112 };
+guiControl.alphabet_sheet.yellow4 = { x: 192, y: 0 };
+guiControl.alphabet_sheet.yellow6 = { x: 240, y: 112 };
 
 guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 // Draw the text at the given x and y on the canvas using the alphabet images.
@@ -76,7 +106,7 @@ guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 	
 	wrapWidth = (wrapWidth <= 0 || wrapWidth > maxWrapWidth) ? maxWrapWidth : wrapWidth;
 	
-	var alphabet = guiControl["alpha_" + color + size.toString()];
+	// var alphabet = guiControl.alphabet_sheet[color + size.toString()];
 
 	// Make words wrap nicely, but let punctuation wrap.
 	var wordsInText = text.split(" ");
@@ -305,10 +335,10 @@ guiControl.drawPixelText = function (text, x, y, wrapWidth, color, size) {
 
 		var lineNumber = Math.floor(i/wrapWidth);
 		var horizontal = i - (wrapWidth * lineNumber);
-		var letterSheetX = letterSizeX * letterCellX;
-		var letterSheetY = letterSizeY * letterCellY;
+		var letterSheetX = guiControl.alphabet_sheet[color + size.toString()].x + (letterSizeX * letterCellX);
+		var letterSheetY = guiControl.alphabet_sheet[color + size.toString()].y + (letterSizeY * letterCellY);
 		var letterX = x + (letterSizeX * horizontal) + pixel(horizontal);	//Places a space between characters horizontally
 		var letterY = y + (letterSizeY * lineNumber) + pixel(lineNumber);	//Places a space between characters vertically
-		OS.context.drawImage(alphabet, letterSheetX, letterSheetY, letterSizeX, letterSizeY, letterX, letterY, letterSizeX, letterSizeY);
+		OS.context.drawImage(guiControl.alphabet_sheet, letterSheetX, letterSheetY, letterSizeX, letterSizeY, letterX, letterY, letterSizeX, letterSizeY);
 	}
 }

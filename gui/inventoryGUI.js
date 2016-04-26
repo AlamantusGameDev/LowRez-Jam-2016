@@ -1,17 +1,17 @@
-function inventoryGUI() {
-	guiControl.inventory = {
-		screen: "main",
-		cursorPosition: 0,
-		show: false,
-		activateDelay: 0
-	}
+function inventoryGUI() {}
+
+guiControl.inventory = {
+	screen: "main",
+	cursorPosition: 0,
+	show: false,
+	activateDelay: 0
 }
 
-function drawInventoryGUI() {
+guiControl.inventory.Draw = function () {
 	if (guiControl.inventory && guiControl.inventory.show) {
 		guiControl.inventory.activateDelay -= (guiControl.inventory.activateDelay > 0) ? 1 : 0;
 
-		OS.context.drawImage(guiControl.background, 0, 0, 240, 240, pixel(2), pixel(2), 240, 240);
+		guiControl.drawGUIBackground();
 
 		if (ct_down().down) {
 			snd_cursordown.Play();
@@ -51,7 +51,7 @@ function drawInventoryGUI() {
 			guiControl.drawPixelText("Close", guiControl.leftBorder, guiControl.rowTop(3) + pixel(), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition));
+			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(guiControl.inventory.cursorPosition));
 
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
@@ -117,7 +117,7 @@ function drawInventoryGUI() {
 			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
+			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
 
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {
@@ -152,7 +152,7 @@ function drawInventoryGUI() {
 			guiControl.drawPixelText("Back", guiControl.leftBorder, guiControl.rowTop(4) - pixel(3), 8, "black", 6);
 			
 			// Draw cursor
-			OS.context.drawImage(guiControl.cursor, guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
+			guiControl.drawCursor(guiControl.leftBorder - (guiControl.iconScaled), guiControl.rowTop(4) - pixel(4));
 
 			// Button Action
 			if (guiControl.inventory.activateDelay <= 0) {

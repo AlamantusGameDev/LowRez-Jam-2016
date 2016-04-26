@@ -9,11 +9,6 @@ var rm_Ocean = OS.R.Add("Default", {
 	numberOfIslands: 10,
 	clockTimerCutoff: ((1 / OS.S.defaultStep) * 60) * 5	// 5 minute day.
 });
-// Load external GUI here.
-rm_Ocean.speedGaugeImg = new Image();
-rm_Ocean.speedGaugeImg.src = "images/speed_gauge_sheet.png";
-rm_Ocean.clockImg = new Image();
-rm_Ocean.clockImg.src = "images/clock_sheet.png";
 
 function loadRooms() {
     OS.AddScript("rooms/oceanRoom.js");
