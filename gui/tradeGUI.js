@@ -170,7 +170,7 @@ guiControl.trade.Draw = function () {
 				}
 
 				// Amounts
-				guiControl.drawPixelText("Shop" + guiControl.trade.island.inventory[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(2) - pixel(6) + pixel(), 4, "black", 4);
+				guiControl.drawPixelText("Shop" + guiControl.trade.island.inventory[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(2) - pixel(6) + pixel(), 4, (guiControl.trade.island.CanBuyFrom(items[guiControl.trade.page], itemPrice)) ? "black" : "yellow", 4);
 				guiControl.drawPixelText("Own " + G.inventory.cargo[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(3) - pixel(6) + pixel(), 4, (G.inventory.cargo[items[guiControl.trade.page]] < G.stats.hold) ? "black" : "yellow", 4);
 			} else {
 				guiControl.drawPixelText("Sold Out!", guiControl.trade.leftBorder, guiControl.trade.rowTop(1) - pixel(5) + pixel(), 10, "black", 6);
@@ -181,8 +181,8 @@ guiControl.trade.Draw = function () {
 			guiControl.drawPixelText(G.inventory.CheckCargo().length.toString(), OS.camera.width - pixel(20) + (guiControl.iconScaled + pixel()), guiControl.trade.rowTop(4) - pixel(4), 4, (G.inventory.CheckCargo().length < G.stats.inventory) ? "black" : "yellow", 6);
 
 			// Yes/No Options
-			guiControl.drawPixelText("Hagl?", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (guiControl.trade.island.timesHaggledToday >= G.stats.popularity) ? "yellow" : ((items.length > 0 && guiControl.trade.island.haggleAmount == 0) ? "black" : "white"), 6);
-			guiControl.drawPixelText("Yes", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) - pixel(2), 8, (items.length > 0 && G.inventory.CanBuy(items[guiControl.trade.page], itemPrice)) ? "black" : "white", 6);
+			guiControl.drawPixelText("Haggle", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (guiControl.trade.island.timesHaggledToday >= G.stats.popularity) ? "yellow" : ((items.length > 0 && guiControl.trade.island.haggleAmount == 0) ? "black" : "white"), 6);
+			guiControl.drawPixelText((guiControl.trade.island.CanBuyFrom(items[guiControl.trade.page], itemPrice)) ? "Yes" : "Over!", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) - pixel(2), 8, (items.length > 0 && G.inventory.CanBuy(items[guiControl.trade.page], itemPrice)) ? ((guiControl.trade.island.CanBuyFrom(items[guiControl.trade.page], itemPrice)) ? "black" : "yellow") : "white", 6);
 
 			// Back Text
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - pixel(2), 8, "black", 6);
@@ -207,7 +207,8 @@ guiControl.trade.Draw = function () {
 							break;
 						case 1:		// Buy
 							if (items.length > 0 &&
-								G.inventory.CanBuy(items[guiControl.trade.page], itemPrice))	//If cursor is over yes and you can buy, buy it.
+								G.inventory.CanBuy(items[guiControl.trade.page], itemPrice) &&
+								guiControl.trade.island.CanBuyFrom(items[guiControl.trade.page], itemPrice))	//If cursor is over yes and you can buy, buy it.
 							{
 								snd_buy.Play();
 								guiControl.trade.island.BuyFrom(items[guiControl.trade.page], itemPrice);
@@ -276,7 +277,7 @@ guiControl.trade.Draw = function () {
 				}
 
 				// Amounts
-				guiControl.drawPixelText("Shop" + guiControl.trade.island.inventory[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(2) - pixel(6) + pixel(), 4, "black", 4);
+				guiControl.drawPixelText("Shop" + guiControl.trade.island.inventory[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(2) - pixel(6) + pixel(), 4, (guiControl.trade.island.CanSellTo(items[guiControl.trade.page], itemPrice)) ? "black" : "yellow", 4);
 				guiControl.drawPixelText("Own " + G.inventory.cargo[items[guiControl.trade.page]].toString(), OS.camera.width - pixel(20), guiControl.trade.rowTop(3) - pixel(6) + pixel(), 4, (G.inventory.cargo[items[guiControl.trade.page]] > 0) ? "black" : "yellow", 4);
 			} else {
 				guiControl.drawPixelText("No Cargo!", guiControl.trade.padding, guiControl.trade.rowTop(1) - pixel(5) + pixel(), 10, "black", 6);
@@ -288,7 +289,7 @@ guiControl.trade.Draw = function () {
 
 			// Yes/No Options
 			guiControl.drawPixelText("Hagl?", guiControl.trade.leftBorder, guiControl.trade.rowTop(2) - pixel(2), 8, (guiControl.trade.island.timesHaggledToday >= G.stats.popularity) ? "yellow" : ((items.length > 0 && guiControl.trade.island.haggleAmount == 0) ? "black" : "white"), 6);
-			guiControl.drawPixelText("Yes", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) - pixel(2), 8, (items.length > 0 && G.inventory.CanSell(items[guiControl.trade.page])) ? "black" : "white", 6);
+			guiControl.drawPixelText((guiControl.trade.island.CanSellTo(items[guiControl.trade.page], itemPrice)) ? "Yes" : "Over!", guiControl.trade.leftBorder, guiControl.trade.rowTop(3) - pixel(2), 8, (items.length > 0 && G.inventory.CanSell(items[guiControl.trade.page])) ? ((guiControl.trade.island.CanSellTo(items[guiControl.trade.page], itemPrice)) ? "black" : "yellow") : "white", 6);
 
 			// Back Text
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - pixel(2), 8, "black", 6);
@@ -313,7 +314,8 @@ guiControl.trade.Draw = function () {
 							break;
 						case 1:		// Sell
 							if (items.length > 0 &&
-								G.inventory.CanSell(items[guiControl.trade.page]))	//If cursor is over yes and you can buy, buy it.
+								G.inventory.CanSell(items[guiControl.trade.page]) &&
+								guiControl.trade.island.CanSellTo(items[guiControl.trade.page], itemPrice))	//If cursor is over yes and you can buy, buy it.
 							{
 								snd_sell.Play();
 								guiControl.trade.island.SellTo(items[guiControl.trade.page], itemPrice);
@@ -422,7 +424,7 @@ guiControl.trade.Draw = function () {
 			// Title
 			guiControl.drawPixelText("Gossip", guiControl.trade.padding, guiControl.topOfBackground, 10, "black", 6);
 
-			guiControl.drawPixelText("Nothing interesting to report! / / / / / -Actually, this isnt in the game yet-", guiControl.trade.padding, guiControl.trade.rowTop(0) - pixel(2), 0, "black", 4);
+			guiControl.drawPixelText("Use the map with M to find new islands to trade with!", guiControl.trade.padding, guiControl.trade.rowTop(0) - pixel(2), 0, "black", 4);
 			
 			// Back Text
 			guiControl.drawPixelText("Back", guiControl.trade.leftBorder, guiControl.trade.rowTop(4) - pixel(2), 8, "black", 6);

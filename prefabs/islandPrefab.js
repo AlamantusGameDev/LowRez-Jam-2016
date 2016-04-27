@@ -17,11 +17,20 @@ var pr_island = OS.P.Add("Island", {
 	canTrade: true,
 	haggleAmount: 0,
 	timesHaggledToday: 0,
+	itemsSoldToday:		[0, 0, 0, 0,
+						 0, 0, 0, 0,
+						 0, 0, 0, 0,
+						 0, 0, 0, 0],
+	itemsBoughtToday:	[0, 0, 0, 0,
+						 0, 0, 0, 0,
+						 0, 0, 0, 0,
+						 0, 0, 0, 0],
 
 	inventory:		[0, 0, 0, 0,
 					 0, 0, 0, 0,
 					 0, 0, 0, 0,
 					 0, 0, 0, 0],
+	storageSpace:	[],
 	innPriceDifference: 0,
 	innStays: 0,
 	priceDifferences: [],
@@ -47,8 +56,13 @@ pr_island.GetMapPosition = function () {
 
 pr_island.SetUp = function () {
 	for (var i = 0; i < 16; i++) {
+		this.storageSpace[i] = Math.round(Math.randomRange(10, 25));
+
+		if (this.storageSpace[i] > 20) {
+			this.inventory[i] = Math.round(this.storageSpace[i] - Math.randomRange(0, 10));
+		}
 		if (Math.randomRange(0, 100) < 25) {
-			this.inventory[i] = Math.round(Math.randomRange(0, 20));
+			this.inventory[i] = Math.round(Math.randomRange(0, this.storageSpace[i]));
 		}
 	}
 	// console.log(this.name + " stock: " + this.inventory);
@@ -63,13 +77,16 @@ pr_island.SetUp = function () {
 
 pr_island.AdjustPrices = function () {
 	for (var i = 0; i < 16; i++) {
-		if (this.inventory[i] > 10) {
-			this.priceDifferences[i] = -Math.round(this.inventory[i] * Math.randomRange(1, 3));
-		} else if (this.inventory[i] < 5) {
-			this.priceDifferences[i] = Math.round((10 - this.inventory[i]) * Math.randomRange(1, 3));
+		this.priceDifferences[i] = 0;
+		if (this.inventory[i] > (this.storageSpace[i] / 2)) {
+			this.priceDifferences[i] += -Math.round(this.inventory[i] * Math.randomRange(1, 3));
+		} else if (this.inventory[i] < (this.storageSpace[i] / 4)) {
+			this.priceDifferences[i] += Math.round((this.storageSpace[i] - this.inventory[i]) * Math.randomRange(1, 3));
 		} else {
-			this.priceDifferences[i] = Math.round(Math.randomRange(-2, 2));
+			this.priceDifferences[i] += Math.round(Math.randomRange(-2, 2));
 		}
+
+		this.priceDifferences[i] = Math.round(this.priceDifferences[i] * ((this.itemsBought[i] + 1) / (this.itemsSold[i] + 1)));
 
 		if (G.economy.cargoItemWorth[i] + this.priceDifferences[i] < 0) {
 			this.priceDifferences[i] = -G.economy.cargoItemWorth[i] + 1;
@@ -84,13 +101,16 @@ pr_island.SimulateTrade = function () {
 // This will be run on a timer that runs when not trading.
 	for (var i = 0; i < 16; i++) {
 		if (this.inventory[i] > 0) {
-			this.inventory[i] += Math.round(Math.randomRange(-5, 5));
+			this.inventory[i] += Math.round(Math.randomRange(-this.storageSpace[i], this.storageSpace[i]));
 			if (this.inventory[i] < 0) {
 				this.inventory[i] = 0;
 			}
+			if (this.inventory[i] > this.storageSpace[i]) {
+				this.inventory[i] = this.storageSpace[i];
+			}
 		} else {
 			if (Math.randomRange(0, 100) < 15) {
-				this.inventory[i] = Math.round(Math.randomRange(0, 5));
+				this.inventory[i] = Math.round(Math.randomRange(0, this.storageSpace[i]));
 			}
 		}
 	}
@@ -101,6 +121,14 @@ pr_island.SimulateTrade = function () {
 pr_island.NewDay = function () {
 	this.haggleAmount = 0;
     this.timesHaggledToday = 0;
+    this.itemsSoldToday =	[0, 0, 0, 0,
+					 		 0, 0, 0, 0,
+					 		 0, 0, 0, 0,
+					 		 0, 0, 0, 0];
+    this.itemsBoughtToday =	[0, 0, 0, 0,
+					 		 0, 0, 0, 0,
+					 		 0, 0, 0, 0,
+					 		 0, 0, 0, 0];
     this.SimulateTrade();
 }
 
@@ -125,6 +153,14 @@ pr_island.TradeWith = function () {
 	guiControl.trade.show = true;
 }
 
+pr_island.CanSellTo = function (itemIndex, price) {
+	if (this.inventory[itemIndex] < this.storageSpace[itemIndex]) {	// If there's space in the inventory
+		if (this.itemsBoughtToday[itemIndex] < this.storageSpace[itemIndex] * 0.75) {	// and if the island hasn't bought more than 75% of its storage space today
+			return true;
+		}
+	}
+	return false;
+}
 pr_island.SellTo = function (itemIndex, price) {
 	// Play Buy sound.
 	this.inventory[itemIndex]++;
@@ -135,10 +171,19 @@ pr_island.SellTo = function (itemIndex, price) {
 	G.economy.cargoSold[itemIndex]++;
 }
 
+pr_island.CanBuyFrom = function (itemIndex, price) {
+	if (this.inventory[itemIndex] > 0) {	// If there's enough of the item
+		if (this.itemsSoldToday[itemIndex] < this.storageSpace[itemIndex] * 0.90) {	// and if the island hasn't sold more than 90% of its storage space today
+			return true;
+		}
+	}
+	return false;
+}
 pr_island.BuyFrom = function (itemIndex, price) {
 	// Play Sell sound.
 	this.inventory[itemIndex]--;
-	this.itemsBought[itemIndex]++;
+	this.itemsSold[itemIndex]++;
+	this.itemsSoldToday[itemIndex]++;
 
 	G.inventory.cargo[itemIndex]++;
 	G.inventory.money -= price;
