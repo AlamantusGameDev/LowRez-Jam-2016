@@ -53,7 +53,7 @@ G.inventory = {
 	},
 	CanBuy: function (itemIndex, price) {
 		if (G.inventory.cargo[itemIndex] < G.stats.hold && G.inventory.money > price &&
-			(G.inventory.cargo[itemIndex] > 0 || G.inventory.CheckCargo().length < G.stats.inventory))
+				(G.inventory.cargo[itemIndex] > 0 || G.inventory.CheckCargo().length < G.stats.inventory))
 		{
 			return true;
 		} else {
@@ -87,6 +87,7 @@ G.economy = {	// Aww yea, supply and demand.
 					 40, 20, 50, 80,
 					 65, 20, 20, 30,
 					 30, 60, 45, 70],
+	maxPriceChange: 10,
 	cargoSold: 		[0, 0, 0, 0,		// The more you sell, the lower the price gets
 					 0, 0, 0, 0,
 					 0, 0, 0, 0,
