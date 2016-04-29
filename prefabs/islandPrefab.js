@@ -71,10 +71,10 @@ pr_island.GetMapPosition = function () {
 
 pr_island.SetUp = function () {
 	for (var i = 0; i < 16; i++) {
-		this.storageSpace[i] = Math.round(Math.randomRange(10, 25));
+		this.storageSpace[i] = Math.round(Math.randomRange(20, 35));
 
-		if (this.storageSpace[i] > 20) {
-			this.inventory[i] = Math.round(this.storageSpace[i] - Math.randomRange(0, 10));
+		if (this.storageSpace[i] > 30) {
+			this.inventory[i] = Math.round(this.storageSpace[i] - Math.randomRange(0, 30));
 		} else if (Math.randomRange(0, 100) < 25) {
 			this.inventory[i] = Math.round(Math.randomRange(0, this.storageSpace[i]));
 		}
