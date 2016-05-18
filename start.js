@@ -1,7 +1,7 @@
 OS.S.defaultStep = 1 / 120;
 OS.S.numberOfScriptsToLoad = 16;
 OS.S.pixelScale = 4;
-// Oversimplified.DEBUG.showMessages = false;
+Oversimplified.DEBUG.showMessages = false;
 OS.SetCamera({
 	width: pixel(64),
 	height: pixel(64),
