@@ -1,12 +1,10 @@
 function inventoryGUI() {
-	if (Oversimplified.DEBUG.showMessages) console.log("Ran inventoryGUI()");
-}
-
-guiControl.inventory = {
-	screen: "main",
-	cursorPosition: 0,
-	show: false,
-	activateDelay: 0
+	guiControl.inventory = {
+		screen: "main",
+		cursorPosition: 0,
+		show: false,
+		activateDelay: 0
+	}
 }
 
 function drawInventoryGUI() {

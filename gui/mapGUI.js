@@ -1,10 +1,8 @@
 function mapGUI() {
-	if (Oversimplified.DEBUG.showMessages) console.log("Ran mapGUI()");
-}
-
-guiControl.map = {
-	show: false,
-	activateDelay: 0
+	guiControl.map = {
+		show: false,
+		activateDelay: 0
+	}
 }
 
 function drawMapGUI() {

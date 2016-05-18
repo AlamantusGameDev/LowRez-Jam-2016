@@ -13,11 +13,9 @@ function start()
     OS.AddScript("loadControls.js");
     OS.AddScript("loadAudio.js");
     OS.AddScript("loadGameManager.js");
-    OS.AddScript("loadGUIs.js");
     OS.AddScript("loadPrefabs.js");
+    OS.AddScript("loadGUIs.js");
     OS.AddScript("loadRooms.js");
-
-    if (Oversimplified.DEBUG.showMessages) console.log("Ran start()");
 }
 
 function pixel(number) {

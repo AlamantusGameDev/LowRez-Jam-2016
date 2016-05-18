@@ -7,10 +7,7 @@ var ani_ship_dl = OS.A.Add("Ship Down-Left", 64, 64, {columns: 2, speed: 1/60, y
 var ani_ship_d = OS.A.Add("Ship Down", 64, 64, {columns: 2, speed: 1/60, yOffset: 64 * 0});
 var ani_ship_dr = OS.A.Add("Ship Down-Right", 64, 64, {columns: 2, speed: 1/60, yOffset: 64 * 2});
 
-function shipPrefab() {
-	if (Oversimplified.DEBUG.showMessages) console.log("Ran shipPrefab()");
-	prefabsLoaded++;
-}
+function shipPrefab() {}
 
 var pr_ship = OS.P.Add("Ship", {
 	solid: true,
@@ -121,49 +118,49 @@ pr_ship.CheckMovement = function () {
 	var movedSuccessfully = false;
 	switch (this.direction) {
 		case 0:
-			if (this.sprite.currentAnimation != "Ship Right") this.SetAnimation("Ship Right");
+			if (this.image.currentAnimation != "Ship Right") this.SetAnimation("Ship Right");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, 0, true, pixel(4));
 			this.pointInFront.x = this.x + this.xBound + pixel(2) + moveAmount;
 			this.pointInFront.y = this.y;
 			break;
 		case 45:
-			if (this.sprite.currentAnimation != "Ship Up-Right") this.SetAnimation("Ship Up-Right");
+			if (this.image.currentAnimation != "Ship Up-Right") this.SetAnimation("Ship Up-Right");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, -moveAmount, true, pixel(4));
 			this.pointInFront.x = this.x + this.xBound + pixel(2) + moveAmount;
 			this.pointInFront.y = this.y - this.yBound - pixel(2) - moveAmount;
 			break;
 		case 90:
-			if (this.sprite.currentAnimation != "Ship Up") this.SetAnimation("Ship Up");
+			if (this.image.currentAnimation != "Ship Up") this.SetAnimation("Ship Up");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(0, -moveAmount, true, pixel(4));
 			this.pointInFront.x = this.x;
 			this.pointInFront.y = this.y - this.yBound - pixel(2) - moveAmount;
 			break;
 		case 135:
-			if (this.sprite.currentAnimation != "Ship Up-Left") this.SetAnimation("Ship Up-Left");
+			if (this.image.currentAnimation != "Ship Up-Left") this.SetAnimation("Ship Up-Left");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, -moveAmount, true, pixel(4));
 			this.pointInFront.x = this.x - this.xBound - pixel(2) - moveAmount;
 			this.pointInFront.y = this.y - this.yBound - pixel(2) - moveAmount;
 			break;
 		case 180:
-			if (this.sprite.currentAnimation != "Ship Left") this.SetAnimation("Ship Left");
+			if (this.image.currentAnimation != "Ship Left") this.SetAnimation("Ship Left");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, 0, true, pixel(4));
 			this.pointInFront.x = this.x - this.xBound - pixel(2) - moveAmount;
 			this.pointInFront.y = this.y;
 			break;
 		case 225:
-			if (this.sprite.currentAnimation != "Ship Down-Left") this.SetAnimation("Ship Down-Left");
+			if (this.image.currentAnimation != "Ship Down-Left") this.SetAnimation("Ship Down-Left");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(-moveAmount, moveAmount, true, pixel(4));
 			this.pointInFront.x = this.x - this.xBound - pixel(2) - moveAmount;
 			this.pointInFront.y = this.y + this.yBound + pixel(2) + moveAmount;
 			break;
 		case 270:
-			if (this.sprite.currentAnimation != "Ship Down") this.SetAnimation("Ship Down");
+			if (this.image.currentAnimation != "Ship Down") this.SetAnimation("Ship Down");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(0, moveAmount, true, pixel(4));
 			this.pointInFront.x = this.x;
 			this.pointInFront.y = this.y + this.yBound + pixel(2) + moveAmount;
 			break;
 		case 315:
-			if (this.sprite.currentAnimation != "Ship Down-Right") this.SetAnimation("Ship Down-Right");
+			if (this.image.currentAnimation != "Ship Down-Right") this.SetAnimation("Ship Down-Right");
 			if (this.doTakeStep) movedSuccessfully = this.SimpleMove(moveAmount, moveAmount, true, pixel(4));
 			this.pointInFront.x = this.x + this.xBound + pixel(2) + moveAmount;
 			this.pointInFront.y = this.y + this.yBound + pixel(2) + moveAmount;

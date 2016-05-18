@@ -14,6 +14,4 @@ var snd_select = new OS.E.AddSound("Select", {wav: "audio/sounds/Select.wav", mp
 var snd_sell = new OS.E.AddSound("Sell", {wav: "audio/sounds/Sell.wav", mp3: "audio/sounds/Sell.mp3"});
 var snd_wave = new OS.E.AddSound("Wave Crash", {wav: "audio/sounds/Wave_Crash.wav", mp3: "audio/sounds/Wave_Crash.mp3"});
 
-function loadAudio() {
-    if (Oversimplified.DEBUG.showMessages) console.log("Ran loadAudio()");
-}
+function loadAudio() {}

@@ -14,9 +14,7 @@ var ct_x = OS.C.Add("X", OS.Keycode.x);
 var ct_m = OS.C.Add("M", OS.Keycode.m);
 var ct_esc = OS.C.Add("Cancel", OS.Keycode.escape);
 
-function loadControls () {
-    if (Oversimplified.DEBUG.showMessages) console.log("Ran loadControls()");
-}
+function loadControls () {}
 
 function ct_up () {
 	return {

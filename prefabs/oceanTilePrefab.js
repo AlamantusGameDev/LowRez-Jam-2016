@@ -1,9 +1,6 @@
 var ani_ocean = OS.A.Add("Ocean", 256, 256, {columns: 10, speed: 1/60});
 
-function oceanTilePrefab() {
-	if (Oversimplified.DEBUG.showMessages) console.log("Ran oceanTilePrefab()");
-	prefabsLoaded++;
-}
+function oceanTilePrefab() {}
 
 var pr_ocean = OS.P.Add("Ocean Particle", {
 	imageSrc: "images/ocean_sheet.png",
