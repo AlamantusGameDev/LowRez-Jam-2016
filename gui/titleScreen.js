@@ -1,16 +1,18 @@
 function titleScreen () {
-    guiControl.title = {
-        screen: "main",
-        show: true,
-        cursorPosition: 0,
-        activateDelay: 0,
+    if (Oversimplified.DEBUG.showMessages) console.log("Ran titleScreen()");
+}
 
-        padding: pixel(2),
-        leftBorder: pixel(12),
+guiControl.title = {
+    screen: "main",
+    show: true,
+    cursorPosition: 0,
+    activateDelay: 0,
 
-        rowTop: function (rowNumber) {
-            return pixel(32) + pixel(2) + pixel((guiControl.iconSize + 2) * rowNumber);
-        }
+    padding: pixel(2),
+    leftBorder: pixel(12),
+
+    rowTop: function (rowNumber) {
+        return pixel(32) + pixel(2) + pixel((guiControl.iconSize + 2) * rowNumber);
     }
 }
 

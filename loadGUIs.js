@@ -3,6 +3,8 @@ function loadGUIs() {
 	OS.AddScript("gui/inventoryGUI.js");
 	OS.AddScript("gui/mapGUI.js");
 	OS.AddScript("gui/tradeGUI.js");
+
+	if (Oversimplified.DEBUG.showMessages) console.log("Ran loadGUIs()");
 }
 
 var guiControl = {

@@ -1,20 +1,22 @@
 function tradeGUI() {
-	guiControl.trade = {
-		screen: "main",	// "main", "buy", "sell", "gossip"
-		cursorPosition: 0,
-		page: 0,		// horizontal page on item lists. Base 1 to match number of pages var "pages" within the gui.
-		itemsPerPage: 3,
-		show: false,
-		activateDelay: 0,
+	if (Oversimplified.DEBUG.showMessages) console.log("Ran tradeGUI()");
+}
 
-		island: null,
+guiControl.trade = {
+	screen: "main",	// "main", "buy", "sell", "gossip"
+	cursorPosition: 0,
+	page: 0,		// horizontal page on item lists. Base 1 to match number of pages var "pages" within the gui.
+	itemsPerPage: 3,
+	show: false,
+	activateDelay: 0,
 
-		padding: pixel(2),
-		leftBorder: pixel(12),
+	island: null,
 
-		rowTop: function (rowNumber) {
-			return (guiControl.trade.padding + pixel(6) + (guiControl.trade.padding * 3)) + pixel((guiControl.iconSize + 3) * rowNumber);
-		}
+	padding: pixel(2),
+	leftBorder: pixel(12),
+
+	rowTop: function (rowNumber) {
+		return (guiControl.trade.padding + pixel(6) + (guiControl.trade.padding * 3)) + pixel((guiControl.iconSize + 3) * rowNumber);
 	}
 }
 

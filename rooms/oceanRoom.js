@@ -1,13 +1,5 @@
 function oceanRoom () {
-    // Create objects on room creation for persistence.
-    G.player = rm_Ocean.AddObject(OS.P["Ship"]);
-    G.oceanParticle = rm_Ocean.AddObject(OS.P["Ocean Particle"]);
-
-    rm_Ocean.GenerateMap();
-
-    // When room is loaded, explicitly set room to rm_Ocean, just in case "Default" doesn't work/is loaded too slowly
-    // to make sure DoFirst runs.
-    OS.SetRoom(rm_Ocean);
+    if (Oversimplified.DEBUG.showMessages) console.log("Ran oceanRoom()");
 }
 
 rm_Ocean.waveTimer = Math.round(Math.randomRange(30, 150));
@@ -16,6 +8,11 @@ rm_Ocean.clockTimerCount = 1;   // Set it to 1 so it doesn't check for player il
 rm_Ocean.DoFirst = function () {
     mus_title.Play();
 
+    // G.player and G.oceanParticle are created in loadPrefabs.js
+
+    rm_Ocean.GenerateMap();
+
+    console.log("player xBound: " + G.player.xBound);
     G.player.x = (this.squareSize * (this.squaresX / 2)) - (this.squareSize / 2) - G.player.xBound;
     G.player.y = (this.squareSize * (this.squaresY / 2));
     // console.log(G.player.name + " created at " + G.player.x + ", " + G.player.y);

@@ -216,4 +216,6 @@ function loadGameManager () {
 	for (var i = 0; i < G.economy.cargoItemWorth.length; i++) {
 		G.economy.cargoItemWorth[i] += Math.round(Math.randomRange(-5, 5));
 	}
+
+    if (Oversimplified.DEBUG.showMessages) console.log("Ran loadGameManager()");
 }
