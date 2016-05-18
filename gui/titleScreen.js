@@ -1,4 +1,6 @@
-function titleScreen () {}
+function titleScreen () {
+    if (Oversimplified.DEBUG.showMessages) console.log("Ran titleScreen()");
+}
 
 guiControl.title = {
     screen: "main",

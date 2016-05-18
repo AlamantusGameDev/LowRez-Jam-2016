@@ -1,4 +1,6 @@
-function inventoryGUI() {}
+function inventoryGUI() {
+	if (Oversimplified.DEBUG.showMessages) console.log("Ran inventoryGUI()");
+}
 
 guiControl.inventory = {
 	screen: "main",

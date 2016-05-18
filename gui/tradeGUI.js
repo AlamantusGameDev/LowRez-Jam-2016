@@ -1,4 +1,6 @@
-function tradeGUI() {}
+function tradeGUI() {
+	if (Oversimplified.DEBUG.showMessages) console.log("Ran tradeGUI()");
+}
 
 guiControl.trade = {
 	screen: "main",	// "main", "buy", "sell", "gossip"

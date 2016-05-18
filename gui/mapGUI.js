@@ -1,4 +1,6 @@
-function mapGUI() {}
+function mapGUI() {
+	if (Oversimplified.DEBUG.showMessages) console.log("Ran mapGUI()");
+}
 
 guiControl.map = {
 	show: false,

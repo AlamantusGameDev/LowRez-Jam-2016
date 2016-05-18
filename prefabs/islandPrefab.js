@@ -1,6 +1,9 @@
 var ani_island_1 = OS.A.Add("Island 1", 256, 256, {});
 
-function islandPrefab() {}
+function islandPrefab() {
+	if (Oversimplified.DEBUG.showMessages) console.log("Ran islandPrefab()");
+	prefabsLoaded++;
+}
 
 var pr_island = OS.P.Add("Island", {
 	solid: true,
